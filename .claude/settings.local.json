@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(unzip -o \"/c/Users/julio/Downloads/SO-apps-v6.10.0\\(1\\).zip\" -d .)",
+      "Read(//tmp/**)"
+    ]
+  }
+}
