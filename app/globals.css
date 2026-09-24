@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@import "../components/landing/tokens.css";
+
+:root {
+  --font-display: var(--font-display-loaded), Georgia, serif;
+  --font-body: var(--font-body-loaded), "Segoe UI", sans-serif;
+}

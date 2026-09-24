@@ -9,7 +9,15 @@
       "mcp__playwright__browser_resize",
       "mcp__playwright__browser_navigate",
       "mcp__playwright__browser_take_screenshot",
-      "Bash(ls -la \"/c/Users/julio/Downloads/Claude/App1/docs/revisiones/\" 2>&1; find / -maxdepth 6 -iname \"replica-fiel-375.png\" 2>/dev/null)"
+      "Bash(ls -la \"/c/Users/julio/Downloads/Claude/App1/docs/revisiones/\" 2>&1; find / -maxdepth 6 -iname \"replica-fiel-375.png\" 2>/dev/null)",
+      "Bash(npm install *)",
+      "Bash(mkdir -p components/landing)",
+      "Bash(cp plantillas-codigo/landing/*.tsx plantillas-codigo/landing/*.css components/landing/)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_console_messages"
     ]
   }
 }

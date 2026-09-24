@@ -102,10 +102,29 @@ FICHA-AVATAR.md: creada y APROBADA (2026-09-24) con los datos del documento de
 investigación original del usuario (Valeria, dolores, deseos, objeciones, VoC, nivel de
 consciencia "consciente de la solución" / mercado sofisticado). Cosa juzgada.
 
+## Sesión 3 — Página de ventas: EN PROGRESO
+- Nombre de la app decidido por el usuario: **FoodScan**
+- Stack: Next.js 16 (App Router) + TypeScript + Tailwind v4 + motion + lucide-react
+  (decisión técnica — landing con SEO, ver 51-STACK-PINEADO.md). Proyecto scaffoldeado
+  en la raíz (app/, components/, package.json).
+- Landing construida desde el KIT canónico (`plantillas-codigo/landing/` →
+  `components/landing/`), tokens.css tematizado con FICHA-ARTE.md, copy marcado en
+  `docs/copy/landing.md` (10 secciones, trazado a FICHA-AVATAR.md), compuesta en
+  `app/page.tsx`. Modelo de monetización: **onboarding-first registrado** (decisión
+  técnica — CTA → `/onboarding`, no directo a checkout).
+- Verificado: `tsc --noEmit` ✓ · `npm run build` ✓ · dev server arranca limpio ✓ ·
+  screenshot completo a 375px en `docs/revisiones/landing-375.png`.
+- Revisor visual (`revisor-visual`) invocado para landing (pantalla que vende, gate
+  obligatorio) — veredicto pendiente en `docs/revisiones/landing-veredicto.md`.
+
 ## Próximo paso
-Sesión 3 — Página de ventas: `19-PAGINA-DE-VENTAS.md` (estructura canónica de 10
-secciones) + `52-COPY-VISUALES-CONVERSION.md` + `55-DISENO-DE-LANDING.md`, copy derivado
-100% de FICHA-AVATAR.md, estilo de FICHA-ARTE.md.
+Con el veredicto del revisor: aplicar correcciones si las hay → cerrar Sesión 3 →
+Sesión 4 (onboarding, paywall, login/auth).
+
+## Problemas conocidos (actualizado)
+- Los enlaces del footer (/privacidad, /terminos, /reembolsos, /aviso-ia) y los
+  destinos de los CTA (/onboarding, /entrar) aún no existen como páginas — se
+  construyen en Sesión 4 y 6. Es esperado en esta etapa, no un bug.
 
 ## Problemas conocidos
 - FICHA-MODELO.md: los campos de Meta Ads Library y Sensor Tower (MRR/top-grossing)
