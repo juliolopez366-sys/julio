@@ -69,9 +69,19 @@ agotador."
 
 B3 — CONSTITUCIÓN DEL PRODUCTO: COMPLETA.
 
+## Identidad visual (Sesión 2) — en progreso
+Usuario eligió opción 1: el agente propone el diseño (sin referencia visual propia).
+TABLA DE LÍDERES investigada: Cara Care, Monash, FODMAP Snap (estructura/nicho) +
+Flo, Headspace (gigantes de bienestar, calidez). Se presentó comparativa A/B/C en
+`direcciones-abc.html` (raíz del proyecto), basada en 3 direcciones probadas del banco
+del SO (54): A = "Confianza clínica cálida" (#5 Clínica humana, teal #0F766E,
+Gantari+Atkinson Hyperlegible), B = "Tu patrón, en foco" (#10 Salvia técnica modo
+oscuro, verde #6FA17F, Chivo+Hanken Grotesk), C = "Tu diario, resuelto" (#1 Editorial
+cálida, óxido #7A3E2E, Newsreader+Mulish). Pendiente: elección del usuario.
+
 ## Próximo paso
-B4 — Referencias visuales: hacer LA PREGUNTA DE REFERENCIA (PASO 0 del 54) antes de
-proponer cualquier diseño.
+Esperar elección del usuario (A / B / C / combinar / otras 3) → volcar a FICHA-ARTE.md
++ tokens (10-DESIGN-TOKENS.md) → EL TOUR DE LA APP (54) antes de cerrar la ficha.
 
 ## Decisiones técnicas (criterio del agente, no requieren aprobación del usuario)
 (pendiente — se define en Sesión 1: framework, monetización, stack)

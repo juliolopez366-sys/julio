@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="es" data-kit="abc-v2">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dirección de arte — 3 opciones para tu app de SII/FODMAP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gantari:wght@400..800&family=Atkinson+Hyperlegible:wght@400;700&family=Chivo:wght@400..800&family=Hanken+Grotesk:wght@400..700&family=Newsreader:opsz,wght@6..72,400..700&family=Mulish:wght@400..700&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background:
+      radial-gradient(1100px 520px at 12% -6%, #f7f7f9, transparent 62%),
+      radial-gradient(900px 460px at 92% 4%, #e2e2e9, transparent 58%),
+      linear-gradient(180deg, #ededf0, #e4e4e9);
+    color: #1c1c1f;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    padding: 32px 20px 64px;
+  }
+  .cabecera { max-width: 1180px; margin: 0 auto 12px; }
+  .cabecera h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
+  .cabecera p.sub { margin-top: 6px; font-size: 14px; color: #55555c; max-width: 70ch; }
+
+  .salidas { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .salidas span {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid #c9c9cf; border-radius: 999px;
+    padding: 6px 12px; font-size: 12.5px; font-weight: 600; color: #3a3a40;
+    background: #f7f7f8;
+  }
+  .salidas b { color: #1c1c1f; }
+  .aviso-fuentes { max-width: 1180px; margin: 10px auto 28px; font-size: 12.5px; color: #6a6a72; }
+
+  .opciones { max-width: 1180px; margin: 0 auto; display: grid; gap: 40px;
+              grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
+  .opcion { display: flex; flex-direction: column; gap: 18px; }
+
+  .meta { background: #f7f7f8; border: 1px solid #d9d9de; border-radius: 14px; padding: 18px; }
+  .meta .letra {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 8px; font-weight: 800; font-size: 15px;
+    color: #f7f7f8; background: #1c1c1f; margin-right: 8px;
+  }
+  .meta h2 { display: flex; align-items: center; font-size: 17px; font-weight: 700; }
+  .meta .direccion { margin-top: 4px; font-size: 13px; color: #55555c; }
+  .hipotesis { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #3a3a40; }
+  .meta ul.tokens { margin-top: 10px; list-style: none; font-size: 12px; color: #6a6a72;
+                    font-family: ui-monospace, monospace; line-height: 1.7; }
+
+  .especimen { margin-top: 12px; border-top: 1px solid #d9d9de; padding-top: 12px; }
+  .especimen .esp-display { font-size: 21px; font-weight: 700; letter-spacing: -0.01em; }
+  .especimen .esp-body { margin-top: 4px; font-size: 13.5px; color: #3a3a40; }
+
+  .telefono {
+    width: 310px; margin: 0 auto;
+    aspect-ratio: 9 / 19.5;
+    border: 10px solid #101014;
+    border-radius: 46px;
+    box-shadow: 0 24px 60px rgb(20 18 24 / 0.28);
+    overflow: hidden;
+    position: relative;
+    display: flex; flex-direction: column;
+  }
+  .statusbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 22px 6px; font-size: 13px; font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .statusbar .der { display: flex; align-items: center; gap: 5px; }
+  .home-indicator {
+    position: absolute; bottom: 7px; left: 50%; transform: translateX(-50%);
+    width: 116px; height: 5px; border-radius: 999px; opacity: 0.85;
+  }
+  .pantalla { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  .chip-icono { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0; }
+  .cta { display: flex; align-items: center; justify-content: center; height: 48px; font-size: 15px; font-weight: 600; letter-spacing: 0.01em; }
+
+  .tabbar {
+    display: flex; align-items: stretch; justify-content: space-around;
+    margin: 12px -18px 0; padding: 8px 8px 16px;
+    border-top: 1px solid color-mix(in oklab, var(--text-2) 18%, transparent);
+    background: color-mix(in oklab, var(--surface) 88%, transparent);
+  }
+  .op-c .tabbar { margin-inline: -20px; }
+  .tabbar a { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 9.5px; font-weight: 600; color: var(--text-2); text-decoration: none; }
+  .tabbar .tab-chip { display: flex; align-items: center; justify-content: center; width: 36px; height: 26px; border-radius: 9px; }
+  .tabbar a.activa { color: var(--accent); }
+  .tabbar a.activa .tab-chip { background: color-mix(in oklab, var(--accent) 14%, transparent); }
+
+  .paleta { display: flex; gap: 8px; margin-top: 10px; }
+  .paleta span { width: 26px; height: 26px; border-radius: 999px; box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.10), 0 1px 3px rgb(0 0 0 / 0.12); }
+
+  .rotulo-frame { text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #85858e; margin-top: 2px; }
+  .hero-landing {
+    width: 310px; margin: 6px auto 0; border-radius: 18px; overflow: hidden;
+    border: 1px solid rgb(0 0 0 / 0.10);
+    box-shadow: 0 16px 40px rgb(20 18 24 / 0.16);
+    background: var(--bg); color: var(--text-1);
+    font-family: var(--font-body); padding: 22px 18px 18px;
+  }
+  .hero-landing .hl-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--accent);
+    background: color-mix(in oklab, var(--accent) 10%, transparent);
+    border: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
+    border-radius: 999px; padding: 4px 10px;
+  }
+  .hero-landing h4 { font-family: var(--font-display); font-size: 22px; font-weight: 700; line-height: 1.16; letter-spacing: -0.01em; margin-top: 10px; }
+  .hero-landing h4 em { font-style: normal; color: var(--accent); }
+  .hero-landing .hl-sub { margin-top: 8px; font-size: 13px; color: var(--text-2); line-height: 1.5; }
+  .hero-landing .hl-sub b { color: var(--text-1); font-weight: 600; }
+  .hero-landing .hl-cta {
+    margin-top: 14px; display: flex; align-items: center; justify-content: center;
+    height: 46px; border-radius: var(--radius-btn); font-size: 14.5px; font-weight: 700;
+    color: var(--bg);
+    background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 86%, white), var(--accent));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35), 0 10px 24px -6px color-mix(in oklab, var(--accent) 45%, transparent);
+  }
+  .hero-landing .hl-prueba { margin-top: 10px; font-size: 11.5px; color: var(--text-2); text-align: center; }
+
+  /* ============ OPCIÓN A — Confianza clínica cálida (banco 54 · dirección 5 Clínica humana) ============ */
+  .op-a {
+    --bg: #f4f7f6; --surface: #fdfefd; --text-1: #22302c; --text-2: #667670;
+    --accent: #0f766e; --radius-card: 18px; --radius-btn: 12px;
+    --font-display: 'Gantari', monospace; --font-body: 'Atkinson Hyperlegible', monospace;
+    --shadow-tinta: 15 118 110;
+  }
+  .op-a .especimen .esp-display { font-family: var(--font-display); }
+  .op-a .especimen .esp-body { font-family: var(--font-body); }
+  .op-a .telefono { background: var(--bg); }
+  .op-a .pantalla { font-family: var(--font-body); color: var(--text-1); padding: 0 18px; }
+  .op-a .statusbar { color: var(--text-1); }
+  .op-a .home-indicator { background: var(--text-1); }
+  .op-a .saludo { margin-top: 10px; font-size: 12px; font-weight: 600; color: var(--text-2); }
+  .op-a h3.titulo-a { font-family: var(--font-display); font-size: 24px; font-weight: 700; line-height: 1.14; letter-spacing: -0.01em; margin-top: 2px; }
+  .op-a .heroe {
+    margin-top: 14px; border-radius: var(--radius-card);
+    border: 1.5px solid transparent;
+    background: linear-gradient(var(--surface), var(--surface)) padding-box,
+      linear-gradient(135deg, color-mix(in oklab, var(--accent) 45%, transparent), transparent 60%) border-box;
+    box-shadow: 0 10px 26px -10px rgb(var(--shadow-tinta) / 0.22);
+    padding: 16px;
+  }
+  .op-a .heroe .label { font-size: 11.5px; font-weight: 600; color: var(--text-2); }
+  .op-a .heroe .dato { font-family: var(--font-display); font-size: 34px; font-weight: 700; line-height: 1.08; }
+  .op-a .heroe .dato small { font-size: 14px; font-weight: 600; color: var(--text-2); }
+  .op-a .heroe .insight { margin-top: 4px; font-size: 12.5px; color: var(--accent); font-weight: 600; }
+  .op-a .card {
+    margin-top: 10px; background: var(--surface); border-radius: var(--radius-card);
+    border: 1px solid color-mix(in oklab, var(--text-2) 22%, transparent);
+    padding: 12px 14px; display: flex; gap: 12px; align-items: flex-start;
+  }
+  .op-a .chip-icono { border-radius: var(--radius-btn); background: color-mix(in oklab, var(--accent) 10%, transparent); border: 1px solid color-mix(in oklab, var(--accent) 22%, transparent); }
+  .op-a .card h4 { font-size: 14px; font-weight: 700; }
+  .op-a .card p { margin-top: 2px; font-size: 12.5px; color: var(--text-2); line-height: 1.45; }
+  .op-a .cta { margin-top: auto; margin-bottom: 0; border-radius: var(--radius-btn); background: var(--accent); color: #fff; box-shadow: 0 8px 22px color-mix(in oklab, var(--accent) 30%, transparent); }
+
+  /* ============ OPCIÓN B — Tu patrón, en foco (banco 54 · dirección 10 Salvia técnica, modo oscuro) ============ */
+  .op-b {
+    --bg: #12160f; --surface: #1b2317; --text-1: #e9efe6; --text-2: #93a48f;
+    --accent: #6fa17f; --radius-card: 14px; --radius-btn: 10px;
+    --font-display: 'Chivo', monospace; --font-body: 'Hanken Grotesk', monospace;
+    --shadow-tinta: 10 15 9;
+  }
+  .op-b .especimen .esp-display { font-family: var(--font-display); }
+  .op-b .especimen .esp-body { font-family: var(--font-body); }
+  .op-b .telefono { background: var(--bg); }
+  .op-b .pantalla { font-family: var(--font-body); color: var(--text-1); padding: 0 18px; }
+  .op-b .statusbar { color: var(--text-1); }
+  .op-b .home-indicator { background: var(--text-1); }
+  .op-b .encabezado-b { margin-top: 12px; text-align: center; }
+  .op-b .encabezado-b .periodo { font-size: 11.5px; font-weight: 600; color: var(--text-2); font-variant-numeric: tabular-nums; }
+  .op-b h3.titulo-b { font-family: var(--font-display); font-size: 20px; font-weight: 700; letter-spacing: -0.02em; margin-top: 2px; }
+  .op-b .anillo-wrap { margin: 14px auto 0; position: relative; width: 132px; height: 132px; }
+  .op-b .anillo-wrap .centro { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .op-b .anillo-wrap .pct { font-family: var(--font-display); font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .op-b .anillo-wrap .pct-label { font-size: 10px; color: var(--text-2); font-weight: 600; text-align: center; max-width: 84px; }
+  .op-b .grid2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+  .op-b .tile { background: var(--surface); border-radius: var(--radius-card); border: 1px solid rgb(255 255 255 / 0.07); padding: 12px; }
+  .op-b .tile.destacada {
+    border: 1.5px solid transparent;
+    background: linear-gradient(var(--surface), var(--surface)) padding-box,
+      linear-gradient(135deg, color-mix(in oklab, var(--accent) 50%, transparent), transparent 60%) border-box;
+  }
+  .op-b .tile .t-label { display: flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 600; color: var(--text-2); }
+  .op-b .tile .t-dato { margin-top: 6px; font-family: var(--font-display); font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .op-b .tile .t-dato small { font-size: 11.5px; color: var(--text-2); font-weight: 600; }
+  .op-b .cta { margin-top: auto; margin-bottom: 0; border-radius: var(--radius-btn); background: var(--accent); color: #0e1310; box-shadow: 0 8px 24px color-mix(in oklab, var(--accent) 28%, transparent); }
+
+  /* ============ OPCIÓN C — Tu diario, resuelto (banco 54 · dirección 1 Editorial cálida) ============ */
+  .op-c {
+    --bg: #f6f1e8; --surface: #fcf9f2; --text-1: #2c2721; --text-2: #6e6557;
+    --accent: #7a3e2e; --radius-card: 14px; --radius-btn: 10px;
+    --font-display: 'Newsreader', monospace; --font-body: 'Mulish', monospace;
+    --shadow-tinta: 62 50 36;
+  }
+  .op-c .especimen .esp-display { font-family: var(--font-display); }
+  .op-c .especimen .esp-body { font-family: var(--font-body); }
+  .op-c .telefono { background: var(--bg); }
+  .op-c .pantalla { font-family: var(--font-body); color: var(--text-1); padding: 0 20px; }
+  .op-c .statusbar { color: var(--text-1); }
+  .op-c .home-indicator { background: var(--text-1); }
+  .op-c .masthead { margin-top: 10px; border-bottom: 2px solid var(--text-1); padding-bottom: 8px; position: relative; }
+  .op-c .masthead::after { content: ''; position: absolute; left: 0; right: 0; bottom: -5px; border-bottom: 1px solid var(--text-1); }
+  .op-c .masthead .edicion { font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-2); }
+  .op-c h3.titulo-c { font-family: var(--font-display); font-size: 24px; font-weight: 700; line-height: 1.12; margin-top: 2px; }
+  .op-c .timeline { margin-top: 16px; display: flex; flex-direction: column; }
+  .op-c .evento { display: grid; grid-template-columns: 44px 14px 1fr; gap: 0 8px; padding-bottom: 16px; position: relative; }
+  .op-c .evento .hora { font-size: 12px; font-weight: 600; color: var(--text-2); font-variant-numeric: tabular-nums; padding-top: 1px; }
+  .op-c .evento .nodo { position: relative; display: flex; justify-content: center; }
+  .op-c .evento .nodo::before { content: ''; position: absolute; top: 14px; bottom: -4px; width: 1.5px; background: color-mix(in oklab, var(--text-2) 35%, transparent); }
+  .op-c .evento:last-child .nodo::before { display: none; }
+  .op-c .evento .punto { width: 10px; height: 10px; border-radius: 999px; margin-top: 3px; border: 2px solid color-mix(in oklab, var(--text-2) 55%, transparent); background: var(--bg); z-index: 1; }
+  .op-c .evento.activo .punto { border-color: var(--accent); background: var(--accent); }
+  .op-c .evento h4 { font-size: 13.5px; font-weight: 700; line-height: 1.3; }
+  .op-c .evento.activo h4 { color: var(--accent); }
+  .op-c .evento p { margin-top: 2px; font-size: 12px; color: var(--text-2); line-height: 1.45; }
+  .op-c .cierre-nota {
+    margin-top: 4px; border: 1px solid transparent; border-radius: var(--radius-card);
+    background: linear-gradient(var(--surface), var(--surface)) padding-box,
+      linear-gradient(135deg, color-mix(in oklab, var(--accent) 40%, transparent), transparent 60%) border-box;
+    box-shadow: 0 8px 20px -10px rgb(var(--shadow-tinta) / 0.25);
+    padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start;
+  }
+  .op-c .chip-icono { width: 36px; height: 36px; border-radius: var(--radius-btn); background: color-mix(in oklab, var(--accent) 10%, transparent); }
+  .op-c .cierre-nota p { font-size: 12.5px; color: var(--text-2); line-height: 1.5; }
+  .op-c .cierre-nota p b { color: var(--text-1); }
+  .op-c .cta { margin-top: auto; margin-bottom: 0; border-radius: var(--radius-btn); background: var(--accent); color: var(--bg); box-shadow: 0 8px 22px color-mix(in oklab, var(--accent) 28%, transparent); font-family: var(--font-body); }
+
+  .pie { max-width: 1180px; margin: 40px auto 0; font-size: 12.5px; color: #6a6a72; border-top: 1px solid #d0d0d6; padding-top: 14px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<header class="cabecera">
+  <h1>Dirección de arte — 3 opciones para tu app de SII/FODMAP</h1>
+  <p class="sub">Tu app resuelta en tres estilos de verdad distintos, basados en apps líderes de salud y bienestar (Cara Care, Flo, Headspace). Ninguno es un borrador: cualquiera puede ser la app final.</p>
+  <div class="salidas" role="list">
+    <span role="listitem"><b>1 · Elegir</b> A, B o C</span>
+    <span role="listitem"><b>2 · Combinar</b> («la A pero con la tipografía de la C»)</span>
+    <span role="listitem"><b>3 · Pedir otras 3</b> direcciones nuevas</span>
+    <span role="listitem"><b>4 · Ajustar un detalle</b> («la B con el verde más cálido»)</span>
+  </div>
+</header>
+<p class="aviso-fuentes">El nombre de cada familia tipográfica se muestra abajo EN su propia fuente — así confirmas que se ve como debe.</p>
+
+<div class="opciones">
+
+  <!-- OPCIÓN A -->
+  <section class="opcion op-a" aria-label="Opción A">
+    <div class="meta">
+      <h2><span class="letra">A</span> Confianza clínica cálida</h2>
+      <p class="direccion">Blanco cálido y un verde-teal de confianza — se ve competente y seria, como algo que le puedes mostrar a tu médico, pero sin sentirse fría ni de hospital.</p>
+      <p class="hipotesis"><strong>Por qué convierte:</strong> Valeria desconfía de la IA y ha sido decepcionada por apps "clínicas y aburridas" (Monash) — este estilo se ve serio y confiable SIN ser frío, lo que baja su objeción #1 ("la IA no va a acertar").</p>
+      <ul class="tokens"><li>fondo #F4F7F6 · acento #0F766E</li><li>Gantari + Atkinson Hyperlegible</li></ul>
+      <div class="paleta" aria-hidden="true">
+        <span style="background:#f4f7f6"></span><span style="background:#fdfefd"></span>
+        <span style="background:#22302c"></span><span style="background:#667670"></span>
+        <span style="background:#0f766e"></span>
+      </div>
+      <div class="especimen">
+        <p class="esp-display">Gantari — AaBbÑñ 0123</p>
+        <p class="esp-body">Atkinson Hyperlegible — El veloz murciélago hindú comía feliz cardillo y kiwi.</p>
+      </div>
+    </div>
+
+    <div class="telefono">
+      <div class="statusbar"><span>9:41</span><span class="der">●●●</span></div>
+      <div class="pantalla">
+        <p class="saludo">Martes 24 de septiembre</p>
+        <h3 class="titulo-a">Hola, Valeria</h3>
+        <div class="heroe">
+          <p class="label">Riesgo de tu almuerzo</p>
+          <p class="dato">Medio <small>· ajo detectado</small></p>
+          <p class="insight">3 comidas seguras registradas esta semana</p>
+        </div>
+        <div class="card">
+          <span class="chip-icono" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          </span>
+          <div><h4>Tu patrón más fuerte</h4><p>El ajo aparece en 4 de tus últimos 5 días malos.</p></div>
+        </div>
+        <div class="card">
+          <span class="chip-icono" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 2.6 6.9L22 9.3l-5.4 4.6 1.8 7.1L12 17l-6.4 4 1.8-7.1L2 9.3l7.4-.4Z"/></svg>
+          </span>
+          <div><h4>Sin ataques hace 4 días</h4><p>Tu racha más larga desde que empezaste.</p></div>
+        </div>
+        <div class="cta">Registrar mi próxima comida</div>
+        <nav class="tabbar" aria-label="Navegación">
+          <a class="activa" href="#"><span class="tab-chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg></span>Hoy</a>
+          <a href="#"><span class="tab-chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>Patrones</a>
+          <a href="#"><span class="tab-chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 9h18"/></svg></span>Historial</a>
+          <a href="#"><span class="tab-chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></span>Perfil</a>
+        </nav>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+
+    <p class="rotulo-frame">Así se vería la página que vende tu app</p>
+    <div class="hero-landing">
+      <span class="hl-badge">Motor de correlación</span>
+      <h4>Encuentra <em>tu detonante real</em>, no el de un libro</h4>
+      <p class="hl-sub"><b>Foto y listo.</b> Cruzamos cada síntoma con lo que comiste en las últimas 48 horas para mostrarte el patrón, con datos.</p>
+      <div class="hl-cta">Encontrar mi detonante</div>
+      <p class="hl-prueba">7 días gratis · cancela cuando quieras</p>
+    </div>
+  </section>
+
+  <!-- OPCIÓN B -->
+  <section class="opcion op-b" aria-label="Opción B">
+    <div class="meta">
+      <h2><span class="letra">B</span> Tu patrón, en foco</h2>
+      <p class="direccion">Modo oscuro con un verde natural (no clínico) — se siente como un panel de datos serio, con el detonante sospechoso como protagonista al centro.</p>
+      <p class="hipotesis"><strong>Por qué convierte:</strong> le da a Valeria la sensación de "por fin datos de verdad" (su deseo #13: "datos claros para mostrarle a mi gastroenterólogo") — el dato central hace sentir la app como un instrumento, no un diario.</p>
+      <ul class="tokens"><li>fondo #12160F · acento #6FA17F</li><li>Chivo + Hanken Grotesk</li></ul>
+      <div class="paleta" aria-hidden="true">
+        <span style="background:#12160f"></span><span style="background:#1b2317"></span>
+        <span style="background:#e9efe6"></span><span style="background:#93a48f"></span>
+        <span style="background:#6fa17f"></span>
+      </div>
+      <div class="especimen">
+        <p class="esp-display">Chivo — AaBbÑñ 0123</p>
+        <p class="esp-body">Hanken Grotesk — El veloz murciélago hindú comía feliz cardillo y kiwi.</p>
+      </div>
+    </div>
+
+    <div class="telefono">
+      <div class="statusbar"><span>9:41</span><span class="der">●●●</span></div>
+      <div class="pantalla">
+        <div class="encabezado-b">
+          <p class="periodo">Últimos 14 días</p>
+          <h3 class="titulo-b">Tu detonante más probable</h3>
+        </div>
+        <div class="anillo-wrap">
+          <svg width="132" height="132" viewBox="0 0 132 132" role="img" aria-label="80 por ciento de confianza">
+            <circle cx="66" cy="66" r="57" fill="none" stroke-width="11" stroke="rgba(111,161,127,0.16)"/>
+            <circle cx="66" cy="66" r="57" fill="none" stroke-width="11" stroke="#6fa17f" stroke-linecap="round" stroke-dasharray="358.1" stroke-dashoffset="71.6" transform="rotate(-90 66 66)"/>
+          </svg>
+          <div class="centro"><span class="pct">80%</span><span class="pct-label">confianza · Ajo</span></div>
+        </div>
+        <div class="grid2x2">
+          <div class="tile destacada">
+            <p class="t-label">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6fa17f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              Días malos con ajo
+            </p>
+            <p class="t-dato">4<small>/5</small></p>
+          </div>
+          <div class="tile">
+            <p class="t-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Comidas hoy</p>
+            <p class="t-dato">3</p>
+          </div>
+          <div class="tile">
+            <p class="t-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Días sin dolor</p>
+            <p class="t-dato">5</p>
+          </div>
+          <div class="tile">
+            <p class="t-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 2.6 6.9L22 9.3l-5.4 4.6 1.8 7.1L12 17l-6.4 4 1.8-7.1L2 9.3l7.4-.4Z"/></svg>Racha de registro</p>
+            <p class="t-dato">9<small> días</small></p>
+          </div>
+        </div>
+        <div class="cta">Ver el detalle del patrón</div>
+        <nav class="tabbar" aria-label="Navegación">
+          <a class="activa" href="#"><span class="tab-chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg></span>Hoy</a>
+          <a href="#"><span class="tab-chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>Patrones</a>
+          <a href="#"><span class="tab-chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 9h18"/></svg></span>Historial</a>
+          <a href="#"><span class="tab-chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></span>Perfil</a>
+        </nav>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+
+    <p class="rotulo-frame">Así se vería la página que vende tu app</p>
+    <div class="hero-landing">
+      <span class="hl-badge">Motor de correlación</span>
+      <h4>Deja de adivinar: <em>mide</em> tu detonante real</h4>
+      <p class="hl-sub"><b>Confianza estadística, no una lista plana.</b> Te decimos qué tan seguro es el patrón, con el porcentaje al frente.</p>
+      <div class="hl-cta">Ver mi patrón ahora</div>
+      <p class="hl-prueba">7 días gratis · cancela cuando quieras</p>
+    </div>
+  </section>
+
+  <!-- OPCIÓN C -->
+  <section class="opcion op-c" aria-label="Opción C">
+    <div class="meta">
+      <h2><span class="letra">C</span> Tu diario, resuelto</h2>
+      <p class="direccion">Cálido, tipo cuaderno editorial — cuenta tu día como una línea de tiempo en vez de una planilla. Se siente personal, no como "hacer tarea".</p>
+      <p class="hipotesis"><strong>Por qué convierte:</strong> ataca directo su dolor #7 ("siento que estoy haciendo tarea cada vez que como") — el formato de diario cálido en vez de formulario reduce la sensación de trabajo.</p>
+      <ul class="tokens"><li>fondo #F6F1E8 · acento #7A3E2E</li><li>Newsreader + Mulish</li></ul>
+      <div class="paleta" aria-hidden="true">
+        <span style="background:#f6f1e8"></span><span style="background:#fcf9f2"></span>
+        <span style="background:#2c2721"></span><span style="background:#6e6557"></span>
+        <span style="background:#7a3e2e"></span>
+      </div>
+      <div class="especimen">
+        <p class="esp-display">Newsreader — AaBbÑñ 0123</p>
+        <p class="esp-body">Mulish — El veloz murciélago hindú comía feliz cardillo y kiwi.</p>
+      </div>
+    </div>
+
+    <div class="telefono">
+      <div class="statusbar"><span>9:41</span><span class="der">●●●</span></div>
+      <div class="pantalla">
+        <div class="masthead">
+          <p class="edicion">Martes 24 de septiembre</p>
+          <h3 class="titulo-c">Tu día, sin adivinar</h3>
+        </div>
+        <div class="timeline">
+          <div class="evento">
+            <span class="hora">8:02</span><span class="nodo"><span class="punto"></span></span>
+            <div><h4>Avena con banana</h4><p>Riesgo bajo · sin FODMAP detectado</p></div>
+          </div>
+          <div class="evento activo">
+            <span class="hora">13:15</span><span class="nodo"><span class="punto"></span></span>
+            <div><h4>Pasta con salsa de tomate</h4><p>Riesgo medio · ajo detectado en la salsa</p></div>
+          </div>
+          <div class="evento">
+            <span class="hora">19:40</span><span class="nodo"><span class="punto"></span></span>
+            <div><h4>Hinchazón fuerte</h4><p>6 horas después del almuerzo</p></div>
+          </div>
+        </div>
+        <div class="cierre-nota">
+          <span class="chip-icono" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7a3e2e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 2.6 6.9L22 9.3l-5.4 4.6 1.8 7.1L12 17l-6.4 4 1.8-7.1L2 9.3l7.4-.4Z"/></svg>
+          </span>
+          <p><b>El ajo vuelve a aparecer.</b> Ya son 4 de tus últimos 5 días malos.</p>
+        </div>
+        <div class="cta">Registrar mi cena</div>
+        <nav class="tabbar" aria-label="Navegación">
+          <a class="activa" href="#"><span class="tab-chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg></span>Hoy</a>
+          <a href="#"><span class="tab-chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>Patrones</a>
+          <a href="#"><span class="tab-chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 9h18"/></svg></span>Historial</a>
+          <a href="#"><span class="tab-chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></span>Perfil</a>
+        </nav>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+
+    <p class="rotulo-frame">Así se vería la página que vende tu app</p>
+    <div class="hero-landing">
+      <span class="hl-badge">Motor de correlación</span>
+      <h4>Tira el diario: <em>tu día ya está resuelto</em></h4>
+      <p class="hl-sub"><b>Foto, no tarea.</b> Cada comida y cada síntoma se acomodan solos en tu línea de tiempo — el patrón aparece sin que muevas un dedo.</p>
+      <div class="hl-cta">Empezar mi diario sin esfuerzo</div>
+      <p class="hl-prueba">7 días gratis · cancela cuando quieras</p>
+    </div>
+  </section>
+
+</div>
+
+<footer class="pie">
+  Las 3 direcciones nacen de la TABLA DE LÍDERES del nicho (Cara Care, Monash, FODMAP Snap por
+  estructura; Flo y Headspace como gigantes de bienestar admirados por calidez) y de 3 direcciones
+  probadas del banco del SO (54: #5 Clínica humana, #10 Salvia técnica, #1 Editorial cálida) — sin
+  inventar combinaciones nuevas. Elige, combina, pide otras 3, o ajusta un detalle.
+</footer>
+
+</body>
+</html>
