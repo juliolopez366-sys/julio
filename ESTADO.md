@@ -47,9 +47,19 @@ Promesa central (borrador): "Ayudo a mujeres con Intestino Irritable a encontrar
 detonante real cruzando cada síntoma con lo que comieron en las últimas 48 horas, sin
 tener que teclear ni adivinar."
 
+## Constitución del Producto (B3) — en progreso
+- Primera victoria APROBADA: registrar la primera comida con foto y ver al instante el
+  nivel de riesgo FODMAP (aunque aún no haya datos suficientes para el patrón completo).
+- MVP APROBADO (3 funciones):
+  1. Foto → riesgo instantáneo (IA identifica ingredientes y nivel de riesgo FODMAP)
+  2. Registro de síntoma con un toque (tipo + hora, sin formularios largos)
+  3. Motor de correlación (cruza síntomas con comidas de 8-48h previas — el diferenciador)
+- Fuera del MVP (a V2, no se construye ahora): recetas, plan de comidas, chat con
+  nutricionista, comunidad.
+
 ## Próximo paso
-B3 — Constitución del Producto: primera victoria, MVP (3 funciones), límites de la app,
-promesa central final. Preguntar una por mensaje.
+B3 — definir el límite "qué NUNCA debe hacer la app", luego cerrar la promesa central
+final. Preguntar una por mensaje.
 
 ## Decisiones técnicas (criterio del agente, no requieren aprobación del usuario)
 (pendiente — se define en Sesión 1: framework, monetización, stack)
