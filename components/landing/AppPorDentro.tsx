@@ -116,11 +116,27 @@ export function AppPorDentro({
                     />
                   ) : (
                     /* Placeholder honesto (55 §5.2): gris elevado + nombre + dashed —
-                       nunca un frame que finja producto terminado */
-                    <div className="flex h-full w-full items-center justify-center border-2 border-dashed border-[color-mix(in_oklab,var(--text-tertiary)_40%,transparent)] bg-[var(--surface-2)] px-4">
-                      <span className="text-center text-[14px] font-medium text-[var(--text-secondary)]">
-                        {f.nombrePantalla ?? f.label}
-                      </span>
+                       nunca un frame que finja producto terminado. Lleva el mismo
+                       dispositivo ownable "mordisco" del Hero (FICHA-ARTE.md) como
+                       separador, para que la identidad no dependa solo de tener el
+                       screenshot real (pendiente de Sesión 5). */
+                    <div className="relative flex h-full w-full flex-col items-center justify-end overflow-hidden border-2 border-dashed border-[color-mix(in_oklab,var(--text-tertiary)_40%,transparent)] bg-[linear-gradient(160deg,color-mix(in_oklab,var(--accent)_80%,transparent),var(--accent)_65%)]">
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 250 22"
+                        preserveAspectRatio="none"
+                        className="absolute inset-x-0 bottom-[38%] h-[16px] w-full"
+                      >
+                        <path
+                          d="M0,0 L92,0 C104,0 108,22 125,22 C142,22 146,0 158,0 L250,0 L250,22 L0,22 Z"
+                          fill="var(--surface-2)"
+                        />
+                      </svg>
+                      <div className="relative z-10 flex h-[38%] w-full items-center justify-center bg-[var(--surface-2)] px-4">
+                        <span className="text-center text-[14px] font-medium text-[var(--text-secondary)]">
+                          {f.nombrePantalla ?? f.label}
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>

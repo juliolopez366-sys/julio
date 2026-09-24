@@ -43,7 +43,7 @@ export function Problema({ titulo, preguntas, id }: ProblemaProps) {
         {titulo && (
           <motion.h2
             variants={item}
-            className="mb-8 text-balance text-[30px] font-bold leading-[1.15] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[40px]"
+            className="mb-8 text-balance text-[26px] font-bold leading-[1.15] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[34px]"
           >
             {titulo}
           </motion.h2>
