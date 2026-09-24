@@ -88,12 +88,28 @@ FICHA-ARTE.md creada con la extracción completa (ver archivo). Resumen:
 - Encaja MUY bien con el mecanismo real de la app: el hero es literalmente la foto de
   comida que el usuario toma (el mecanismo del MVP), no una foto decorativa.
 
-Pendiente: aprobación del usuario sobre la réplica fiel.
+Se generó además EL TOUR DE LA APP (`vista-previa-app.html`): onboarding, mecanismo
+(foto→IA), pantalla principal y paywall, con el mismo estilo. Screenshots guardados en
+`docs/revisiones/replica-fiel-375.png` y `docs/revisiones/vista-previa-app-375.png`.
+Se creó también `FICHA-MODELO.md` (app modelo: Cara Care — revenue probado por
+financiamiento de $16M + adquisición por Bayer; ver ficha para el plano completo y el
+eje de diferenciación).
+
+Pendiente: aprobación del usuario sobre la réplica fiel + el tour completo.
 
 ## Próximo paso
-Si aprueba → cerrar FICHA-ARTE.md (Aprobada: SÍ) → EL TOUR DE LA APP (54): 4-5 vistas
-más (onboarding, paywall, mecanismo en acción) con este mismo estilo → recién ahí
-Sesión 3 (página de ventas).
+Si aprueba ambos → cerrar FICHA-ARTE.md (Aprobada: SÍ) → Sesión 3 (página de ventas,
+19-PAGINA-DE-VENTAS.md + FICHA-AVATAR.md — pendiente crearla formalmente con el
+PLANTILLA-FICHA-AVATAR.md antes de escribir copy de venta).
+
+## Problemas conocidos
+- FICHA-MODELO.md: los campos de Meta Ads Library y Sensor Tower (MRR/top-grossing)
+  quedaron NO ENCONTRADO — requieren búsqueda manual con acceso que esta sesión no tiene.
+  No bloquea el avance; se completa si se decide invertir en ads pagados (34).
+- FICHA-AVATAR.md formal (plantilla PLANTILLA-FICHA-AVATAR.md) aún no se creó como
+  archivo — el contenido del avatar (Valeria, dolores, deseos, objeciones) vive por ahora
+  en el PDF original del usuario y en este ESTADO.md. Debe formalizarse antes de escribir
+  cualquier copy de venta (landing/onboarding/paywall) — gate duro de la Regla 6 del SO.
 
 ## Decisiones técnicas (criterio del agente, no requieren aprobación del usuario)
 (pendiente — se define en Sesión 1: framework, monetización, stack)

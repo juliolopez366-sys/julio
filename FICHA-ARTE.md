@@ -49,9 +49,11 @@
 ## Trazabilidad y vetos
 - Ruta de diseño: RÉPLICA FIEL de la referencia del usuario (reemplazó la propuesta A/B/C)
 - Réplica fiel: `replica-fiel.html` (raíz del proyecto) · referencia archivada en
-  `docs/referencias/referencia-usuario-1.webp` · test de fidelidad: ver reporte en el mismo
-  mensaje de cierre
-- Tour de la app: PENDIENTE (se hace tras aprobar esta réplica — 4-5 vistas del estilo aplicado)
+  `docs/referencias/referencia-usuario-1.webp` · test de fidelidad: PASA (6/6, ver checklist
+  en el propio archivo) · screenshot: `docs/revisiones/replica-fiel-375.png`
+- Tour de la app: `vista-previa-app.html` (raíz) · vistas incluidas: onboarding, mecanismo
+  (foto→IA), pantalla principal (M0), paywall · screenshot: `docs/revisiones/vista-previa-app-375.png`
+  · aprobado por el usuario: PENDIENTE
 - Paleta derivada de: referencia del usuario (tomada tal cual) — verde bosque + crema pergamino
 - Registro anti-repetición: verde bosque `#47593A` + crema `#F1E8D4` + Fraunces/Work Sans →
   vetados para el próximo proyecto del SO

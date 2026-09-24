@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-kit="abc-v2">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,7 +30,7 @@
     --bg: #f6f2e6; --surface: #f1e8d4; --hundido: #e9dfc6;
     --text-1: #2c2a1e; --text-2: #6b6b54;
     --accent: #47593a; --alerta: #b5652e;
-    --font-display: 'Fraunces', serif; --font-body: 'Work Sans', sans-serif;
+    --font-display: 'Fraunces', monospace; --font-body: 'Work Sans', monospace;
   }
   .telefono {
     width: 320px; margin: 0 auto;
@@ -139,6 +139,18 @@
   </div>
   <div class="columna">
     <p class="rotulo">Tu app, en ese mismo estilo</p>
+    <div class="paleta" style="display:flex;gap:8px;justify-content:center;margin-bottom:12px;">
+      <span style="width:26px;height:26px;border-radius:999px;background:#f6f2e6;box-shadow:inset 0 0 0 1px rgb(0 0 0/0.1)"></span>
+      <span style="width:26px;height:26px;border-radius:999px;background:#f1e8d4;box-shadow:inset 0 0 0 1px rgb(0 0 0/0.1)"></span>
+      <span style="width:26px;height:26px;border-radius:999px;background:#2c2a1e"></span>
+      <span style="width:26px;height:26px;border-radius:999px;background:#6b6b54"></span>
+      <span style="width:26px;height:26px;border-radius:999px;background:#47593a"></span>
+      <span style="width:26px;height:26px;border-radius:999px;background:#b5652e"></span>
+    </div>
+    <div style="text-align:left;max-width:320px;margin:0 auto 16px;font-family:'Segoe UI',sans-serif;">
+      <p style="font-family:'Fraunces',monospace;font-size:19px;font-weight:700;">Fraunces — AaBbÑñ 0123</p>
+      <p style="font-family:'Work Sans',monospace;font-size:13px;color:#55555c;margin-top:2px;">Work Sans — El veloz murciélago hindú comía feliz cardillo y kiwi.</p>
+    </div>
     <div class="telefono">
       <div class="statusbar"><span>9:41</span><span>●●●</span></div>
       <div class="pantalla">
@@ -189,6 +201,15 @@
           <a href="#"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></a>
         </nav>
       </div>
+    </div>
+
+    <p style="text-align:center;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#85858e;margin-top:14px;">Así se vería la página que vende tu app</p>
+    <div style="width:320px;margin:6px auto 0;border-radius:18px;overflow:hidden;border:1px solid rgb(0 0 0/0.1);box-shadow:0 16px 40px rgb(20 18 24/0.16);background:var(--bg);color:var(--text-1);font-family:var(--font-body);padding:22px 18px 18px;">
+      <span style="display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);background:color-mix(in oklab, var(--accent) 10%, transparent);border:1px solid color-mix(in oklab, var(--accent) 25%, transparent);border-radius:999px;padding:4px 10px;">Motor de correlación</span>
+      <h4 style="font-family:var(--font-display);font-size:22px;font-weight:700;line-height:1.16;letter-spacing:-0.01em;margin-top:10px;">Encuentra <em style="font-style:normal;color:var(--accent);">tu detonante real</em>, no el de un libro</h4>
+      <p style="margin-top:8px;font-size:13px;color:var(--text-2);line-height:1.5;"><b style="color:var(--text-1);font-weight:600;">Foto y listo.</b> Cruzamos cada síntoma con lo que comiste en las últimas 48 horas para mostrarte el patrón, con datos.</p>
+      <div style="margin-top:14px;display:flex;align-items:center;justify-content:center;height:46px;border-radius:16px;font-size:14.5px;font-weight:700;color:#fff;background:linear-gradient(180deg, color-mix(in oklab, var(--accent) 86%, white), var(--accent));box-shadow:inset 0 1px 0 rgb(255 255 255/0.35), 0 10px 24px -6px color-mix(in oklab, var(--accent) 45%, transparent);">Encontrar mi detonante</div>
+      <p style="margin-top:10px;font-size:11.5px;color:var(--text-2);text-align:center;">7 días gratis · cancela cuando quieras</p>
     </div>
   </div>
 </div>

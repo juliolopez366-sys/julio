@@ -1,0 +1,58 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - heading "Réplica fiel — tu app con el estilo de tu referencia" [level=1] [ref=e3]
+    - paragraph [ref=e4]: Extraje el verde bosque, el crema pergamino, la curva orgánica y la barra flotante de tu imagen — el contenido es tu app (foto de comida → riesgo → patrón), la piel visual es la que elegiste.
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - paragraph [ref=e7]: Tu referencia
+      - img "Referencia del usuario" [ref=e8]
+    - generic [ref=e9]:
+      - paragraph [ref=e10]: Tu app, en ese mismo estilo
+      - generic [ref=e18]:
+        - paragraph [ref=e19]: Fraunces — AaBbÑñ 0123
+        - paragraph [ref=e20]: Work Sans — El veloz murciélago hindú comía feliz cardillo y kiwi.
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - generic [ref=e23]: 9:41
+          - generic [ref=e24]: ●●●
+        - generic [ref=e25]:
+          - generic [ref=e26]: Tu almuerzo
+          - generic [ref=e36]:
+            - paragraph [ref=e37]: Riesgo de esta comida
+            - heading "Medio · ajo detectado" [level=3] [ref=e38]
+            - paragraph [ref=e39]: 3 comidas seguras registradas esta semana
+            - generic [ref=e40]:
+              - generic [ref=e41]: Tu patrón
+              - link "Ver todo" [ref=e42] [cursor=pointer]:
+                - /url: "#"
+            - generic [ref=e43]:
+              - generic [ref=e46]:
+                - heading "Ajo" [level=4] [ref=e47]
+                - paragraph [ref=e48]: 4 de 5 días malos
+              - generic [ref=e51]:
+                - heading "Cebolla" [level=4] [ref=e52]
+                - paragraph [ref=e53]: 2 de 5 días malos
+            - paragraph [ref=e58]: El ajo vuelve a aparecer. Ya son 4 de tus últimos 5 días malos.
+          - navigation "Navegación" [ref=e59]:
+            - link [ref=e60] [cursor=pointer]:
+              - /url: "#"
+            - link [ref=e63] [cursor=pointer]:
+              - /url: "#"
+            - link [ref=e67] [cursor=pointer]:
+              - /url: "#"
+            - link [ref=e71] [cursor=pointer]:
+              - /url: "#"
+      - paragraph [ref=e75]: Así se vería la página que vende tu app
+      - generic [ref=e76]:
+        - generic [ref=e77]: Motor de correlación
+        - heading [level=4] [ref=e78]:
+          - text: Encuentra
+          - emphasis [ref=e79]: tu detonante real
+          - text: ", no el de un libro"
+        - paragraph [ref=e80]: Foto y listo. Cruzamos cada síntoma con lo que comiste en las últimas 48 horas para mostrarte el patrón, con datos.
+        - generic [ref=e81]: Encontrar mi detonante
+        - paragraph [ref=e82]: 7 días gratis · cancela cuando quieras
+  - generic [ref=e83]:
+    - generic [ref=e84]: Test de fidelidad
+    - text: "✓ Mismo modo (claro) ✓ Mismo hue de acento (verde bosque, no perturbado) ✓ Misma sensación tipográfica (display con carácter orgánico + body limpio) ✓ Radios grandes y orgánicos (±4px de la referencia) ✓ Misma densidad aireada ✓ Misma lógica de sombra (sutil, casi ausente dentro de la app) ✓ Detalle firma replicado: la curva \"mordisco\" entre la foto y la hoja crema, y la barra de navegación en píldora flotante"
+  - paragraph [ref=e85]: "Si esto te convence, lo guardo como definitivo en tu Ficha de Arte y seguimos con el Tour de la App (4-5 pantallas más con este mismo estilo: onboarding, pantalla de planes, y el mecanismo de la foto en acción). Si quieres ajustar algo — más verde, menos curva, otra tipografía — dímelo y lo corrijo antes de seguir."
