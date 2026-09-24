@@ -57,9 +57,21 @@ tener que teclear ni adivinar."
 - Fuera del MVP (a V2, no se construye ahora): recetas, plan de comidas, chat con
   nutricionista, comunidad.
 
+- Límites APROBADOS ("la app nunca"): (1) nunca reemplaza al médico ni sugiere
+  medicamentos, (2) nunca inventa un patrón sin evidencia suficiente — dice "aún no hay
+  datos suficientes" en vez de adivinar, (3) nunca usa tono de culpa/regaño, (4) nunca
+  comparte datos de salud del usuario con nadie.
+
+Promesa central FINAL: "Ayudo a mujeres con Intestino Irritable a encontrar su
+detonante real cruzando cada síntoma con lo que comieron en las últimas 48 horas —sin
+teclear, sin adivinar y sin que su app las trate como un experimento científico
+agotador."
+
+B3 — CONSTITUCIÓN DEL PRODUCTO: COMPLETA.
+
 ## Próximo paso
-B3 — definir el límite "qué NUNCA debe hacer la app", luego cerrar la promesa central
-final. Preguntar una por mensaje.
+B4 — Referencias visuales: hacer LA PREGUNTA DE REFERENCIA (PASO 0 del 54) antes de
+proponer cualquier diseño.
 
 ## Decisiones técnicas (criterio del agente, no requieren aprobación del usuario)
 (pendiente — se define en Sesión 1: framework, monetización, stack)
