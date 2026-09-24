@@ -118,13 +118,32 @@ consciencia "consciente de la solución" / mercado sofisticado). Cosa juzgada.
   obligatorio) — veredicto pendiente en `docs/revisiones/landing-veredicto.md`.
 
 ## Próximo paso
-Con el veredicto del revisor: aplicar correcciones si las hay → cerrar Sesión 3 →
-Sesión 4 (onboarding, paywall, login/auth).
+Con el segundo veredicto del revisor: si sigue NO LISTA solo por los placeholders
+honestos del hero/carrusel (ver Problemas conocidos), se acepta y se cierra la Sesión 3
+igual — esos dos defectos dependen de que exista la app real (Sesión 5). Si aparece algo
+NUEVO que sí sea corregible hoy, se corrige antes de cerrar. Luego → Sesión 4
+(onboarding, paywall, login/auth).
+
+## FICHA-MERCADO.md — creada (2026-09-24)
+Precio $6.99/mes · $49.99/año (del documento original del usuario). Pasarela: Hotmart.
+**Prueba elegida: 7 días · Garantía elegida: 15 días** (garantía 15 > prueba 7 ✓ — regla
+dura del 18 cumplida, verificado contra la política real de Hotmart: 7/15/21/30 días
+configurables). Resuelve el gate `garantia` del hook de cierre.
 
 ## Problemas conocidos (actualizado)
 - Los enlaces del footer (/privacidad, /terminos, /reembolsos, /aviso-ia) y los
   destinos de los CTA (/onboarding, /entrar) aún no existen como páginas — se
   construyen en Sesión 4 y 6. Es esperado en esta etapa, no un bug.
+- **veredicto:landing** — el revisor-visual marcó la landing como "NO LISTA" por 2
+  defectos que dependen de la app real, todavía inexistente: (1) el visual del Hero es
+  un placeholder honesto (no hay screenshot real de "foto de comida + riesgo detectado"
+  porque la app interna no se ha construido — eso es la Sesión 5), y (2) el carrusel de
+  "La app por dentro" (4 frames) son placeholders con solo el nombre de la pantalla por
+  la misma razón. Se decide POSPONER ambos a la Sesión 5, cuando existan capturas reales
+  que montar — es la secuencia correcta del SO (no se simulan screenshots falsos de una
+  app que no existe). Sí se corrigieron los defectos accionables hoy: verbo de CTA
+  unificado y dispositivo ownable "mordisco" agregado al placeholder del Hero para
+  diferenciar la paleta de la dirección "Capítulo" vetada.
 
 ## Problemas conocidos
 - FICHA-MODELO.md: los campos de Meta Ads Library y Sensor Tower (MRR/top-grossing)

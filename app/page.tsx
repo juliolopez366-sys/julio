@@ -110,7 +110,7 @@ export default function LandingFoodScan() {
           totalAnual: 'Se cobra $49.99/año',
           ahorro: '2 meses gratis',
           descomposicionDia: 'menos de $0.14 al día',
-          ctaLabel: 'Empezar mis 7 días gratis',
+          ctaLabel: CTA_LABEL,
           ctaHref: CTA_HREF,
           features: [
             'Foto → riesgo instantáneo con IA',

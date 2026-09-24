@@ -58,7 +58,7 @@
   - totalTachado: `$132` · nota: `Hoy: $4.17/mes (se cobra $49.99/año)`
 - anual: badge `MÁS POPULAR` · precioMes `$4.17` · totalAnual `Se cobra $49.99/año`
   · ahorro `2 meses gratis` · descomposicionDia `menos de $0.14 al día`
-  · ctaLabel `Empezar mis 7 días gratis`
+  · ctaLabel `Encontrar mi detonante gratis` (mismo verbo del hero, regla del kit)
   · features: `Foto → riesgo instantáneo con IA` · `Registro de síntomas en un toque`
     · `Motor de correlación de 48 horas` · `Reportes para tu médico`
 - mensual: precioMes `$6.99` · ctaLabel `Elegir mensual` · mismas features + `Cancelas cuando quieras`

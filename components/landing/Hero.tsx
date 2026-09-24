@@ -113,12 +113,27 @@ export function Hero({
               </div>
             ) : (
               /* Placeholder HONESTO (55 §1.3): dashed + ratio fijo (CLS 0) + sugerencia.
+                 Lleva el dispositivo ownable de FICHA-ARTE.md (la curva "mordisco") para
+                 que la identidad no dependa solo de la paleta papel+tinta verde.
                  Queda anotado como pendiente en ESTADO.md hasta montar el visual real. */
-              <div className="flex aspect-[4/3] w-full flex-col items-center justify-center gap-3 rounded-[var(--radius-card)] border-2 border-dashed border-[color-mix(in_oklab,var(--text-tertiary)_45%,transparent)] bg-[color-mix(in_oklab,var(--accent)_5%,transparent)] px-8">
-                <Camera size={20} color="var(--text-secondary)" aria-hidden="true" />
-                <p className="max-w-[36ch] text-center text-[14px] font-medium leading-snug text-[var(--text-secondary)]">
-                  Sugerencia: {visualPlaceholderSugerencia}
-                </p>
+              <div className="relative flex aspect-[4/3] w-full flex-col items-center justify-end overflow-hidden rounded-[var(--radius-card)] border-2 border-dashed border-[color-mix(in_oklab,var(--text-tertiary)_45%,transparent)] bg-[linear-gradient(160deg,color-mix(in_oklab,var(--accent)_85%,transparent),var(--accent)_70%)]">
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 400 34"
+                  preserveAspectRatio="none"
+                  className="absolute inset-x-0 bottom-[22%] h-[24px] w-full"
+                >
+                  <path
+                    d="M0,0 L150,0 C172,0 178,34 200,34 C222,34 228,0 250,0 L400,0 L400,34 L0,34 Z"
+                    fill="var(--surface)"
+                  />
+                </svg>
+                <div className="relative z-10 flex w-full flex-col items-center gap-3 bg-[var(--surface)] px-8 pb-6 pt-4 [border-radius:0_0_var(--radius-card)_var(--radius-card)]">
+                  <Camera size={20} color="var(--text-secondary)" aria-hidden="true" />
+                  <p className="max-w-[36ch] text-center text-[14px] font-medium leading-snug text-[var(--text-secondary)]">
+                    Sugerencia: {visualPlaceholderSugerencia}
+                  </p>
+                </div>
               </div>
             )}
           </div>
