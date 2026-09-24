@@ -53,10 +53,10 @@
   en el propio archivo) · screenshot: `docs/revisiones/replica-fiel-375.png`
 - Tour de la app: `vista-previa-app.html` (raíz) · vistas incluidas: onboarding, mecanismo
   (foto→IA), pantalla principal (M0), paywall · screenshot: `docs/revisiones/vista-previa-app-375.png`
-  · aprobado por el usuario: PENDIENTE
+  · aprobado por el usuario: SÍ (2026-09-24)
 - Paleta derivada de: referencia del usuario (tomada tal cual) — verde bosque + crema pergamino
 - Registro anti-repetición: verde bosque `#47593A` + crema `#F1E8D4` + Fraunces/Work Sans →
   vetados para el próximo proyecto del SO
 - Modo (claro/oscuro): claro — fijado por la referencia del usuario
 
-## Idioma UI: Español latino neutro · Fecha de cierre: PENDIENTE aprobación · Aprobada: NO (en revisión)
+## Idioma UI: Español latino neutro · Fecha de cierre: 2026-09-24 · Aprobada: SÍ

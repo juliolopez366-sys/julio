@@ -95,21 +95,25 @@ Se creó también `FICHA-MODELO.md` (app modelo: Cara Care — revenue probado p
 financiamiento de $16M + adquisición por Bayer; ver ficha para el plano completo y el
 eje de diferenciación).
 
-Pendiente: aprobación del usuario sobre la réplica fiel + el tour completo.
+FICHA-ARTE.md: APROBADA (2026-09-24) — réplica fiel + tour de 4 pantallas confirmados
+por el usuario. Identidad visual es COSA JUZGADA desde ahora.
+
+FICHA-AVATAR.md: creada y APROBADA (2026-09-24) con los datos del documento de
+investigación original del usuario (Valeria, dolores, deseos, objeciones, VoC, nivel de
+consciencia "consciente de la solución" / mercado sofisticado). Cosa juzgada.
 
 ## Próximo paso
-Si aprueba ambos → cerrar FICHA-ARTE.md (Aprobada: SÍ) → Sesión 3 (página de ventas,
-19-PAGINA-DE-VENTAS.md + FICHA-AVATAR.md — pendiente crearla formalmente con el
-PLANTILLA-FICHA-AVATAR.md antes de escribir copy de venta).
+Sesión 3 — Página de ventas: `19-PAGINA-DE-VENTAS.md` (estructura canónica de 10
+secciones) + `52-COPY-VISUALES-CONVERSION.md` + `55-DISENO-DE-LANDING.md`, copy derivado
+100% de FICHA-AVATAR.md, estilo de FICHA-ARTE.md.
 
 ## Problemas conocidos
 - FICHA-MODELO.md: los campos de Meta Ads Library y Sensor Tower (MRR/top-grossing)
   quedaron NO ENCONTRADO — requieren búsqueda manual con acceso que esta sesión no tiene.
   No bloquea el avance; se completa si se decide invertir en ads pagados (34).
-- FICHA-AVATAR.md formal (plantilla PLANTILLA-FICHA-AVATAR.md) aún no se creó como
-  archivo — el contenido del avatar (Valeria, dolores, deseos, objeciones) vive por ahora
-  en el PDF original del usuario y en este ESTADO.md. Debe formalizarse antes de escribir
-  cualquier copy de venta (landing/onboarding/paywall) — gate duro de la Regla 6 del SO.
+- FICHA-AVATAR.md no viene de entrevistas directas (44), sino del documento de research
+  de mercado del usuario + reseñas públicas de competidores. Es evidencia real y citable,
+  pero si en el futuro hay usuarias reales, conviene reforzarla con sus entrevistas.
 
 ## Decisiones técnicas (criterio del agente, no requieren aprobación del usuario)
 (pendiente — se define en Sesión 1: framework, monetización, stack)
