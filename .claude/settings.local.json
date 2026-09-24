@@ -3,7 +3,9 @@
     "allow": [
       "Bash(unzip -o \"/c/Users/julio/Downloads/SO-apps-v6.10.0\\(1\\).zip\" -d .)",
       "Read(//tmp/**)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(python3 -c ' *)",
+      "Bash(base64 -w0 docs/referencias/referencia-usuario-1.webp)"
     ]
   }
 }

@@ -70,18 +70,30 @@ agotador."
 B3 — CONSTITUCIÓN DEL PRODUCTO: COMPLETA.
 
 ## Identidad visual (Sesión 2) — en progreso
-Usuario eligió opción 1: el agente propone el diseño (sin referencia visual propia).
-TABLA DE LÍDERES investigada: Cara Care, Monash, FODMAP Snap (estructura/nicho) +
-Flo, Headspace (gigantes de bienestar, calidez). Se presentó comparativa A/B/C en
-`direcciones-abc.html` (raíz del proyecto), basada en 3 direcciones probadas del banco
-del SO (54): A = "Confianza clínica cálida" (#5 Clínica humana, teal #0F766E,
-Gantari+Atkinson Hyperlegible), B = "Tu patrón, en foco" (#10 Salvia técnica modo
-oscuro, verde #6FA17F, Chivo+Hanken Grotesk), C = "Tu diario, resuelto" (#1 Editorial
-cálida, óxido #7A3E2E, Newsreader+Mulish). Pendiente: elección del usuario.
+El usuario eligió inicialmente "que el agente proponga" y se le presentó A/B/C
+(`direcciones-abc.html`), PERO luego mandó una imagen de referencia real (mockup de
+app de recetas: verde bosque + crema pergamino, curva orgánica, nav en píldora) diciendo
+"me encanta este estilo". Por protocolo (16), una referencia dada por el usuario ES
+CONTRATO y reemplaza el A/B/C: se hizo RÉPLICA FIEL, no interpretación libre.
+
+FICHA-ARTE.md creada con la extracción completa (ver archivo). Resumen:
+- Paleta: verde bosque #47593A (acento único) + crema pergamino #F1E8D4 + fondo #F6F2E6
+- Tipografía: Fraunces (display) + Work Sans (body)
+- Radio grande/orgánico, sombra casi ausente, sin bordes
+- Dispositivo ownable: la curva "mordisco" entre la foto de comida y la hoja crema +
+  nav inferior en píldora flotante
+- Réplica construida en `replica-fiel.html` (raíz), imagen de referencia archivada en
+  `docs/referencias/referencia-usuario-1.webp` e incrustada en base64 en la réplica
+  para que se vea siempre sin depender de rutas locales.
+- Encaja MUY bien con el mecanismo real de la app: el hero es literalmente la foto de
+  comida que el usuario toma (el mecanismo del MVP), no una foto decorativa.
+
+Pendiente: aprobación del usuario sobre la réplica fiel.
 
 ## Próximo paso
-Esperar elección del usuario (A / B / C / combinar / otras 3) → volcar a FICHA-ARTE.md
-+ tokens (10-DESIGN-TOKENS.md) → EL TOUR DE LA APP (54) antes de cerrar la ficha.
+Si aprueba → cerrar FICHA-ARTE.md (Aprobada: SÍ) → EL TOUR DE LA APP (54): 4-5 vistas
+más (onboarding, paywall, mecanismo en acción) con este mismo estilo → recién ahí
+Sesión 3 (página de ventas).
 
 ## Decisiones técnicas (criterio del agente, no requieren aprobación del usuario)
 (pendiente — se define en Sesión 1: framework, monetización, stack)
