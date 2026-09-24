@@ -64,7 +64,7 @@ export function Solucion({
       >
         <motion.div variants={item}>
           <Kicker>{kicker}</Kicker>
-          <h2 className="text-balance text-[30px] font-bold leading-[1.15] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[40px]">
+          <h2 className="text-balance text-[28px] font-bold leading-[1.15] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[38px]">
             <MarkedCopy text={tituloMarked} />
           </h2>
         </motion.div>

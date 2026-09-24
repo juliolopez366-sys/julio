@@ -41,7 +41,18 @@ export function Garantia({ nombre, condicionMarked, pisoLegal, icon: Icono = Shi
         <motion.div variants={item}>
           {/* La card de garantía: uno de los 1-3 usos de hairline permitidos por vista */}
           <Hairline surface="surface" className="shadow-[var(--shadow-1)]">
-            <div className="flex flex-col items-center gap-4 px-6 py-10 text-center">
+            <div className="flex flex-col items-center gap-4 px-6 pb-10 pt-2 text-center">
+              {/* Dispositivo ownable "mordisco" (FICHA-ARTE.md) repetido aquí para que
+                  la identidad no viva solo en el Hero y el carrusel. */}
+              <svg aria-hidden="true" viewBox="0 0 120 14" className="h-[10px] w-[120px]">
+                <path
+                  d="M0,0 L44,0 C50,0 52,14 60,14 C68,14 70,0 76,0 L120,0"
+                  fill="none"
+                  stroke="color-mix(in oklab, var(--accent) 35%, transparent)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
               <span
                 aria-hidden="true"
                 className="flex size-15 items-center justify-center rounded-[var(--radius-button)] border border-[color-mix(in_oklab,var(--accent)_22%,transparent)] bg-[var(--chip-bg)]"
