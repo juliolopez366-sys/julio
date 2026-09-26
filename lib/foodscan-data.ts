@@ -85,13 +85,13 @@ function crearSemilla(ahora: number) {
   const hora = 3_600_000;
 
   const base: { id: string; nombreComida: string; descripcion: string; ingredientes: string[]; registradoEn: string; colorFoto: [string, string] }[] = [
-    { id: 'c1', nombreComida: 'Desayuno', descripcion: 'Avena con plátano', ingredientes: ['avena', 'plátano'], registradoEn: new Date(ahora - 5 * dia - 6 * hora).toISOString(), colorFoto: ['#dcd0a8', '#a9925f'] },
-    { id: 'c2', nombreComida: 'Almuerzo', descripcion: 'Pasta con ajo y tomate', ingredientes: ['pasta', 'ajo', 'tomate', 'aceite de oliva'], registradoEn: new Date(ahora - 5 * dia).toISOString(), colorFoto: ['#e2b98a', '#8f5a34'] },
-    { id: 'c3', nombreComida: 'Desayuno', descripcion: 'Huevo revuelto con espinaca', ingredientes: ['huevo', 'espinaca'], registradoEn: new Date(ahora - 4 * dia - 4 * hora).toISOString(), colorFoto: ['#e8d9a0', '#b89b4e'] },
-    { id: 'c4', nombreComida: 'Cena', descripcion: 'Pollo con cebolla salteada', ingredientes: ['pollo', 'cebolla', 'pimiento'], registradoEn: new Date(ahora - 4 * dia + 10 * hora).toISOString(), colorFoto: ['#d7a373', '#7d4f2a'] },
-    { id: 'c5', nombreComida: 'Almuerzo', descripcion: 'Ensalada con pollo y espinaca', ingredientes: ['pollo', 'espinaca', 'pepino'], registradoEn: new Date(ahora - 3 * dia - 4 * hora).toISOString(), colorFoto: ['#bcd0a0', '#5f7a45'] },
-    { id: 'c6', nombreComida: 'Cena', descripcion: 'Hummus de garbanzo con ajo', ingredientes: ['garbanzo', 'ajo', 'limón'], registradoEn: new Date(ahora - 3 * dia + 11 * hora).toISOString(), colorFoto: ['#d9c48a', '#8c752f'] },
-    { id: 'c7', nombreComida: 'Cena', descripcion: 'Sopa de miso con ajo', ingredientes: ['ajo', 'miso', 'fideos'], registradoEn: new Date(ahora - 2 * dia + 19 * hora).toISOString(), colorFoto: ['#c9ad7a', '#71592b'] },
+    { id: 'c1', nombreComida: 'Desayuno', descripcion: 'Avena con plátano', ingredientes: ['avena', 'plátano'], registradoEn: new Date(ahora - 10 * dia - 6 * hora).toISOString(), colorFoto: ['#dcd0a8', '#a9925f'] },
+    { id: 'c2', nombreComida: 'Almuerzo', descripcion: 'Pasta con ajo y tomate', ingredientes: ['pasta', 'ajo', 'tomate', 'aceite de oliva'], registradoEn: new Date(ahora - 10 * dia).toISOString(), colorFoto: ['#e2b98a', '#8f5a34'] },
+    { id: 'c3', nombreComida: 'Desayuno', descripcion: 'Huevo revuelto con espinaca', ingredientes: ['huevo', 'espinaca'], registradoEn: new Date(ahora - 7 * dia - 4 * hora).toISOString(), colorFoto: ['#e8d9a0', '#b89b4e'] },
+    { id: 'c4', nombreComida: 'Cena', descripcion: 'Pollo con cebolla salteada', ingredientes: ['pollo', 'cebolla', 'pimiento'], registradoEn: new Date(ahora - 7 * dia + 10 * hora).toISOString(), colorFoto: ['#d7a373', '#7d4f2a'] },
+    { id: 'c5', nombreComida: 'Almuerzo', descripcion: 'Ensalada con pollo y espinaca', ingredientes: ['pollo', 'espinaca', 'pepino'], registradoEn: new Date(ahora - 6 * dia - 4 * hora).toISOString(), colorFoto: ['#bcd0a0', '#5f7a45'] },
+    { id: 'c6', nombreComida: 'Cena', descripcion: 'Hummus de garbanzo con ajo', ingredientes: ['garbanzo', 'ajo', 'limón'], registradoEn: new Date(ahora - 6 * dia + 11 * hora).toISOString(), colorFoto: ['#d9c48a', '#8c752f'] },
+    { id: 'c7', nombreComida: 'Cena', descripcion: 'Sopa de miso con ajo', ingredientes: ['ajo', 'miso', 'fideos'], registradoEn: new Date(ahora - 5 * dia + 19 * hora).toISOString(), colorFoto: ['#c9ad7a', '#71592b'] },
     { id: 'c8', nombreComida: 'Almuerzo', descripcion: 'Pizza con ajo y masa de trigo', ingredientes: ['trigo', 'ajo', 'queso'], registradoEn: new Date(ahora - 1 * dia).toISOString(), colorFoto: ['#dba25c', '#7a4a1f'] },
     { id: 'c9', nombreComida: 'Desayuno', descripcion: 'Pan tostado con miel', ingredientes: ['trigo', 'miel'], registradoEn: new Date(ahora - 3 * hora).toISOString(), colorFoto: ['#e6c98f', '#a3763a'] },
   ];
@@ -102,8 +102,8 @@ function crearSemilla(ahora: number) {
   });
 
   const sintomas: Sintoma[] = [
-    { id: 's1', tipo: 'dolor', intensidad: 2, registradoEn: new Date(ahora - 5 * dia + 6 * hora).toISOString() },
-    { id: 's2', tipo: 'hinchazon', intensidad: 3, registradoEn: new Date(ahora - 3 * dia + 15 * hora).toISOString() },
+    { id: 's1', tipo: 'dolor', intensidad: 2, registradoEn: new Date(ahora - 10 * dia + 6 * hora).toISOString() },
+    { id: 's2', tipo: 'hinchazon', intensidad: 3, registradoEn: new Date(ahora - 6 * dia + 15 * hora).toISOString() },
     { id: 's3', tipo: 'urgencia', intensidad: 2, registradoEn: new Date(ahora - 1 * dia + 10 * hora).toISOString() },
   ];
 

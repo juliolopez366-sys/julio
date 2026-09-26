@@ -4,12 +4,11 @@
 // vista-previa-app.html (vista 3): foto de la última comida + mordisco + resultado
 // de riesgo + insight del Motor de Detonante Real.
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { Camera, Flame, Plus } from 'lucide-react';
 import { FotoComida } from '@/components/app/foto-comida';
 import { MordiscoAncho } from '@/components/app/mordisco-ancho';
-import { BadgeRiesgo } from '@/components/app/badge-riesgo';
 import { FilaComida } from '@/components/app/fila-comida';
 import { SheetNuevaComida } from '@/components/app/sheet-nueva-comida';
 import { SheetSintoma } from '@/components/app/sheet-sintoma';
@@ -21,6 +20,7 @@ import {
   calcularCorrelacion,
   agregarComida,
   agregarSintoma,
+  ETIQUETA_RIESGO,
   type Comida,
   type Perfil,
   type Correlacion,
@@ -32,6 +32,27 @@ function esHoy(iso: string) {
   return fecha.toDateString() === hoy.toDateString();
 }
 
+/** Cuenta desde el valor anterior al nuevo (baseline #2 — nunca un número estático). */
+function useContadorAnimado(valor: number, duracionMs = 600) {
+  const [mostrado, setMostrado] = useState(valor);
+  const anterior = useRef(0);
+  useEffect(() => {
+    const inicio = anterior.current;
+    const fin = valor;
+    const t0 = performance.now();
+    let raf: number;
+    const tick = (t: number) => {
+      const p = Math.min(1, (t - t0) / duracionMs);
+      setMostrado(Math.round(inicio + (fin - inicio) * p));
+      if (p < 1) raf = requestAnimationFrame(tick);
+      else anterior.current = fin;
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [valor, duracionMs]);
+  return mostrado;
+}
+
 export default function HoyPage() {
   const [comidas, setComidas] = useState<Comida[] | null>(null);
   const [perfil, setPerfil] = useState<Perfil | null>(null);
@@ -39,6 +60,7 @@ export default function HoyPage() {
   const [sheetComida, setSheetComida] = useState(false);
   const [sheetSintoma, setSheetSintoma] = useState(false);
   const reduce = useReducedMotion();
+  const rachaAnimada = useContadorAnimado(perfil?.rachaActual ?? 0);
 
   useEffect(() => {
     asegurarSemilla();
@@ -65,14 +87,15 @@ export default function HoyPage() {
 
   const ultima = comidas[0];
   const comidasHoy = comidas.filter((c) => esHoy(c.registradoEn));
+  const colorResultado = ultima.nivelRiesgo === 'bajo' ? 'var(--accent)' : 'var(--alerta)';
 
   return (
     <div className="flex flex-1 flex-col">
       <div className="relative h-[200px] shrink-0 overflow-hidden" style={{ background: 'linear-gradient(160deg, color-mix(in oklab, var(--accent) 78%, white 22%), var(--accent) 70%)' }}>
         <div className="flex items-center justify-between px-5 pt-5">
           <span className="text-[15px] font-semibold text-white [font-family:var(--font-display)]">FoodScan</span>
-          <span className="flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[12px] font-semibold text-white">
-            <Flame size={14} aria-hidden="true" /> {perfil.rachaActual} días
+          <span className="flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[12px] font-semibold tabular-nums text-white">
+            <Flame size={14} aria-hidden="true" /> {rachaAnimada} días
           </span>
         </div>
         <FotoComida colores={ultima.colorFoto} className="absolute inset-x-5 top-14 bottom-0 rounded-t-[var(--radius-card)]" />
@@ -81,15 +104,12 @@ export default function HoyPage() {
 
       <div className="flex flex-1 flex-col gap-5 px-5 pb-28 pt-1">
         <motion.div initial={{ opacity: 0, y: reduce ? 0 : 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-          <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">
-            Tu {ultima.nombreComida.toLowerCase()} · {ultima.descripcion}
-          </p>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            <BadgeRiesgo nivel={ultima.nivelRiesgo} />
-            {ultima.ingredientesRiesgo.length > 0 && (
-              <span className="text-[15px] text-[var(--text-secondary)]">por {ultima.ingredientesRiesgo.join(', ')}</span>
-            )}
-          </div>
+          <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">Riesgo de tu {ultima.nombreComida.toLowerCase()}</p>
+          <h2 className="mt-1 text-[28px] font-bold [font-family:var(--font-display)]" style={{ color: colorResultado }}>
+            {ETIQUETA_RIESGO[ultima.nivelRiesgo]}
+            {ultima.ingredientesRiesgo[0] ? ` · ${ultima.ingredientesRiesgo[0]}` : ''}
+          </h2>
+          <p className="text-[15px] text-[var(--text-secondary)]">{ultima.descripcion}</p>
         </motion.div>
 
         {correlacion && (
@@ -101,26 +121,29 @@ export default function HoyPage() {
           >
             <p className="text-[15px] leading-relaxed text-[var(--text-primary)]">
               <b className="font-semibold text-[var(--accent)]">El {correlacion.ingrediente} vuelve a aparecer.</b>{' '}
-              {correlacion.vecesConSintoma} de tus últimos {correlacion.vecesComido} registros con este ingrediente terminaron en síntomas.
+              {correlacion.vecesConSintoma} de tus últimos {correlacion.vecesComido} registros con este ingrediente terminaron en síntomas.{' '}
+              <span className="text-[var(--text-secondary)]">Todavía es poca muestra — sigue registrando para confirmarlo.</span>
             </p>
           </motion.div>
         )}
 
         <motion.div initial={{ opacity: 0, y: reduce ? 0 : 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.14 }} className="flex flex-col gap-3">
-          <button
+          <motion.button
             type="button"
+            whileTap={reduce ? undefined : { scale: 0.97 }}
             onClick={() => setSheetComida(true)}
             className="flex h-[52px] w-full items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--accent)] text-[16px] font-semibold text-[var(--bg)] shadow-[0_8px_24px_color-mix(in_oklab,var(--accent)_28%,transparent)] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)]"
           >
             <Camera size={20} aria-hidden="true" /> Escanear mi próxima comida
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             type="button"
+            whileTap={reduce ? undefined : { scale: 0.97 }}
             onClick={() => setSheetSintoma(true)}
             className="flex h-12 w-full items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--surface-2)] text-[15px] font-semibold text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
           >
             <Plus size={18} aria-hidden="true" /> Registrar un síntoma
-          </button>
+          </motion.button>
         </motion.div>
 
         <div>
