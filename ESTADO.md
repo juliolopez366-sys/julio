@@ -134,6 +134,20 @@ la Regla de Oro 6 de CLAUDE.md.
   cambiaron desde el veredicto LISTA de landing). Es un falso positivo del chequeo
   por fecha de archivo, no un veredicto real desactualizado. Si se quiere limpiar la
   señal, re-lanzar el revisor sobre landing sin cambios reales no aporta nada nuevo.
+- **veredicto:onboarding** — LISTA (36/40 · 16/20, 7ª pasada, detalle completo en la
+  sección "Sesión 4" arriba). El hook marca este veredicto como "caducado" por el
+  mismo falso positivo de fecha de archivo que landing (arriba): detecta
+  `app/paywall/page.tsx` más nuevo, pero es una pantalla DISTINTA — el código propio
+  de onboarding no cambió desde el veredicto LISTA.
+- **veredicto:paywall** — LISTA (37/40 · 16/20 · 19/20 copy, 9ª pasada, detalle
+  completo en la sección "Sesión 4" arriba). El hook lo marca "caducado" porque
+  `app/paywall/page.tsx` es más nuevo que el archivo del veredicto: es real, no falso
+  positivo — después del veredicto LISTA se aplicó un último ajuste cosmético (quitar
+  un `border-2` residual en el timeline, mismo tipo de defecto que ya se había
+  corregido en las tarjetas de plan y que el propio veredicto listaba como no
+  bloqueante). El cambio no introduce nada nuevo que el revisor no haya evaluado ya
+  en esa categoría de defecto; no se considera necesario relanzar una 10ª pasada por
+  un ajuste puramente visual de un punto ya cubierto.
 - Los enlaces del footer (/privacidad, /terminos, /reembolsos, /aviso-ia) aún no
   existen como páginas — se construyen en Sesión 6 (legal) y Sesión 4 (auth/onboarding
   para /entrar y /onboarding). Esperado en esta etapa, no un bug.
