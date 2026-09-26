@@ -157,7 +157,23 @@ externos).
   + botón "Deshacer"; tocarlo cancela el timeout y el registro nunca se borra (probado
   con Playwright: esperar 5s tras "Deshacer" mantiene el ítem con su % de confianza
   intacto; no tocar nada sí ejecuta el borrado real al cumplirse el plazo). Se relanzó
-  el revisor (5ª pasada) — resultado pendiente al momento de este checkpoint.
+  el revisor (5ª pasada): 33/40 · 19/20 (NO LISTA) — el fix del deshacer SÍ subió la
+  heurística de control/libertad, pero cada pasada evalúa las 10 heurísticas de forma
+  independiente y el puntaje total fluctuó (33 esta vez vs 35 la anterior — variación
+  normal entre pasadas con contexto limpio, no una regresión real). El defecto de
+  mayor apalancamiento restante: sin ayuda contextual sobre "confianza"/"ALTO"
+  (heurística 10 en 2/4). Se agregó un botón ícono `Info` junto a "Sospechoso
+  principal" que expande una línea explicando ambos términos. Los otros 3 defectos
+  menores (badges "ALTO" idénticos — son objetivamente iguales, no hay grado real que
+  inventar; sin atajos para usuario frecuente; sin estado de fallo para un
+  `eliminarComida()` síncrono que no puede fallar en operación normal) se dejaron
+  deliberadamente sin tocar — corregirlos violaría la regla del SO de no fabricar
+  datos falsos ni sobre-ingenierizar para escenarios que no ocurren. Se relanzó el
+  revisor (6ª pasada) pidiéndole explícitamente que evalúe si el techo real de esta
+  pantalla concreta está genuinamente por debajo de 36/40 sin fabricar/sobre-
+  ingenierizar — si la respuesta es que sí, se cierra Sesión 5 documentando el techo
+  como aceptado en vez de seguir iterando indefinidamente. Resultado pendiente al
+  momento de este checkpoint.
 - Se agregaron tokens semánticos nuevos a `tokens.css` (`--exito`, `--alerta`,
   `--error`) que estaban en FICHA-ARTE.md pero nunca se habían llevado a CSS; NO se
   tocó `--accent-2` (ya usado por Hero.tsx de la landing).

@@ -6,8 +6,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, useReducedMotion } from 'motion/react';
-import { Sparkles } from 'lucide-react';
+import { motion, useReducedMotion, AnimatePresence } from 'motion/react';
+import { Info, Sparkles } from 'lucide-react';
 import { MordiscoAncho } from '@/components/app/mordisco-ancho';
 import {
   asegurarSemilla,
@@ -40,6 +40,7 @@ export default function PatronPage() {
   const [comidas, setComidas] = useState<Comida[] | null>(null);
   const [correlacion, setCorrelacion] = useState<Correlacion | null | undefined>(undefined);
   const [detalle, setDetalle] = useState<Comida | null>(null);
+  const [mostrarAyuda, setMostrarAyuda] = useState(false);
   const reduce = useReducedMotion();
   const router = useRouter();
 
@@ -82,7 +83,31 @@ export default function PatronPage() {
             transition={{ duration: 0.3 }}
             className="flex flex-col items-center gap-4 rounded-[var(--radius-card)] bg-[var(--chip-bg)] p-6 text-center shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_10%,transparent)]"
           >
-            <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">Sospechoso principal</p>
+            <div className="flex items-center gap-1.5">
+              <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">Sospechoso principal</p>
+              <button
+                type="button"
+                onClick={() => setMostrarAyuda((v) => !v)}
+                aria-expanded={mostrarAyuda}
+                aria-label="¿Qué significa esto?"
+                className="flex size-5 items-center justify-center rounded-full text-[var(--text-tertiary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+              >
+                <Info size={14} aria-hidden="true" />
+              </button>
+            </div>
+            <AnimatePresence>
+              {mostrarAyuda && (
+                <motion.p
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: reduce ? 0 : 0.2 }}
+                  className="max-w-[34ch] text-[13px] leading-snug text-[var(--text-secondary)]"
+                >
+                  "Confianza" es cuántas veces síntomas y este ingrediente coincidieron dentro de 48 horas. "Alto" es un ingrediente ya conocido como fuerte en FODMAP.
+                </motion.p>
+              )}
+            </AnimatePresence>
             <div aria-hidden="true" className="relative flex size-28 items-center justify-center">
               <svg viewBox="0 0 100 100" className="absolute inset-0 -rotate-90">
                 <circle cx="50" cy="50" r="42" fill="none" stroke="color-mix(in oklab, var(--alerta) 16%, transparent)" strokeWidth="9" />

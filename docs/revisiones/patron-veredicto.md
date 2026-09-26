@@ -1,22 +1,53 @@
 # VEREDICTO revisor-visual — Tu Patrón
 Fecha: 2026-09-26 00:00
 Screenshot: docs/revisiones/patron-375.png
-Usabilidad: 35/40
+Usabilidad: 33/40
 Craft: 19/20
 Copy (si vende): N-A
 Fidelidad (si hubo referencia): FIEL
 Veredicto: NO LISTA
 Top defectos:
-1. [Sheet de detalle, tras eliminar] Hay confirmación visual (check + "Registro eliminado" con aria-live) pero NO hay "deshacer" — la eliminación es irreversible en el instante del tap en "Sí, eliminar" (el segundo paso solo confirma la intención, no ofrece revertir el resultado). → Agregar un breve "Deshacer" de 4-5s antes de que la eliminación sea definitiva, o mantener el registro recuperable un rato (heurística 3).
-2. [Sección "La evidencia detrás de tu patrón", las 4 tarjetas] Los 4 badges siguen mostrando el mismo texto "ALTO" sin ninguna variación cromática/de intensidad entre ellos — sigue leyéndose repetitivo (el número de orden 1-4 ayuda a escanear pero no reemplaza la jerarquía de fuerza). → Si hay grados reales dentro de "ALTO", diferenciar con variante tonal; si las 4 son objetivamente idénticas, no bloqueante (como en pasadas anteriores).
-3. [Pantalla completa] No hay ningún tooltip/ícono de ayuda que explique qué significa "detonante", "confianza" o el criterio detrás de "ALTO" — el usuario nuevo tiene que inferirlo del párrafo de texto corrido, sin apoyo puntual donde más se necesita (junto al %/al badge). → Un ícono de info pequeño junto a "Sospechoso principal" o al badge, con un popover de 1 línea.
-4. [Heurística 7 — flexibilidad] Sigue sin existir ningún acceso rápido para el usuario frecuente (abrir detalle desde otro punto, atajos, press-and-hold). → Sigue NO bloqueante — evaluar solo si la telemetría muestra revisitas frecuentes a este tab.
-5. [Prevención de errores, general] No se observa ningún estado deshabilitado/validación previa en esta pantalla más allá de la confirmación de borrado (no hay otros inputs que prevenir) — heurística acotada por la naturaleza de solo-lectura de la pantalla, no por un defecto nuevo.
+1. [Pantalla completa] No hay ningún ícono de ayuda/tooltip junto a "Sospechoso principal", el % o el badge que explique qué significa "detonante", "confianza" o el criterio detrás de "ALTO" — persiste sin corregir desde la 3ra pasada. → Agregar un ícono de info (Lucide `Info`, 14-16px) junto a "Sospechoso principal" y/o al primer badge "ALTO" con un popover de 1 línea (heurística 10, actualmente 2/4).
+2. [Sección "La evidencia detrás de tu patrón", las 4 tarjetas] Los 4 badges "ALTO" siguen siendo visualmente idénticos sin variación tonal — persiste sin corregir desde la 2da pasada. → Si hay grados reales dentro de "ALTO" diferenciar con intensidad de color; si las 4 son objetivamente idénticas, está acotado por los datos, no bloqueante (heurística 8, actualmente 3/4).
+3. [Heurística 7 — flexibilidad] Sigue sin existir ningún acceso rápido para el usuario frecuente (atajos, defaults, acceso directo a esta pantalla desde otro punto) — persiste sin corregir desde la 2da pasada, no bloqueante por naturaleza de la pantalla (heurística 7, actualmente 2/4).
+4. [Sheet de detalle, flujo de error] No hay evidencia (código ni screenshot) de qué le muestra la app a la persona si `eliminarComida()` falla (ej. sin espacio, corrupción de localStorage) — solo existe el `error.tsx` genérico de la ruta, no un estado de fallo propio del borrado. → Si el riesgo real es bajo (localStorage síncrono), documentarlo como aceptado; si no, agregar un mensaje corto "No se pudo eliminar — intenta de nuevo" dentro del propio sheet (heurística 9, actualmente 3/4, sin verificar para este flujo específico).
+5. [Sheet de detalle, estado "Registro eliminado"] El "Deshacer" es sólido y funciona (ver verificación abajo), pero vive únicamente dentro del propio sheet modal — si la persona cierra el sheet (X, swipe, tap en el fondo) antes de los 4.5s sin haber leído "Registro eliminado", pierde la referencia visual de que hay una ventana para arrepentirse (el borrado sigue su curso en silencio). No es un defecto que un usuario note "sin buscarlo" en el flujo normal (cerrar tras ver la confirmación es aceptar el resultado, no cancelarlo) — pero un patrón más robusto (toast persistente fuera del modal) lo dejaría a prueba de este borde. No baja la heurística por debajo de 3/4; queda como refinamiento, no como bloqueante.
 
-## Verificación de los 4 fixes de la 3ra pasada (33/40 · 19/20 → NO LISTA)
-1. Sin toast/confirmación tras eliminar → RESUELTO. `sheet-detalle-comida.tsx:36-38,42-49`: al confirmar, `eliminarComida()` corre, `onEliminar?.()` refresca la lista de fondo (visible en `patron-eliminado-375.png`: la fila "Pizza con ajo y masa de trigo" ya no está detrás del sheet, el % bajó de 75% a 50%, y quedan 3 filas), se marca `setEliminado(true)` mostrando dentro del propio sheet un ícono de check + "Registro eliminado" con `role="status" aria-live="polite"`, y recién a los 900ms se cierra con `onCerrar`. El usuario VE la confirmación antes de que el sheet desaparezca — no navega a ciegas. Confirmado en código y en el screenshot del estado nuevo.
-2. `error.tsx` sin `whileTap` en "Reintentar" → RESUELTO. `error.tsx:26-33`: es `motion.button` con `whileTap={reduce ? undefined : { scale: 0.97 }}`, respeta `useReducedMotion`. Confirmado en código.
-3. Botones "Cancelar"/"Sí, eliminar"/"Eliminar este registro" sin `whileTap` → RESUELTO. Los tres son `motion.button` con el mismo `whileTap={reduce ? undefined : { scale: 0.97 }}` (`sheet-detalle-comida.tsx:80-105`). Confirmado en código.
-4. CTA "Registrar una comida" del empty-state sin `whileTap` → RESUELTO. `page.tsx:152-159`: `motion.button` con el mismo `whileTap`, mismo patrón `reduce`. Confirmado en código.
+## Verificación del fix de "deshacer real" (defecto TOP #1 de la 4ta pasada, 35/40 · 19/20 → NO LISTA)
+RESUELTO — con evidencia de código y de comportamiento verificado. `sheet-detalle-comida.tsx:39-53`:
+al tocar "Sí, eliminar" ya NO se borra el registro: `confirmarEliminar()` solo hace `setEliminado(true)`
+(muestra "Registro eliminado" + botón "Deshacer" con `role="status" aria-live="polite"`, visible en
+`patron-deshacer-375.png`) y programa `eliminarComida(comida.id)` + `onEliminar?.()` (refresco del
+padre) + `onCerrar()` recién a los 4500ms via `setTimeout`. Si la persona toca "Deshacer" dentro de
+esa ventana, `deshacerEliminar()` llama `clearTimeout(timeoutRef.current)` y revierte `eliminado` a
+`false`, devolviendo la pantalla exactamente al estado previo (foto, ingredientes y botón "Eliminar
+este registro" — el registro NUNCA llegó a borrarse). El reporte de la sesión confirma la prueba con
+Playwright: tocar "Deshacer" y esperar 5s (más allá de la ventana de 4.5s) deja el ítem intacto en
+la lista con el mismo % de confianza; dejar pasar el tiempo sin tocar nada sí ejecuta el borrado real.
+Esto es un "deshacer" REAL (revierte el resultado, no solo una animación cosmética) y cumple
+exactamente lo que pedía la heurística 3 ("¿toda acción destructiva tiene confirmación + undo?").
+Heurística 3 sube de un valor bajo (confirmación presente pero sin reversibilidad real — fallaba en
+lo básico) a 3/4 (bien implementado; el único matiz de nivel "ojo entrenado" es que el afordance de
+deshacer vive solo dentro del modal, ver defecto #5 arriba, que no alcanza a bajarlo de 3).
 
-Los 4 defectos de la 3ra pasada quedaron resueltos, incluyendo el más importante (confirmación visible tras eliminar, verificada con screenshot dedicado). El feedback de tap ahora es consistente en TODOS los botones de acción de la pantalla y sus componentes (heurística 4), y la visibilidad del sistema (heurística 1) mejoró con la confirmación in-sheet. La usabilidad sube de 33/40 a 35/40 — queda a 1 punto del umbral (≥36/40) por defectos que no formaban parte de este lote de correcciones: falta de "deshacer" real tras la eliminación (heurística 3, la confirmación previene el error pero no permite revertir el resultado), ausencia de ayuda contextual puntual sobre los términos del patrón (heurística 10), y la falta persistente de accesos rápidos (heurística 7, no bloqueante) más los badges "ALTO" sin variación tonal (no bloqueante, ya evaluado en pasadas previas). El craft se mantiene en 19/20 (sin cambios en jerarquía/profundidad/identidad/encaje; el eje de movimiento ya estaba cerca del máximo y la consistencia de tap lo consolida, sin aportar puntos adicionales por sí sola). Los dos defectos marcados como no bloqueantes en rondas anteriores (badges "ALTO" idénticos, flexibilidad/heurística 7) siguen sin bloquear el veredicto. Gate doble NO se cumple (35/40 < 36/40 requerido, aunque craft 19/20 ≥ 16/20 sí lo cumple). Veredicto: NO LISTA.
+## Por qué la pantalla SIGUE sin cruzar el umbral (33/40 < 36/40 requerido)
+El fix de heurística 3 es real y queda confirmado — pero el gate de usabilidad no depende de un
+solo criterio, y esta pasada además re-evalúa con criterio estricto e independiente los diez
+criterios completos (no solo el que se tocó). Los puntos que faltan para llegar a 36/40 (faltan 3)
+están concentrados en dos heurísticas que llevan SIN corregirse desde la 2da/3ra pasada:
+- **Heurística 10 (ayuda contextual) = 2/4**: cero apoyo puntual (tooltip/ícono info) sobre
+  "detonante", "confianza" o el criterio de "ALTO" — un usuario nuevo debe inferirlo solo del
+  párrafo. Subir esto a 3/4 (+1 punto) es el fix de mayor apalancamiento y el más barato de
+  implementar (un ícono `Info` + popover de 1 línea).
+- **Heurística 7 (flexibilidad) = 2/4**: cero atajos/accesos rápidos para el usuario frecuente, sin
+  cambios en 3 pasadas. Es la heurística más tolerada por el propio sistema para una pantalla de
+  solo-lectura como esta (la rúbrica marca "no bloqueante" explícitamente), pero sigue restando 2
+  puntos completos vs el máximo.
+- **Heurística 8 (estético/minimalista) = 3/4**: los 4 badges "ALTO" idénticos sin variación tonal
+  siguen restando un punto de pulido, sin cambios desde la 2da pasada.
+- **Heurística 9 (errores con solución) = 3/4**: no hay evidencia de un estado de fallo específico
+  del borrado (solo el error boundary genérico de la ruta) — no verificado para este flujo exacto.
+Con esas 4 heurísticas resueltas o subidas un peldaño (en particular 10 y 8, las más accionables y
+más baratas), la pantalla cruzaría 36/40 sin tocar nada más. El craft (19/20) YA cumple su umbral
+(≥16/20) y no cambió en esta pasada — el bloqueo es puramente de usabilidad.
+Gate doble NO se cumple (33/40 < 36/40; craft 19/20 ≥ 16/20 sí). Veredicto: NO LISTA.
