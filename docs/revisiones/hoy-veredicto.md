@@ -1,76 +1,100 @@
-# VEREDICTO revisor-visual — Hoy (M0, app interna FoodScan)
+# VEREDICTO revisor-visual — Hoy (M0, FoodScan)
 Fecha: 2026-09-26 00:00
 Screenshot: docs/revisiones/hoy-375.png
-Usabilidad: 31/40
-Craft: 15/20
+Usabilidad: 37/40
+Craft: 16/20
 Copy (si vende): N-A
 Fidelidad (si hubo referencia): FIEL
-Veredicto: NO LISTA
+Veredicto: LISTA
 
-Detalle usabilidad: h1:3 h2:4 h3:2 h4:4 h5:2 h6:4 h7:3 h8:3 h9:3 h10:3
-Detalle craft: jerarquía:3 profundidad:3 identidad:3 movimiento:3 encaje:3
+## Verificación de los 4 fixes de la ronda anterior
 
-## Verificación de los 5 defectos de la 3ra pasada
+1. Confirmación de borrado (2 pasos) — RESUELTO. `sheet-detalle-comida.tsx` L55-85: el primer
+   tap solo activa `confirmando=true`; el borrado real (`eliminarComida`) ocurre únicamente en
+   el segundo botón "Sí, eliminar", con "Cancelar" al lado. Cumple heurística 3 (control y
+   libertad) y el patrón de confirmación para irreversibles.
+2. Área táctil "Repetir" ≥44px — RESUELTO. `hoy/page.tsx` L178: `min-h-11` (44px) + `px-3`.
+   Verificado también visualmente en el screenshot (el link tiene aire vertical suficiente).
+3. Celebración en hito real (baseline #7) — RESUELTO. `hoy/page.tsx` L117-127: condición real
+   `perfil.rachaActual > 0 && rachaActual % 7 === 0`, `motion.div` con spring
+   (`stiffness:300, damping:20`), respeta `useReducedMotion`. Visible en el screenshot: chip
+   "¡7 días seguidos! Vas muy bien." Dato semilla ajustado a racha=7, verificable sin fe de
+   código.
+4. Color de la barra de confianza (evidencia insuficiente) — RESUELTO. `hoy/page.tsx` L146,
+   150-152: texto destacado y barra de progreso usan `var(--accent)` (verde), no
+   `var(--alerta)`. Coherente con el mismo patrón en `patron/page.tsx`. Visible en el
+   screenshot: barra verde, no terracota.
 
-1. [GENUINO] `FilaComida` ahora recibe `onClick` en las 3 pantallas: `hoy/page.tsx:194`,
-   `historial/page.tsx:104`, `patron/page.tsx:117` — todas llaman `onClick={setDetalle}` y
-   montan el mismo `SheetDetalleComida`. Consistencia real, verificado en código.
-2. [PARCIAL] Se agregó `eliminarComida(id)` en `lib/foodscan-data.ts:170-172` y el botón
-   "Eliminar este registro" en `sheet-detalle-comida.tsx:46-58` (visible cuando se pasa
-   `onEliminar`, que las 3 pantallas pasan). "Repetir" ahora confirma con un toast
-   `role="status" aria-live="polite"` (`hoy/page.tsx:222-234`). Pero el botón "Eliminar" borra
-   AL INSTANTE, sin confirmación ni undo — ver Top Defectos #1: se resolvió el hueco original
-   (no había forma de borrar) pero se introdujo uno nuevo de la misma familia (acción
-   irreversible sin red de seguridad).
-3. [GENUINO, con matiz] El contenedor "Hoy registraste N comidas" ahora lleva
-   `shadow-[inset_0_2px_6px_color-mix(in_oklab,var(--text-primary)_10%,transparent)]`
-   (`hoy/page.tsx:180`) además del cambio de tono `surface-2`. En el screenshot se lee como
-   recesado — la sombra interior sí resuelve la ambigüedad tonal señalada en la pasada anterior.
-4. [GENUINO] El toast `aria-live="polite"` con `Agregado: [comida]` aparece cerca del nav
-   (`bottom-[92px]`) al tocar "Repetir", confirmando la acción en el momento — resuelve el
-   "cambio silencioso" de la pasada anterior.
-5. [GENUINO] La barra `mt-3 h-1.5 w-full ... rounded-full` se anima de `width: 0` a
-   `${vecesConSintoma/vecesComido*100}%` con `duration: 0.8` y respeta `reduce` — apoyo visual
-   Tufte real para el dato de confianza, no solo texto.
+Los 4 fixes están genuinamente aplicados, no son cosméticos ni parciales.
 
-4 de 5 fixes están genuinamente aplicados y verificados en código; el #2 resuelve el problema
-original pero abre uno nuevo (ver abajo). Ninguno es un fix cosmético o simulado.
+## USABILIDAD 37/40
+(h1:4 h2:4 h3:4 h4:4 h5:4 h6:4 h7:3 h8:3 h9:4 h10:3)
 
-## Gate de carga cognitiva
-Pasa: ≤5 ítems visibles, 1 acción primaria + 2 secundarias, sin campos que recordar entre
-pantallas, texto por bloque ≤4 líneas, "qué sigue" obvio, header/CTA/nav sin elementos muertos.
+- h1 Estado del sistema: 4 — feedback en cada acción: skeleton en carga inicial, toast
+  "Agregado: ..." con aria-live en "Repetir", contador de racha animado, barra de confianza que
+  se dibuja, whileTap en botones. Nada se siente colgado.
+- h2 Lenguaje del usuario: 4 — "Escanear mi próxima comida", "Vas muy bien", "Todavía es poca
+  muestra" — cero jerga, cero inglés.
+- h3 Control y libertad: 4 — borrado con confirmación de 2 pasos (verificado en código), sheets
+  con drag-to-dismiss y botón cerrar explícito (`bottom-sheet.tsx` L44-46, L52-59).
+- h4 Consistencia: 4 — mismo radius, mismos chips, mismo patrón de card elevada/hundida en
+  `fila-comida.tsx` y `sheet-detalle-comida.tsx`; color de confianza ahora consistente con
+  `patron/page.tsx`.
+- h5 Prevención de errores: 4 — confirmación antes de borrar, badges de riesgo consistentes.
+- h6 Reconocer vs recordar: 4 — la última comida, el riesgo y el insight están todos visibles
+  sin que el usuario tenga que recordar nada de otra pantalla.
+- h7 Flexibilidad (verificado en código): 3 — hay un atajo real ("Repetir" evita rehacer el
+  flujo completo de escaneo), pero no hay más defaults/atajos de teclado; es aceptable para una
+  app mobile-first, no ejemplar.
+- h8 Estético y minimalista: 3 — una acción primaria clara (Escanear), pero la pantalla apila 4
+  bloques de contenido antes del registro del día (celebración + riesgo + insight + 3 CTAs) —
+  funciona, pero un ojo entrenado nota que son varios elementos compitiendo por atención antes
+  del primer scroll.
+- h9 Errores con solución: 4 — no se observaron mensajes de error en este flujo (nada que
+  penalizar; los estados vistos son correctos).
+- h10 Ayuda contextual: 3 — el empty state de "Nada registrado todavía hoy" con CTA está bien,
+  pero el insight de correlación ("todavía es poca muestra") no explica cuántos registros se
+  necesitan para confirmar — un usuario nuevo no sabe cuál es la meta.
 
-## Top Defectos
+Gate de carga cognitiva: pasa (≤5 ítems visibles, 1 acción primaria clara, campos no aplica,
+bloques de texto cortos, "qué sigue" obvio con el CTA dominante).
 
-1. [Sheet de detalle de comida → botón "Eliminar este registro", `sheet-detalle-comida.tsx:47-53`]
-   Es una acción IRREVERSIBLE (borra de `localStorage` para siempre y afecta el cálculo de
-   correlación de "Tu Patrón") pero se ejecuta en un solo tap, sin modal de confirmación ni
-   snackbar "Eliminado — Deshacer" → antes de llamar `eliminarComida`, mostrar un paso de
-   confirmación (doble tap tipo "¿Eliminar? Sí, eliminar" o un toast con acción "Deshacer" de
-   4-5s antes de persistir el borrado). Viola la regla dura de UX #8 (undo/confirmación según
-   reversibilidad) y baja heurística 3 a 2.
-2. [Link "Repetir "..."" bajo el CTA principal, `hoy/page.tsx:158-169`] Es solo texto sin
-   padding vertical definido (`flex items-center ... text-[12px]`, sin `h-` ni `py-`) — el área
-   táctil real es notablemente menor a los 44px mínimos de la regla dura de UX #5, en una zona
-   donde el usuario puede tocar por error el CTA de arriba o el botón de síntoma de abajo →
-   envolver en un botón con `min-h-11` (44px) manteniendo el texto visualmente pequeño y
-   discreto. Baja heurística 5 a 2 (mayor riesgo de mis-tap sin ningún mecanismo que lo prevenga).
-3. [Craft — EJE Movimiento] No hay evidencia en NINGÚN archivo de `app/`/`components/app/` de
-   una celebración en hitos reales (confetti/spring al llegar a una racha redonda, etc. — grep
-   de `confetti|celebra|hito|milestone` no encuentra código de producto, solo documentación del
-   SO) — falta la baseline #7 de animación. No es exigible en esta pantalla puntual si vive en
-   otra, pero si no existe en ningún lado del código de la app, es una baseline pendiente.
-4. [Card de insight "El ajo vuelve a aparecer...", `hoy/page.tsx:138-145`] La barra de progreso
-   nueva usa `bg-[var(--alerta)]` incluso cuando el insight es sobre un patrón que "todavía es
-   poca muestra" (confianza <100%, texto de baja certeza) — el color de alerta (terracota, mismo
-   tono que "riesgo alto") puede leerse como una advertencia más fuerte de la que el propio texto
-   describe → considerar un tono neutro/secundario para la barra de "confianza en construcción"
-   y reservar `--alerta` para cuando el patrón ya está confirmado (ver `patron/page.tsx` que sí
-   usa `--alerta` correctamente para un patrón YA confirmado).
-5. [Craft — EJE Identidad, atención no bloqueante] La paleta papel cálido + tinta verde
-   (crema `#F1E8D4` + verde bosque `#47593A`) es cercana en concepto al ejemplo canónico vetado
-   "Capítulo" (papel cálido + tinta verde + Petrona/Karla) del TEST ANTI-CLON — se salva porque
-   proviene de una referencia FOTOGRÁFICA real del usuario (contrato, `FICHA-ARTE.md`) y usa
-   Fraunces/Work Sans (no Petrona/Karla), por lo que NO se sanciona EJE 3 a 0, pero es la razón
-   de que el registro anti-repetición ya haya vetado esta combinación para el próximo proyecto —
-   sin acción requerida aquí, solo queda anotado.
+## CRAFT 16/20
+(jerarquía:3 profundidad:3 identidad:3 movimiento:4 encaje:3)
+
+- Jerarquía: 3 — display "Alto · trigo" domina, label uppercase y body diferenciados; 4 niveles
+  presentes, pero el body del insight (15px) y la descripción de la comida (15px) compiten en
+  peso visual con el propio título — un ojo entrenado nota que el bloque de insight es casi tan
+  prominente como el resultado principal.
+- Profundidad: 3 — header con gradiente, card de insight elevada con sombra tintada, card de
+  comidas de hoy con sombra interior (hundida) — 3 niveles reales, no un fill plano.
+- Identidad: 3 — el dispositivo "mordisco" (scallop) es ownable y está presente en el screenshot;
+  el sistema duotono verde bosque + crema con Fraunces/Work Sans se acerca a la familia vetada
+  "Capítulo" (papel cálido + tinta verde), pero nace de una referencia del usuario documentada
+  como CONTRATO en FICHA-ARTE.md y usa una pareja tipográfica distinta (Fraunces/Work Sans, no
+  Petrona/Karla) — punto ya aceptado como no accionable en la ronda anterior, no se vuelve a
+  penalizar como bloqueante.
+- Movimiento: 4 — las 7 baseline verificadas en código: (1) stagger de entrada por bloque con
+  delays 0/0.08/0.14, (2) contador de racha animado desde el valor anterior
+  (`useContadorAnimado`), (3) barra de confianza que se dibuja (`width: 0→X%`, ease
+  personalizado), (4) `whileTap scale 0.97/0.98` en CTAs y filas, (5) transición de sheets con
+  drag-to-dismiss y easing, (6) aparición suave de modales (`bottom-sheet.tsx`, opacity+y con
+  ease `[0.16,1,0.3,1]`), (7) celebración real en hito de racha. `useReducedMotion` respetado en
+  cada uno de los puntos anteriores.
+- Encaje óptico: 3 — chips abrazan su contenido, radios consistentes en todo el screenshot,
+  padding simétrico en CTAs; el badge de racha en el header y el chip de celebración usan el
+  mismo radius de píldora, correcto.
+
+## FIDELIDAD: FIEL
+Modo claro, verde bosque + crema, Fraunces/Work Sans, radios 26-28px en cards, mordisco visible
+en el header tal como fija FICHA-ARTE.md — coincide con la réplica aprobada.
+
+## TOP DEFECTOS (no bloqueantes — la pantalla cruza el umbral doble)
+1. [Card de insight de correlación] Compite en peso visual con el resultado de riesgo principal
+   (mismo tamaño de texto 15px, mismo nivel de prominencia) → reducir a 14px o mover el acento
+   solo a la palabra clave, dejando el resto en `--text-secondary` desde el inicio del párrafo.
+2. [Card de insight] No comunica la meta de confirmación ("sigue registrando" ¿hasta cuándo?) →
+   agregar el número objetivo, ej. "te faltan 3 registros más para confirmarlo".
+3. [Bloque completo antes del scroll] 4 elementos de contenido (celebración + riesgo + insight +
+   3 CTAs) antes de "Hoy registraste..." → considerar colapsar la celebración de racha en el
+   chip del header en vez de una card aparte, para bajar la densidad del primer scroll.
