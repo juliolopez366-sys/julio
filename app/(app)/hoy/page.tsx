@@ -114,6 +114,18 @@ export default function HoyPage() {
       <MordiscoAncho />
 
       <div className="flex flex-1 flex-col gap-5 px-5 pb-28 pt-1">
+        {perfil.rachaActual > 0 && perfil.rachaActual % 7 === 0 && (
+          <motion.div
+            initial={{ opacity: 0, scale: reduce ? 1 : 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 300, damping: 20 }}
+            className="flex items-center justify-center gap-2 self-center rounded-full bg-[var(--chip-bg)] px-4 py-2"
+          >
+            <Flame size={16} className="text-[var(--alerta)]" aria-hidden="true" />
+            <span className="text-[12px] font-semibold text-[var(--accent)]">¡{perfil.rachaActual} días seguidos! Vas muy bien.</span>
+          </motion.div>
+        )}
+
         <motion.div initial={{ opacity: 0, y: reduce ? 0 : 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
           <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">Riesgo de tu {ultima.nombreComida.toLowerCase()}</p>
           <h2 className="mt-1 text-[28px] font-bold [font-family:var(--font-display)]" style={{ color: colorResultado }}>
@@ -135,9 +147,9 @@ export default function HoyPage() {
               {correlacion.vecesConSintoma} de tus últimos {correlacion.vecesComido} registros con este ingrediente terminaron en síntomas.{' '}
               <span className="text-[var(--text-secondary)]">Todavía es poca muestra — sigue registrando para confirmarlo.</span>
             </p>
-            <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[color-mix(in_oklab,var(--alerta)_16%,transparent)]">
+            <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[color-mix(in_oklab,var(--accent)_16%,transparent)]">
               <motion.div
-                className="h-full rounded-full bg-[var(--alerta)]"
+                className="h-full rounded-full bg-[var(--accent)]"
                 initial={{ width: 0 }}
                 animate={{ width: `${Math.round((correlacion.vecesConSintoma / correlacion.vecesComido) * 100)}%` }}
                 transition={{ duration: reduce ? 0 : 0.8, delay: reduce ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
@@ -163,7 +175,7 @@ export default function HoyPage() {
               setAviso(`Agregado: ${ultima.descripcion}`);
               setTimeout(() => setAviso(null), 2200);
             }}
-            className="flex items-center justify-center gap-1.5 self-center text-[12px] font-medium text-[var(--text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+            className="flex min-h-11 items-center justify-center gap-1.5 self-center px-3 text-[12px] font-medium text-[var(--text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
           >
             <RotateCcw size={14} aria-hidden="true" /> Repetir &ldquo;{ultima.descripcion}&rdquo;
           </button>

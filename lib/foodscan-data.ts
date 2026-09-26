@@ -107,7 +107,7 @@ function crearSemilla(ahora: number) {
     { id: 's3', tipo: 'urgencia', intensidad: 2, registradoEn: new Date(ahora - 1 * dia + 10 * hora).toISOString() },
   ];
 
-  const perfil: Perfil = { diasMeta: 5, rachaActual: 6, rachaMaxima: 6, congeladoresDisponibles: 0 };
+  const perfil: Perfil = { diasMeta: 5, rachaActual: 7, rachaMaxima: 7, congeladoresDisponibles: 1 };
 
   return { comidas, sintomas, perfil };
 }

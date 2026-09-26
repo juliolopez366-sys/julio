@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import { BottomSheet } from './bottom-sheet';
 import { FotoComida } from './foto-comida';
@@ -14,6 +17,12 @@ export function SheetDetalleComida({
   /** Se llama tras eliminar, para que la pantalla recargue sus datos. */
   onEliminar?: () => void;
 }) {
+  const [confirmando, setConfirmando] = useState(false);
+
+  useEffect(() => {
+    if (!comida) setConfirmando(false);
+  }, [comida]);
+
   return (
     <BottomSheet abierto={comida !== null} onCerrar={onCerrar} titulo={comida?.descripcion ?? ''}>
       {comida && (
@@ -43,19 +52,37 @@ export function SheetDetalleComida({
               })}
             </div>
           </div>
-          {onEliminar && (
-            <button
-              type="button"
-              onClick={() => {
-                eliminarComida(comida.id);
-                onCerrar();
-                onEliminar();
-              }}
-              className="flex h-11 w-full items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--surface-2)] text-[15px] font-semibold text-[var(--error)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-            >
-              <Trash2 size={16} aria-hidden="true" /> Eliminar este registro
-            </button>
-          )}
+          {onEliminar &&
+            (confirmando ? (
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setConfirmando(false)}
+                  className="flex h-11 flex-1 items-center justify-center rounded-[var(--radius-button)] bg-[var(--surface-2)] text-[15px] font-semibold text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    eliminarComida(comida.id);
+                    onCerrar();
+                    onEliminar();
+                  }}
+                  className="flex h-11 flex-1 items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--error)] text-[15px] font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                >
+                  <Trash2 size={16} aria-hidden="true" /> Sí, eliminar
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setConfirmando(true)}
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--surface-2)] text-[15px] font-semibold text-[var(--error)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+              >
+                <Trash2 size={16} aria-hidden="true" /> Eliminar este registro
+              </button>
+            ))}
         </div>
       )}
     </BottomSheet>
