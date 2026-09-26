@@ -221,8 +221,10 @@ function Pregunta({
   };
   return (
     <div className="flex flex-1 flex-col justify-center gap-8">
-      <div className="flex flex-col gap-3">
-        <Mordisco />
+      <div className="flex flex-col gap-4">
+        <span className="flex size-14 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
+          <Mordisco size="lg" />
+        </span>
         <TituloConAcento
           titulo={titulo}
           acento={acento}
@@ -231,8 +233,8 @@ function Pregunta({
         {microcopy && <p className="text-[14px] text-[var(--text-secondary)]">{microcopy}</p>}
       </div>
       <div className="flex flex-col gap-3">
-        {opciones.map((op) => (
-          <Chip key={op.label} label={op.label} icon={op.icon} seleccionado={seleccionado === op.label} onClick={() => elegir(op.label)} />
+        {opciones.map((op, i) => (
+          <Chip key={op.label} index={i} label={op.label} icon={op.icon} seleccionado={seleccionado === op.label} onClick={() => elegir(op.label)} />
         ))}
       </div>
     </div>
@@ -253,8 +255,8 @@ function Reconocimiento({
   return (
     <div className="flex flex-1 flex-col">
       <div className="flex flex-1 flex-col items-center justify-center gap-5 text-center">
-        <span className="flex size-16 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)]">
-          <Mordisco />
+        <span className="flex size-16 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
+          <Mordisco size="lg" />
         </span>
         <h1 className="text-balance text-[26px] font-bold leading-[1.15] [font-family:var(--font-display)]">{titulo}</h1>
         <p className="max-w-[38ch] text-[16px] leading-[1.5] text-[var(--text-secondary)]">{texto}</p>
