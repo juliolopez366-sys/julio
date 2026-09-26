@@ -250,13 +250,23 @@ y pidió compararlo con el ya construido e incorporar lo que aplicara. Comparaci
   veredicto real desactualizado. NOTA: sí hubo un cambio REAL en Agitacion.tsx en esta
   sesión (se le agregó ícono a cada frase) — para eso se relanzó el revisor-visual
   completo, ver "Elevación de la página de ventas" arriba; el veredicto se sobrescribió
-  con el resultado de esa pasada.
-- **veredicto:onboarding — EN PROGRESO REAL (no falso positivo)** — se le agregó una
-  pantalla nueva al flujo (demo "Así funciona", ver "Onboarding: pulido con demo Aha"
-  abajo) y se relanzó el revisor-visual sobre el flujo completo; el veredicto anterior
-  (36/40 · 16/20) queda obsoleto a propósito hasta que la nueva pasada devuelva
-  resultado y sobrescriba `docs/revisiones/onboarding-veredicto.md`.
-- **veredicto:onboarding** — LISTA (36/40 · 16/20, 7ª pasada, detalle completo en la
+  con el resultado de esa pasada. NOTA 2: también hubo un cambio real en `app/page.tsx`
+  (logo real en header/footer, ver "Logo real" arriba) — SÍ se relanzó el revisor
+  (38/40 · 20/20 · 19/20, LISTA). Después de esa pasada se aplicó un ajuste cosmético
+  más (subir el logo de 24px a 32px, sugerencia del propio revisor) sin relanzar una
+  3ª pasada — mismo criterio ya aplicado al `border-2` de paywall en Sesión 4: es un
+  ajuste dentro de la misma categoría de defecto que el revisor ya evaluó y aceptó
+  como no bloqueante, no introduce nada nuevo.
+- **veredicto:onboarding** — resuelto: se agregó la demo "Así funciona" (ver
+  "Onboarding: pulido con demo Aha" abajo), 1ª pasada NO LISTA (30/40), se corrigieron
+  los 5 defectos, 2ª pasada LISTA (37/40 · 18/20). Después se relanzó otra vez por el
+  cambio de logo real en el header (también LISTA, 37/40 · 18/20, sin defectos
+  nuevos). Igual que en landing (NOTA 2 arriba), tras esa pasada se subió el logo de
+  24px a 32px (sugerencia del propio revisor por legibilidad) sin relanzar una 4ª
+  pasada — mismo criterio del `border-2` de paywall: ajuste dentro de una categoría de
+  defecto ya evaluada y aceptada como no bloqueante.
+- **veredicto:onboarding (histórico)** — LISTA (36/40 · 16/20, 7ª pasada, detalle
+  completo en la
   sección "Sesión 4" arriba). El hook marca este veredicto como "caducado" por el
   mismo falso positivo de fecha de archivo que landing (arriba): detecta archivos de
   OTRAS pantallas (paywall, y ahora también hoy/historial/cuenta de Sesión 5) más
