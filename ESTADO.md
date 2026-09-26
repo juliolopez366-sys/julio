@@ -84,6 +84,11 @@ Sesión 4 — Onboarding, paywall y login/auth: `02B-ONBOARDING-Y-PAYWALL.md` +
 rutas `/onboarding` y `/entrar` que la landing ya referencia.
 
 ## Problemas conocidos
+- **veredicto:onboarding** — el onboarding/paywall/login (Sesión 4) TODAVÍA NO SE
+  CONSTRUYÓ. No existe código, no existe screenshot, no existe veredicto del revisor.
+  Es el próximo paso propuesto al usuario, no algo declarado como listo. No confundir
+  la ruta `/onboarding` referenciada por el CTA de la landing (Sesión 3, ya lista) con
+  la pantalla en sí, que se construye recién en Sesión 4.
 - Los enlaces del footer (/privacidad, /terminos, /reembolsos, /aviso-ia) aún no
   existen como páginas — se construyen en Sesión 6 (legal) y Sesión 4 (auth/onboarding
   para /entrar y /onboarding). Esperado en esta etapa, no un bug.
