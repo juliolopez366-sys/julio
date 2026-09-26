@@ -29,7 +29,12 @@
 
   /* ── MARCA ── */
   --accent: #47593a;
-  --accent-2: #b5652e;   /* 2ª nota: alerta terracota (nivel de riesgo) — FICHA-ARTE.md */
+  --accent-2: #b5652e;   /* 2ª nota: alerta terracota — usada como decoración sutil en la landing (Hero.tsx) */
+
+  /* ── SEMÁNTICOS (FICHA-ARTE.md — sistema duotono, estos son funcionales no decorativos) ── */
+  --exito: #5c7a4a;
+  --alerta: #b5652e;
+  --error: #a6402c;
 
   /* ── FORMA ── */
   --radius-card: 26px;

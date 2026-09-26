@@ -165,3 +165,51 @@ la Regla de Oro 6 de CLAUDE.md.
   DESPUÉS de elegir plan, para persistir la compra (corrige la etiqueta "registrado"
   usada al cerrar la Sesión 3, que no coincidía con el flujo construido).
 - Idioma UI: español latino neutro, mono-idioma.
+
+### Los 3 pilares técnicos de Sesión 5 (app interna) — Regla de Oro 6
+- **Loop de retención (modelo Hooked):**
+  - Gatillo: interno ("¿esto me va a hacer daño?" antes de comer) + externo (push a la
+    hora de comida más frecuente del usuario, se define en Sesión 6 con backend real).
+  - Acción central: registrar una comida (foto simulada) en 1-2 toques desde "Hoy".
+  - Recompensa variable: riesgo instantáneo (predecible) + de vez en cuando el Motor de
+    Detonante Real revela un candidato nuevo de detonante (variable — no en cada registro,
+    solo cuando el patrón cruza el umbral de confianza).
+  - Inversión: el historial de comidas+síntomas alimenta directamente el motor de
+    correlación — pasa el test binario de 24 ("si borro tu historial, ¿la app de mañana
+    es idéntica?" → NO, porque el patrón desaparece y hay que reconstruirlo).
+  - Número mágico (hipótesis, sin datos reales aún): **4 comidas registradas en las
+    primeras 48 horas** — coincide con la ventana de correlación del propio mecanismo.
+    Se valida cuando haya usuarios reales (36).
+  - Primera semana: D1 = primera foto + resultado instantáneo (primera victoria) ·
+    D2 = racha visible por primera vez · D3-D4 = primer insight de correlación (aunque
+    sea parcial: "necesitas 1 más para ver tu patrón") + se ofrece passkey tras el
+    primer éxito · D7 = hito emocional + mejor momento para upgrade a anual.
+  - Ritual diario (M0): pantalla "Hoy" — 1 CTA de cámara para la próxima comida + acceso
+    de 1 toque a registrar síntoma + estado del día (comidas registradas, racha).
+- **Método de auth:** magic link/OTP por email como primario + Google OAuth como
+  secundario (ya construido en `/entrar`, jerarquía Hotmart-first de 26). Passkey se
+  ofrece DESPUÉS de la primera victoria (D1-D3), no en el primer login — el hook de UI
+  para ese prompt se agrega en Sesión 5, la implementación real (WebAuthn) espera a
+  tener backend en Sesión 6.
+- **Modelo de datos + RLS (se implementa en Supabase en Sesión 6; el esquema se decide
+  ahora para que la Sesión 5 lo simule fielmente con `localStorage`):**
+  - `comidas`: id, user_id, foto_url, ingredientes_riesgo (jsonb), nivel_riesgo
+    (bajo/medio/alto), registrado_en.
+  - `sintomas`: id, user_id, tipo, intensidad, registrado_en.
+  - `correlaciones`: id, user_id, ingrediente_sospechoso, confianza, comidas_relacionadas
+    (jsonb), generado_en — resultado cacheado del motor, se recalcula al registrar.
+  - `perfiles`: user_id (FK a auth.users), plan, dias_meta, canal, racha_actual,
+    racha_maxima, congeladores_disponibles.
+  - RLS en las 4 tablas: policy `(select auth.uid()) = user_id` en `using` Y `with
+    check`, columna `user_id` indexada (patrón ya usado en el ejemplo de passkeys de 26).
+- **Arquitectura de IA (30):** el análisis de foto de comida es candidato a job
+  asíncrono (imagen → Storage → cola → modelo de visión → resultado) cuando exista
+  backend real. Mientras tanto (Sesión 5, sin Supabase/IA real todavía — eso es
+  Sesión 6 paso 3 de la secuencia maestra), se SIMULA client-side con una heurística
+  determinista sobre palabras clave FODMAP y con `localStorage` para persistencia
+  (regla del stack: "app desplegada sin backend → localStorage").
+- **Secciones de la app interna (3-5, Regla de Oro 0 + Paso 5 de la secuencia
+  maestra):** Hoy (protagonista: registrar la próxima comida) · Historial
+  (protagonista: comidas y síntomas pasados, buscables) · Tu Patrón (protagonista: el
+  Motor de Detonante Real — la sección que vende la promesa central) · Cuenta
+  (protagonista: plan, racha, ajustes).
