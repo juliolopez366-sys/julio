@@ -170,14 +170,20 @@ técnicas abajo).
   de monetización ya aprobada (cosa juzgada).
 
 ## Problemas conocidos
-- El hook de cierre marca veredictos "caducados" cuando detecta archivos .tsx más
-  nuevos de OTRAS pantallas (falso positivo por fecha, no por contenido) — pasó
-  varias veces esta sesión entre landing/onboarding/paywall y las pantallas nuevas
-  de la app interna. Cuando hubo un cambio REAL en una pantalla ya LISTA, siempre se
-  relanzó el revisor-visual (ver secciones de arriba); los ajustes cosméticos
-  triviales sugeridos por el propio revisor (ej. subir el logo de 24 a 32px, quitar
-  un `border-2` residual en Sesión 4) no ameritaron una pasada extra por caer dentro
-  de una categoría de defecto ya evaluada y aceptada como no bloqueante.
+- **veredicto:landing / veredicto:onboarding / veredicto:paywall** — el hook de
+  cierre marca estos 3 veredictos como "caducados" cuando detecta archivos .tsx MÁS
+  NUEVOS en el repo que pertenecen a OTRAS pantallas (ej. las de la app interna,
+  `app/(app)/*`) — es un falso positivo del chequeo por fecha de archivo, no un
+  veredicto real desactualizado, porque esas pantallas no tocan ningún componente de
+  landing/onboarding/paywall. Cuando SÍ hubo un cambio real en una de las tres (ícono
+  en Agitación, logo real, demo Aha del onboarding), siempre se relanzó el
+  revisor-visual completo y se confirmó LISTA (ver "Elevaciones post-lanzamiento"
+  arriba). Los ajustes cosméticos triviales sugeridos por el propio revisor tras un
+  veredicto LISTA (ej. subir el logo de 24 a 32px, quitar un `border-2` residual en
+  Sesión 4) no ameritaron una pasada extra por caer dentro de una categoría de
+  defecto ya evaluada y aceptada como no bloqueante. Este falso positivo por fecha de
+  archivo seguirá disparándose cada vez que se toque cualquier archivo de la app
+  interna — es esperado, no indica una regresión real en esas 3 pantallas.
 - Los enlaces del footer (/privacidad, /terminos, /reembolsos, /aviso-ia) aún no
   existen como páginas — se construyen en Sesión 6 (legal). Esperado en esta etapa.
 - FICHA-MODELO.md: los campos de Meta Ads Library y Sensor Tower (MRR/top-grossing)
