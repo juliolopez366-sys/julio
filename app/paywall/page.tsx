@@ -6,32 +6,33 @@
 // Backend de pago no existe aún (Sesión 6) — el CTA simula el flujo con estado local (C3ter).
 
 import { useEffect, useState } from 'react';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { X, Lock } from 'lucide-react';
 import { Mordisco, CtaPrimario, PantallaFunnel } from '@/components/onboarding/funnel-ui';
 
 type Respuestas = { preocupacion?: string; momento?: string; intentos?: string; diasMeta: number; canal?: string };
 
 const N_RESPUESTAS = 5;
+/** Toda salida del paywall va al mismo lugar (X y "Ahora no" — un solo modelo mental). */
+const SALIDA_HREF = '/';
 
 export default function PaywallPage() {
   const [plan, setPlan] = useState<'anual' | 'mensual'>('anual');
   const [respuestas, setRespuestas] = useState<Respuestas | null>(null);
   const [checkoutPendiente, setCheckoutPendiente] = useState(false);
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     const raw = sessionStorage.getItem('foodscan_onboarding');
     if (raw) setRespuestas(JSON.parse(raw));
   }, []);
 
-  const precio = plan === 'anual' ? '$4.17' : '$6.99';
-
   return (
     <PantallaFunnel>
       <div className="mx-auto flex w-full max-w-[500px] flex-1 flex-col px-5 pb-6 pt-4">
         <div className="flex h-11 items-center justify-between">
           <a
-            href="/onboarding"
+            href={SALIDA_HREF}
             aria-label="Cerrar"
             className="flex size-11 items-center justify-center rounded-full text-[var(--text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
           >
@@ -39,7 +40,12 @@ export default function PaywallPage() {
           </a>
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="flex flex-col gap-1.5 pt-1">
+        <motion.div
+          initial={{ opacity: 0, y: reduce ? 0 : 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="flex flex-col gap-1.5 pt-1"
+        >
           <div className="flex items-center gap-2">
             <Mordisco />
             <span className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">Tu plan está listo</span>
@@ -52,7 +58,7 @@ export default function PaywallPage() {
 
         {/* Timeline del trial (C4) — visual default con trial */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: reduce ? 0 : 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.08 }}
           className="mt-6 rounded-[var(--radius-card)] bg-[var(--surface)] p-5"
@@ -61,8 +67,18 @@ export default function PaywallPage() {
         </motion.div>
 
         {/* Cards de plan */}
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.16 }} className="mt-6 flex flex-col gap-3">
-          <button type="button" onClick={() => setPlan('anual')} className="relative text-left">
+        <motion.div
+          initial={{ opacity: 0, y: reduce ? 0 : 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.16 }}
+          className="mt-6 flex flex-col gap-3"
+        >
+          <motion.button
+            type="button"
+            whileTap={reduce ? undefined : { scale: 0.97 }}
+            onClick={() => setPlan('anual')}
+            className="relative text-left"
+          >
             <span className="absolute -top-[10px] left-4 z-10 rounded-full bg-[var(--accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.06em] text-[var(--bg)]">
               Más popular · 2 meses gratis
             </span>
@@ -79,9 +95,14 @@ export default function PaywallPage() {
               </div>
               <p className="mt-1 text-[13px] text-[var(--text-secondary)]">Se cobra $49.99/año</p>
             </div>
-          </button>
+          </motion.button>
 
-          <button type="button" onClick={() => setPlan('mensual')} className="text-left">
+          <motion.button
+            type="button"
+            whileTap={reduce ? undefined : { scale: 0.97 }}
+            onClick={() => setPlan('mensual')}
+            className="text-left"
+          >
             <div
               className={`rounded-[var(--radius-card)] p-4 transition-colors ${
                 plan === 'mensual' ? 'border-[1.5px] border-[var(--accent)] bg-[var(--chip-bg)]' : 'border border-[color-mix(in_oklab,var(--text-tertiary)_28%,transparent)] bg-[var(--surface)]'
@@ -94,7 +115,7 @@ export default function PaywallPage() {
                 </span>
               </div>
             </div>
-          </button>
+          </motion.button>
         </motion.div>
 
         <div className="mt-6 flex flex-col gap-3">
@@ -107,20 +128,19 @@ export default function PaywallPage() {
               animate={{ opacity: 1, height: 'auto' }}
               className="rounded-[var(--radius-button)] bg-[var(--surface)] px-4 py-3 text-center text-[13px] text-[var(--text-secondary)]"
             >
-              El checkout de Hotmart se conecta en la Sesión 6 — por ahora esta pantalla queda lista
-              con el precio y el copy reales.
+              Ya casi — estamos activando el pago seguro. Vuelve pronto para empezar tu prueba gratis.
             </motion.p>
           )}
           <p className="text-center text-[13px] text-[var(--text-secondary)]">
             Hoy no pagas nada · te avisamos 1 día antes del cobro · cancela en 1 tap
           </p>
           <div className="flex items-center justify-center gap-4 text-[14px] text-[var(--text-secondary)]">
-            <a href="/" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">Ahora no</a>
+            <a href={SALIDA_HREF} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">Ahora no</a>
             <span aria-hidden="true">·</span>
             <a href="/entrar" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">Restaurar compra</a>
           </div>
           <p className="flex items-center justify-center gap-1.5 text-[12px] text-[var(--text-tertiary)]">
-            <Lock size={14} aria-hidden="true" /> Pago seguro por Hotmart · Garantía de 15 días
+            <Lock size={14} aria-hidden="true" /> Pago seguro por Hotmart
           </p>
         </div>
       </div>

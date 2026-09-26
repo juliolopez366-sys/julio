@@ -6,8 +6,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AnimatePresence, motion } from 'motion/react';
-import { AlertCircle, Clock, HelpCircle, XCircle, Instagram, Search, Users } from 'lucide-react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { AlertCircle, Clock, HelpCircle, XCircle, Instagram, Search, Users, Sparkles } from 'lucide-react';
 import { FunnelHeader, Chip, CtaPrimario, Mordisco, PantallaFunnel } from '@/components/onboarding/funnel-ui';
 
 type Respuestas = {
@@ -47,10 +47,11 @@ export default function OnboardingPage() {
     }
   }, [paso, respuestas, router]);
 
+  const reduce = useReducedMotion();
   const variants = {
-    entrar: (dir: 1 | -1) => ({ x: dir === 1 ? 40 : -40, opacity: 0 }),
+    entrar: (dir: 1 | -1) => ({ x: reduce ? 0 : dir === 1 ? 40 : -40, opacity: 0 }),
     centro: { x: 0, opacity: 1 },
-    salir: (dir: 1 | -1) => ({ x: dir === 1 ? -24 : 24, opacity: 0 }),
+    salir: (dir: 1 | -1) => ({ x: reduce ? 0 : dir === 1 ? -24 : 24, opacity: 0 }),
   };
 
   return (
@@ -65,12 +66,13 @@ export default function OnboardingPage() {
             initial="entrar"
             animate="centro"
             exit="salir"
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: reduce ? 0.15 : 0.28, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-1 flex-col"
           >
             {paso === 0 && (
               <Pregunta
                 titulo="¿Qué es lo que más te preocupa de tu SII?"
+                acento="preocupa"
                 microcopy="Así priorizamos qué te mostramos primero."
                 opciones={[
                   { icon: <AlertCircle size={20} />, label: 'La hinchazón y el dolor abdominal' },
@@ -85,12 +87,13 @@ export default function OnboardingPage() {
             {paso === 1 && (
               <Pregunta
                 titulo="¿Cuándo sueles sentir tus peores síntomas?"
+                acento="peores síntomas"
                 microcopy="Esto ajusta la ventana de horas que revisamos por cada comida."
                 opciones={[
-                  { label: 'Después de almorzar' },
-                  { label: 'En la noche' },
-                  { label: 'Es impredecible' },
-                  { label: 'Depende del día' },
+                  { icon: <Clock size={20} />, label: 'Después de almorzar' },
+                  { icon: <Clock size={20} />, label: 'En la noche' },
+                  { icon: <HelpCircle size={20} />, label: 'Es impredecible' },
+                  { icon: <HelpCircle size={20} />, label: 'Depende del día' },
                 ]}
                 onSeleccionar={(label) => avanzar({ momento: label })}
               />
@@ -113,11 +116,12 @@ export default function OnboardingPage() {
             {paso === 3 && (
               <Pregunta
                 titulo="¿Ya intentaste otras apps para esto?"
+                acento="otras apps"
                 microcopy="Queremos saber qué no te funcionó."
                 opciones={[
                   { icon: <XCircle size={20} />, label: 'Sí, y las abandoné' },
-                  { label: 'Uso un diario de papel' },
-                  { label: 'No, es mi primera vez' },
+                  { icon: <HelpCircle size={20} />, label: 'Uso un diario de papel' },
+                  { icon: <Sparkles size={20} />, label: 'No, es mi primera vez' },
                 ]}
                 onSeleccionar={(label) => avanzar({ intentos: label })}
               />
@@ -148,12 +152,13 @@ export default function OnboardingPage() {
             {paso === 6 && (
               <Pregunta
                 titulo="¿Cómo conociste FoodScan?"
+                acento="FoodScan"
                 microcopy="Nos ayuda a saber qué está funcionando."
                 opciones={[
                   { icon: <Instagram size={20} />, label: 'Instagram o TikTok' },
                   { icon: <Search size={20} />, label: 'Buscando en Google' },
                   { icon: <Users size={20} />, label: 'Recomendación de alguien' },
-                  { label: 'Otro' },
+                  { icon: <Sparkles size={20} />, label: 'Otro' },
                 ]}
                 onSeleccionar={(label) => avanzar({ canal: label })}
               />
@@ -181,13 +186,29 @@ export default function OnboardingPage() {
   );
 }
 
+function TituloConAcento({ titulo, acento, className }: { titulo: string; acento?: string; className: string }) {
+  if (!acento || !titulo.includes(acento)) {
+    return <h1 className={className}>{titulo}</h1>;
+  }
+  const [antes, despues] = titulo.split(acento);
+  return (
+    <h1 className={className}>
+      {antes}
+      <span className="text-[var(--accent)]">{acento}</span>
+      {despues}
+    </h1>
+  );
+}
+
 function Pregunta({
   titulo,
+  acento,
   microcopy,
   opciones,
   onSeleccionar,
 }: {
   titulo: string;
+  acento?: string;
   microcopy?: string;
   opciones: { icon?: React.ReactNode; label: string }[];
   onSeleccionar: (label: string) => void;
@@ -199,12 +220,15 @@ function Pregunta({
     setTimeout(() => onSeleccionar(label), 300);
   };
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-balance text-[28px] font-bold leading-[1.1] tracking-[-0.02em] [font-family:var(--font-display)]">
-          {titulo}
-        </h1>
-        {microcopy && <p className="mt-2 text-[14px] text-[var(--text-secondary)]">{microcopy}</p>}
+    <div className="flex flex-1 flex-col justify-center gap-8">
+      <div className="flex flex-col gap-3">
+        <Mordisco />
+        <TituloConAcento
+          titulo={titulo}
+          acento={acento}
+          className="text-balance text-[28px] font-bold leading-[1.1] tracking-[-0.02em] [font-family:var(--font-display)]"
+        />
+        {microcopy && <p className="text-[14px] text-[var(--text-secondary)]">{microcopy}</p>}
       </div>
       <div className="flex flex-col gap-3">
         {opciones.map((op) => (
@@ -295,6 +319,7 @@ function PantallaCarga({ respuestas }: { respuestas: Respuestas }) {
     return () => clearTimeout(t);
   }, [activo, lineas.length]);
   const porcentaje = Math.round(((activo + 1) / lineas.length) * 100);
+  const reduce = useReducedMotion();
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-10" aria-live="polite" aria-busy="true">
@@ -322,7 +347,7 @@ function PantallaCarga({ respuestas }: { respuestas: Respuestas }) {
         {lineas.map((l, i) => (
           <motion.li
             key={l}
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: reduce ? 0 : 8 }}
             animate={{ opacity: i <= activo ? 1 : 0.4, y: 0 }}
             transition={{ duration: 0.2 }}
             className="flex items-center gap-3 text-[15px]"
@@ -335,8 +360,8 @@ function PantallaCarga({ respuestas }: { respuestas: Respuestas }) {
               </span>
             ) : i === activo ? (
               <motion.span
-                animate={{ opacity: [1, 0.4, 1] }}
-                transition={{ duration: 1, repeat: Infinity }}
+                animate={reduce ? { opacity: 1 } : { opacity: [1, 0.4, 1] }}
+                transition={reduce ? undefined : { duration: 1, repeat: Infinity }}
                 className="size-5 shrink-0 rounded-full bg-[var(--accent)]"
               />
             ) : (

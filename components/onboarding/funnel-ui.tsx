@@ -4,7 +4,7 @@
 // Consume SOLO los tokens de components/landing/tokens.css — misma marca que la landing.
 
 import { type ReactNode } from 'react';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { ChevronLeft, Check } from 'lucide-react';
 
 /** Header de marca — logo + nombre, siempre presente, vuelve a "/" (regla de marca del 50). */
@@ -16,6 +16,7 @@ export function FunnelHeader({
   /** 0-100. Si se omite, no se pinta la barra (pantallas de loading/paywall no la usan). */
   progreso?: number;
 }) {
+  const reduce = useReducedMotion();
   return (
     <div className="mx-auto w-full max-w-[500px] px-4 pt-4">
       <div className="flex h-11 items-center gap-2">
@@ -43,7 +44,7 @@ export function FunnelHeader({
               className="h-full rounded-full bg-[var(--accent)]"
               initial={false}
               animate={{ width: `${progreso}%` }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: reduce ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] }}
             />
           </div>
         )}
@@ -69,10 +70,11 @@ export function Chip({
   seleccionado: boolean;
   onClick: () => void;
 }) {
+  const reduce = useReducedMotion();
   return (
     <motion.button
       type="button"
-      whileTap={{ scale: 0.97 }}
+      whileTap={reduce ? undefined : { scale: 0.97 }}
       onClick={onClick}
       className={`flex h-14 w-full items-center gap-3 rounded-[var(--radius-button)] border px-4 text-left text-[16px] font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] ${
         seleccionado
@@ -84,9 +86,9 @@ export function Chip({
       <span className="flex-1">{label}</span>
       {seleccionado && (
         <motion.span
-          initial={{ scale: 0.5, opacity: 0 }}
+          initial={{ scale: reduce ? 1 : 0.5, opacity: reduce ? 1 : 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: reduce ? 0 : 0.2 }}
           className="flex size-5 shrink-0 items-center justify-center rounded-full bg-[var(--accent)]"
         >
           <Check size={12} strokeWidth={3} color="var(--bg)" aria-hidden="true" />
@@ -122,10 +124,11 @@ export function CtaPrimario({
   disabled?: boolean;
   type?: 'button' | 'submit';
 }) {
+  const reduce = useReducedMotion();
   return (
     <motion.button
       type={type}
-      whileTap={disabled ? undefined : { scale: 0.97 }}
+      whileTap={disabled || reduce ? undefined : { scale: 0.97 }}
       onClick={onClick}
       disabled={disabled}
       className={`flex h-[52px] w-full items-center justify-center rounded-[var(--radius-button)] text-[16px] font-semibold transition-opacity duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] [touch-action:manipulation] ${
