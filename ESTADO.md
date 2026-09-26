@@ -97,17 +97,22 @@ rutas `/onboarding` y `/entrar` que la landing ya referencia.
   `app/paywall/page.tsx` (pantalla DISTINTA) es más nuevo que el archivo del
   veredicto — mismo falso positivo por fecha de archivo que el de landing (abajo).
   El código de onboarding en sí no cambió desde el veredicto LISTA.
-- **veredicto:paywall** — 6ª pasada: usabilidad 36/40 y copy 19/20 (ningún eje ≤2) ya
-  cruzaban el umbral en la 5ª ronda; se aplicaron 5 fixes de craft más (precio
-  animado al cambiar de plan, jerarquía tipográfica corregida, header compartido con
-  las demás pantallas del funnel, badge "Ahorra 40%" con matemática verificable en
-  vez de "2 meses gratis", timeline + beneficios fusionados en una sola tarjeta para
-  reducir el scroll) y se relanzó el revisor — **la 6ª pasada FALLÓ por el límite de
-  uso de la sesión (rate limit), no por un error de código o de diseño**. El build
-  (`npm run build`) pasa limpio y el screenshot actualizado ya está en
-  `docs/revisiones/paywall-375.png`. Pendiente: relanzar el revisor-visual cuando el
-  límite de la sesión se reinicie — es el único paso que falta para cerrar la
-  Sesión 4.
+- **veredicto:paywall** — en revisión (8ª pasada en curso). Historial relevante:
+  ⚠️ **hallazgo de proceso**: tras un corte de sesión por límite de uso, el navegador
+  de Playwright perdió el tamaño de viewport (375×812) al reiniciarse y las capturas
+  de paywall/entrar se tomaron sin querer a ~1024px de ancho (escritorio). Un
+  veredicto "LISTA" (36/40·16/20·19/20) se emitió sobre esa evidencia inválida y se
+  DESCARTÓ por completo al detectarse (verificación con dimensiones reales del PNG,
+  no solo mirar el screenshot). Lección: tras cualquier reinicio de sesión/navegador,
+  verificar el ANCHO REAL del PNG (no asumir) antes de invocar al revisor — un
+  veredicto sobre evidencia incorrecta no cuenta aunque diga "LISTA". Con el
+  screenshot corregido a 375px real, la 7ª pasada (evidencia válida) dio 33/40·15/20·
+  19/20 y encontró un defecto real que las pasadas anteriores no habían visto:
+  las tarjetas de plan usaban `border`, violando la regla explícita de FICHA-ARTE.md
+  ("sin bordes — todo por color plano y curvas"). Corregido (bordes fuera, check
+  circular en la tarjeta activa, contraste del timeline subido, micro-título "Qué
+  incluye tu plan", enlaces secundarios con underline consistente) y se relanzó la
+  8ª pasada — resultado pendiente al cierre de este checkpoint.
 - **veredicto:landing** — el hook de cierre marca el veredicto de landing como
   "caducado" porque detecta archivos .tsx MÁS NUEVOS en el repo (app/onboarding,
   app/paywall, app/entrar) — pero esos archivos son de OTRAS pantallas (Sesión 4),
@@ -115,12 +120,18 @@ rutas `/onboarding` y `/entrar` que la landing ya referencia.
   cambiaron desde el veredicto LISTA de landing). Es un falso positivo del chequeo
   por fecha de archivo, no un veredicto real desactualizado. Si se quiere limpiar la
   señal, re-lanzar el revisor sobre landing sin cambios reales no aporta nada nuevo.
-- **entrar (login)** — pantalla secundaria (Regla 7: solo necesita medición +
-  checklist, no revisor-visual completo). Screenshot tomado
-  (`docs/revisiones/entrar-375.png`) y el flujo feliz probado a mano (envío de
-  correo → estado "Revisa tu correo"), pero el checklist formal quedó sin anotar
-  cuando se cortó la sesión por el límite de uso. Pendiente: completar el checklist
-  del `docs/sistema/CHECKLIST-CIERRE.md` y anotar "sin revisor (pantalla secundaria)".
+- **entrar (login)** — sin revisor (pantalla secundaria, Regla 7). Medición +
+  checklist completados: screenshots a 375px reales de los 3 estados
+  (`docs/revisiones/entrar-375.png` inicial, `entrar-enviado-375.png` éxito) más el
+  estado de carga y error probados en código. Checklist núcleo: tsc/build/dev
+  limpios ✓ · min-h-dvh sin vacío muerto ✓ · llena de valor (input + Google OAuth +
+  microcopy de confianza + contacto, no "input+2 botones") ✓ · estados
+  inicial/enviando/enviado/error/disabled todos presentes (se agregó el estado de
+  error con reintento, que faltaba) ✓ · flujo feliz + borde (email vacío bloquea
+  envío, countdown de reenvío) probados a mano ✓ · copy humano, sin jerga ✓ · foco de
+  teclado visible en los 3 botones/links (se agregó al botón "Reenviar", que no lo
+  tenía) ✓ · tokens de FICHA-ARTE respetados (excepción documentada: los colores del
+  ícono de Google son su paleta oficial de marca, no tokens propios) ✓.
 - Los enlaces del footer (/privacidad, /terminos, /reembolsos, /aviso-ia) aún no
   existen como páginas — se construyen en Sesión 6 (legal) y Sesión 4 (auth/onboarding
   para /entrar y /onboarding). Esperado en esta etapa, no un bug.

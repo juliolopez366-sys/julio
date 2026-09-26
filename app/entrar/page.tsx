@@ -9,7 +9,7 @@ import { motion } from 'motion/react';
 import { Lock, Mail } from 'lucide-react';
 import { CtaPrimario, PantallaFunnel } from '@/components/onboarding/funnel-ui';
 
-type Estado = 'inicial' | 'enviando' | 'enviado';
+type Estado = 'inicial' | 'enviando' | 'enviado' | 'error';
 
 export default function EntrarPage() {
   const [email, setEmail] = useState('');
@@ -43,7 +43,28 @@ export default function EntrarPage() {
           FoodScan
         </a>
 
-        {estado !== 'enviado' ? (
+        {estado === 'error' ? (
+          <motion.div
+            key="error"
+            role="alert"
+            aria-live="assertive"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            className="flex flex-col items-center gap-3 rounded-[var(--radius-button)] bg-[var(--surface-2)] px-4 py-6 text-center"
+          >
+            <p className="text-[15px] font-medium text-[var(--text-primary)]">
+              No pudimos enviar el enlace. Puede ser tu conexión o algo de nuestro lado.
+            </p>
+            <button
+              type="button"
+              onClick={() => setEstado('inicial')}
+              className="text-[14px] font-semibold text-[var(--accent)] underline underline-offset-2"
+            >
+              Reintentar
+            </button>
+          </motion.div>
+        ) : estado !== 'enviado' ? (
           <motion.div key="form" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
             <h1 className="text-balance text-[26px] font-bold leading-[1.15] [font-family:var(--font-display)]">
               Entra a tu plan
@@ -107,7 +128,7 @@ export default function EntrarPage() {
               type="button"
               disabled={countdown > 0}
               onClick={enviar}
-              className="mt-6 text-[14px] font-medium text-[var(--accent)] disabled:text-[var(--text-tertiary)]"
+              className="mt-6 rounded-[var(--radius-button)] text-[14px] font-medium text-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:text-[var(--text-tertiary)]"
             >
               {countdown > 0 ? `Reenviar en ${countdown}s` : 'Reenviar enlace'}
             </button>

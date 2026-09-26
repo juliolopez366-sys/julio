@@ -7,7 +7,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
-import { Lock, Camera, Activity, ClipboardCheck } from 'lucide-react';
+import { Lock, Camera, Activity, ClipboardCheck, Check } from 'lucide-react';
 import { Mordisco, CtaPrimario, FunnelHeader, PantallaFunnel } from '@/components/onboarding/funnel-ui';
 
 /** Anima el precio mostrado entre el valor anterior y el nuevo al cambiar de plan (baseline #2). */
@@ -74,7 +74,7 @@ export default function PaywallPage() {
           <div className="flex flex-col gap-1.5">
             <span className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">Tu plan está listo</span>
             <h1 className="text-balance text-[28px] font-bold leading-[1.1] [font-family:var(--font-display)]">
-              Se acabó <span className="text-[var(--accent)]">cancelar planes por miedo</span> a un mal día
+              Se acabó cancelar planes por <span className="text-[var(--accent)]">miedo</span> a un mal día
             </h1>
             <p className="text-[15px] leading-relaxed text-[var(--text-secondary)]">
               Tu <span className="font-semibold text-[var(--text-primary)]">Motor de Detonante Real</span> queda configurado con tus {N_RESPUESTAS} respuestas — ajustado a tu meta de {respuestas?.diasMeta ?? 5} días/semana.
@@ -90,7 +90,7 @@ export default function PaywallPage() {
           className="mt-6 rounded-[var(--radius-card)] bg-[var(--surface)] p-5 shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_10%,transparent)]"
         >
           <TimelineTrial />
-          <div className="my-4 h-px bg-[color-mix(in_oklab,var(--text-tertiary)_18%,transparent)]" />
+          <p className="mb-3 mt-5 text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">Qué incluye tu plan</p>
           <ul className="flex flex-col gap-3">
             {[
               { icon: <Camera size={20} aria-hidden="true" />, texto: 'Escaneo de comidas sin límite' },
@@ -124,10 +124,17 @@ export default function PaywallPage() {
               Más popular · Ahorra 40%
             </span>
             <div
-              className={`rounded-[var(--radius-card)] p-4 pt-5 shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_10%,transparent)] transition-colors ${
-                plan === 'anual' ? 'border-[1.5px] border-[var(--accent)] bg-[var(--chip-bg)]' : 'border border-[color-mix(in_oklab,var(--text-tertiary)_28%,transparent)] bg-[var(--surface)]'
+              className={`relative rounded-[var(--radius-card)] p-4 pt-5 transition-colors ${
+                plan === 'anual'
+                  ? 'bg-[var(--chip-bg)] shadow-[0_8px_24px_color-mix(in_oklab,var(--accent)_24%,transparent)]'
+                  : 'bg-[var(--surface)] shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_8%,transparent)]'
               }`}
             >
+              {plan === 'anual' && (
+                <span className="absolute right-4 top-4 flex size-5 items-center justify-center rounded-full bg-[var(--accent)]">
+                  <Check size={12} strokeWidth={3} color="var(--bg)" aria-hidden="true" />
+                </span>
+              )}
               <div className="flex items-center justify-between">
                 <span className="text-[18px] font-semibold">Anual</span>
                 <span className="text-[28px] font-bold tabular-nums [font-family:var(--font-display)]">
@@ -148,10 +155,17 @@ export default function PaywallPage() {
             className="text-left"
           >
             <div
-              className={`rounded-[var(--radius-card)] p-4 shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_10%,transparent)] transition-colors ${
-                plan === 'mensual' ? 'border-[1.5px] border-[var(--accent)] bg-[var(--chip-bg)]' : 'border border-[color-mix(in_oklab,var(--text-tertiary)_28%,transparent)] bg-[var(--surface)]'
+              className={`relative rounded-[var(--radius-card)] p-4 transition-colors ${
+                plan === 'mensual'
+                  ? 'bg-[var(--chip-bg)] shadow-[0_8px_24px_color-mix(in_oklab,var(--accent)_24%,transparent)]'
+                  : 'bg-[var(--surface)] shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_8%,transparent)]'
               }`}
             >
+              {plan === 'mensual' && (
+                <span className="absolute right-4 top-4 flex size-5 items-center justify-center rounded-full bg-[var(--accent)]">
+                  <Check size={12} strokeWidth={3} color="var(--bg)" aria-hidden="true" />
+                </span>
+              )}
               <div className="flex items-center justify-between">
                 <span className="text-[18px] font-semibold">Mensual</span>
                 <span className="text-[28px] font-bold tabular-nums [font-family:var(--font-display)]">
@@ -207,9 +221,9 @@ export default function PaywallPage() {
             Hoy no pagas nada · te avisamos antes del cobro · cancela en 1 tap
           </p>
           <div className="flex items-center justify-center gap-4 text-[15px] text-[var(--text-secondary)]">
-            <a href={SALIDA_HREF} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">Ahora no</a>
+            <a href={SALIDA_HREF} className="underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">Ahora no</a>
             <span aria-hidden="true">·</span>
-            <a href="/entrar" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">Restaurar compra</a>
+            <a href="/entrar" className="underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">Restaurar compra</a>
           </div>
           <p className="flex items-center justify-center gap-1.5 text-[12px] text-[var(--text-tertiary)]">
             <Lock size={14} aria-hidden="true" /> Pago seguro por Hotmart
@@ -240,7 +254,7 @@ function TimelineTrial() {
           </div>
           <div>
             <p className="text-[16px] font-medium text-[var(--text-primary)]">{n.titulo}</p>
-            <p className="text-[15px] text-[var(--text-secondary)]">{n.detalle}</p>
+            <p className="text-[15px] text-[var(--text-primary)] opacity-80">{n.detalle}</p>
           </div>
         </div>
       ))}
