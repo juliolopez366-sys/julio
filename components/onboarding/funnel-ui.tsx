@@ -97,10 +97,10 @@ export function Chip({
       transition={{ duration: reduce ? 0 : 0.25, delay: reduce ? 0 : index * 0.06, ease: [0.16, 1, 0.3, 1] }}
       whileTap={reduce ? undefined : { scale: 0.97 }}
       onClick={onClick}
-      className={`flex h-14 w-full items-center gap-3 rounded-[var(--radius-button)] border px-4 text-left text-[16px] font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] ${
+      className={`flex h-14 w-full items-center gap-3 rounded-[var(--radius-button)] px-4 text-left text-[16px] font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] ${
         seleccionado
-          ? `border-[var(--accent)] border-[1.5px] bg-[var(--chip-bg)] text-[var(--text-primary)] ${SOMBRA_FLOTANTE}`
-          : `border-[color-mix(in_oklab,var(--text-tertiary)_28%,transparent)] bg-[var(--surface-2)] text-[var(--text-primary)] ${SOMBRA_FLOTANTE}`
+          ? `bg-[var(--chip-bg)] text-[var(--text-primary)] shadow-[0_8px_24px_color-mix(in_oklab,var(--accent)_24%,transparent)]`
+          : `bg-[var(--surface-2)] text-[var(--text-primary)] ${SOMBRA_FLOTANTE}`
       }`}
     >
       {icon && <span className="shrink-0 text-[var(--accent)]">{icon}</span>}

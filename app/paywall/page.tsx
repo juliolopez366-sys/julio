@@ -40,14 +40,21 @@ const N_RESPUESTAS = 5;
 const SALIDA_HREF = '/';
 
 export default function PaywallPage() {
-  const [plan, setPlan] = useState<'anual' | 'mensual'>('anual');
+  const [plan, setPlanState] = useState<'anual' | 'mensual'>('anual');
   const [respuestas, setRespuestas] = useState<Respuestas | null>(null);
   const [estadoCta, setEstadoCta] = useState<EstadoCta>('inicial');
   const reduce = useReducedMotion();
 
+  const setPlan = (p: 'anual' | 'mensual') => {
+    setPlanState(p);
+    sessionStorage.setItem('foodscan_plan', p);
+  };
+
   useEffect(() => {
     const raw = sessionStorage.getItem('foodscan_onboarding');
     if (raw) setRespuestas(JSON.parse(raw));
+    const planGuardado = sessionStorage.getItem('foodscan_plan');
+    if (planGuardado === 'anual' || planGuardado === 'mensual') setPlanState(planGuardado);
   }, []);
 
   useEffect(() => {
