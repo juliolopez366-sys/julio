@@ -18,7 +18,11 @@
       "mcp__playwright__browser_evaluate",
       "mcp__playwright__browser_wait_for",
       "mcp__playwright__browser_console_messages",
-      "Bash(rm -rf .next)"
+      "Bash(rm -rf .next)",
+      "Bash(cp onboarding-q1.png onboarding-375.png)",
+      "Bash(cp paywall-full.png paywall-375.png)",
+      "Bash(cp login-1.png entrar-375.png)",
+      "Bash(rm -f onboarding-q2.png onboarding-recog1.png onboarding-recog2.png onboarding-slider.png onboarding-carga.png paywall-1.png paywall-cta.png login-enviado.png)"
     ]
   }
 }
