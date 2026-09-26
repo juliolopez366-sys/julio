@@ -159,6 +159,38 @@ con caché; una pestaña nueva no lo reproduce). Screenshot re-tomado y verifica
   y el frame 3 reutiliza `hero-mockup.png` (misma imagen que el Hero) en vez de una
   captura propia del panel de patrones — quedan como mejora futura, no bloquean.
 
+## Logo real (pedido explícito del usuario)
+El usuario aportó una imagen de referencia de su isotipo (mockup de ícono de app:
+plato+hoja+cubiertos+marco de escaneo, sobre fondo verde bosque en cuadrado
+redondeado, con el wordmark "FOODSCAN" debajo del ícono dentro del mismo cuadrado).
+Se procesó con `sharp` (Node): se quitó el fondo crema/blanco (canal alfa por
+distancia de color), se recortó SOLO la porción del ícono (sin el wordmark, para
+tener un isotipo limpio usable a tamaño chico en headers) y se generaron:
+- `public/logo-mark.png` (128×128, transparente) — usado inline en el header de la
+  landing (`Hero`), el footer (`FooterLegal`) y el header compartido de
+  onboarding/paywall (`FunnelHeader` en `funnel-ui.tsx`), reemplazando el cuadrito de
+  color placeholder que había en los tres lugares.
+- `app/icon.png` (256×256, transparente) y `app/apple-icon.png` (180×180, fondo crema
+  `#F6F2E6` — iOS aplica su propia máscara) — favicon/ícono de app vía las convenciones
+  de archivo especial de Next.js (se sirven automáticamente en `/icon.png` y
+  `/apple-icon.png`, confirmado en `npm run build`).
+Verificado: `tsc --noEmit` ✓ · `npm run build` ✓ · logo visible sin errores de consola
+en landing (header y footer) y onboarding (header del funnel). Como el logo toca 2
+de las 4 pantallas del dinero (landing y onboarding), se relanzó el revisor-visual en
+ambas. El paywall NO se ve afectado: su header usa la variante "cerrar" (X) de
+`FunnelHeader`, no la variante con el logo.
+- **Landing: 38/40 · 20/20 · 19/20 copy — LISTA** (sin cambio vs. la pasada anterior;
+  el logo no introdujo defectos nuevos). Nota no bloqueante: el `rounded-[8px]` que
+  tenía el `<img>` era CSS redundante (el propio PNG ya trae la esquina redondeada) —
+  se quitó.
+- **Onboarding: 37/40 · 18/20 — LISTA** (sin cambio vs. la pasada anterior). Nota real:
+  a 24px el detalle interno del isotipo (hoja + cubiertos + marco) se perdía y se leía
+  como una mancha sin forma reconocible — se subió el logo de 24px a 32px (`size-6` →
+  `size-8`) en las 3 ubicaciones (Hero, FooterLegal, FunnelHeader) para mejorar la
+  legibilidad del detalle, dentro del tap-target de 44px del header del funnel.
+  Cambio de bajo riesgo (tamaño dentro de la escala de espaciado del 14, mismo slot,
+  sugerido por el propio revisor) — no se relanzó una 3ª pasada por esto.
+
 ## Onboarding: pulido con demo Aha (pedido explícito del usuario, basado en análisis externo)
 El usuario compartió un análisis de otra IA (Gemini) sobre cómo mejorar el onboarding
 y pidió compararlo con el ya construido e incorporar lo que aplicara. Comparación:

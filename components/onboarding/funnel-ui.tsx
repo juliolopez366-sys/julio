@@ -50,7 +50,8 @@ export function FunnelHeader({
             className="flex size-11 shrink-0 items-center justify-center gap-1.5 text-[var(--text-primary)]"
             aria-label="FoodScan — volver al inicio"
           >
-            <span aria-hidden="true" className="size-6 rounded-[8px] bg-[var(--accent)]" />
+            {/* eslint-disable-next-line @next/next/no-img-element -- logo real, portable como el resto del kit */}
+            <img src="/logo-mark.png" alt="" className="size-8" width={32} height={32} />
           </a>
         )}
         {progreso !== undefined && (

@@ -18,12 +18,16 @@ import { StickyCtaMobile } from '@/components/landing/ui';
 const CTA_HREF = '/onboarding';
 const CTA_LABEL = 'Encontrar mi detonante gratis';
 
+/* eslint-disable-next-line @next/next/no-img-element -- logo real, se mantiene portable como el resto del kit */
+const LOGO = <img src="/logo-mark.png" alt="" className="size-8" width={32} height={32} />;
+
 export default function LandingFoodScan() {
   return (
     <div className="min-h-dvh bg-[var(--bg)] text-[var(--text-primary)] [font-family:var(--font-body)]">
       {/* 1. HERO */}
       <Hero
         appName="FoodScan"
+        logo={LOGO}
         loginHref="/entrar"
         h1Marked="Encuentra tu [acento]detonante real[/acento] en días, no en años"
         subtitleMarked="Toma una foto de tu comida y descubre [b]tu patrón real[/b] en 48 horas."
@@ -191,6 +195,7 @@ export default function LandingFoodScan() {
       {/* 10. FOOTER LEGAL */}
       <FooterLegal
         appName="FoodScan"
+        logo={LOGO}
         soporteEmail="soporte@foodscan.app"
         enlaces={[
           { label: 'Privacidad', href: '/privacidad' },

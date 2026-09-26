@@ -1,62 +1,58 @@
-# VEREDICTO revisor-visual — onboarding FoodScan (re-revisión pantalla "Así funciona" / AhaSimulacion)
+# VEREDICTO revisor-visual — onboarding FoodScan (re-revisión: logo real en FunnelHeader)
 Fecha: 2026-09-26 00:00
-Screenshot: docs/revisiones/onboarding-375.png
+Screenshot: docs/revisiones/onboarding-logo-header-375.png
 Usabilidad: 37/40  (detalle: h1:4 h2:4 h3:3 h4:4 h5:3 h6:4 h7:3 h8:4 h9:4 h10:4)
 Craft: 18/20  (detalle: jerarquía:4 profundidad:4 identidad:4 movimiento:4 encaje:2)
 Copy (si vende): N-A (onboarding, no es superficie de venta directa)
 Fidelidad (si hubo referencia): FIEL (paleta verde bosque/crema, Fraunces/Work Sans, radios y chip Mordisco consistentes con FICHA-ARTE.md)
 Veredicto: LISTA
 
-Confirmación de los 5 defectos de la ronda anterior:
-1. RESUELTO (mejora sustancial, no perfecta): el copy ahora dice "Reconocemos el plato y lo
-   cruzamos con recetas típicas... luego tú confirmas en un toque lo que sí llevaba" y la alerta
-   pasó de afirmación absoluta a "Probable ajo oculto... Confírmalo en un toque si lo sabes" —
-   ya no reproduce la objeción #1 de FICHA-AVATAR.md sin sustento, y conecta con la objeción #6
-   (corregir es 1 toque). Nota menor: esta pantalla sigue sin nombrar la ventana de correlación
-   de 48h que sí aparece en PantallaCarga línea 442 y en los pasos de Reconocimiento — el puente
-   completo entre "foto reconocida" y "correlación de sintomas 48h" vive repartido en dos
-   pantallas distintas del flujo en vez de decirse una sola vez junto a la demo. No baja el gate
-   por sí solo (ya no hay contradicción activa, solo fragmentación de la explicación), pero es
-   la única deuda que queda del defecto original.
-2. RESUELTO: la promesa "5 a 7 días" fue reemplazada por "Tu patrón aparece apenas un ingrediente
-   se repita en tus días malos" (código línea 445) — sin cifra inventada, ancla al mecanismo real.
-3. RESUELTO: etiqueta "Ejemplo" visible en la esquina superior derecha de la card (código línea
-   322-324, confirmada en el screenshot) — separa la demo simulada de una alerta real futura.
-4. RESUELTO: el CTA nunca se deshabilita (código línea 392: el onClick siempre responde; si se
-   toca durante "Analizando…" salta directo a mostrar el resultado en vez de esperar el
-   temporizador). Cumple el ancla "nunca disabled por defecto" del CTA héroe vivo.
-5. RESUELTO: el chip Mordisco fue agregado al encabezado (código línea 310, visible en el
-   screenshot) — consistente con Pregunta y Reconocimiento.
+Alcance de esta re-revisión: el ÚNICO cambio desde el veredicto anterior (37/40 · 18/20, mismo
+archivo, pantalla "Así funciona") es el reemplazo del logo placeholder (cuadrito de color sólido
+24px) por el isotipo real (`/logo-mark.png`: plato+hoja+cubiertos+marco de escaneo sobre verde
+bosque redondeado) en `FunnelHeader` (components/onboarding/funnel-ui.tsx, línea 54), visible solo
+en la variante "volver al inicio" del header — es decir, en la Pregunta 1, antes de que exista
+botón Atrás. El resto del flujo (Preguntas 2-4, Reconocimiento, AhaSimulacion, compromiso, paywall)
+no se tocó y conserva el veredicto de la ronda anterior.
 
-Top defectos restantes (ninguno bloqueante, quedan para pulido futuro):
-1. [Encabezado + demo de `AhaSimulacion`] La ventana de correlación de 48h (mecanismo central del
-   producto, mencionado en PantallaCarga y en los pasos de Reconocimiento) no se nombra en esta
-   pantalla — el usuario ve "reconocemos el plato" y "confirmas en un toque" pero no lee aquí cómo
-   se conecta con sus síntomas de después. Fix: agregar una frase corta bajo la alerta, ej. "Lo
-   cruzamos después con tus síntomas de las próximas 48h".
-2. [Card de la demo, encaje óptico] La etiqueta "Ejemplo" (esquina superior derecha) y el círculo
-   de plato simulado no comparten una línea de aire idéntica con el resto de cards del flujo — el
-   padding superior de la card se siente 4-6px más apretado contra la etiqueta que en las cards de
-   Reconocimiento. Fix: igualar el padding superior a `pt-6` explícito en vez de heredar el `p-6`
-   general para que la etiqueta no quede pegada al borde visualmente.
-3. [CTA en estado "Analizando…"] El label "Analizando… (toca para ver el resultado)" es largo y
-   mezcla dos ideas (estado del sistema + instrucción de atajo) en un solo botón — funciona, pero
-   un ojo entrenado nota que es más texto del que carga cualquier otro CTA del flujo. Fix: acortar
-   a "Analizando…" y mover "toca para saltar" como microcopy debajo del botón.
-4. [Alerta de ejemplo] El color `--alerta` (terracota) se usa igual que se usaría para un riesgo
-   real del usuario; la etiqueta "Ejemplo" en la card ya lo distingue a nivel de contenedor, pero
-   la alerta en sí no hereda ningún tratamiento visual diferenciado (opacidad, borde punteado).
-   Fix opcional: bajar levemente la opacidad de fondo de la alerta cuando `esEjemplo` para reforzar
-   la distancia con una alerta real futura (no bloqueante, la etiqueta ya resuelve lo esencial).
-5. [Consistencia de verbo] "Análisis completo" (estado post-detección) y "Así de simple" (CTA)
-   usan registros distintos — uno describe el sistema, el otro es una frase de cierre emocional;
-   funciona pero rompe levemente el patrón de "estado del sistema en su propio idioma" que domina
-   el resto del onboarding. No accionable con prioridad; mencionado por completitud.
+Verificación puntual del logo (respondiendo lo pedido explícitamente):
+- NITIDEZ: aceptable pero no ejemplar. A 24px el trazo general (plato redondo con marco de
+  escaneo en las esquinas) se distingue sobre el fondo verde bosque, sin pixelado ni artefactos de
+  compresión visibles en el screenshot. Sin embargo, el detalle fino del isotipo original (hoja +
+  cubiertos, visible con claridad en `public/logo-mark.png` a tamaño completo) se pierde a este
+  tamaño y se percibe como una mancha clara genérica dentro del cuadrado verde — un ojo entrenado
+  nota que es "un ícono con textura interna" más que reconoce QUÉ dibuja. No es un defecto que un
+  usuario cualquiera note sin buscarlo (nivel 3, no nivel 2): a simple vista solo lee "logo verde",
+  que es lo esperado de un logo de header pequeño.
+- ALINEACIÓN: correcta. El `<img>` de 24px está centrado dentro del contenedor `flex size-11
+  items-center justify-center` (código línea 50), a la misma altura vertical que la barra de
+  progreso y con el mismo tamaño de tap-target (44px) que el botón "Atrás" (ChevronLeft 22px) que
+  lo reemplaza en pantallas siguientes — consistencia de posición mantenida entre variantes del
+  header.
+- DISTORSIÓN: ninguna visible. El PNG es cuadrado (proporción 1:1) y se renderiza en un contenedor
+  también cuadrado (`size-6` = 24×24), sin estiramiento ni recorte evidente. El `rounded-[8px]`
+  aplicado por CSS es redundante sobre un PNG que ya trae su propio fondo redondeado con esquinas
+  transparentes, pero no introduce un doble borde visible a este tamaño — no accionable.
 
-Resumen: el resto del flujo (las 4 preguntas, Reconocimiento sin cambios, compromiso de días,
-paywall) mantiene la calidad que dio LISTA en la ronda que aprobó el onboarding base. Los 5
-defectos de la ronda anterior sobre `AhaSimulacion` quedan resueltos: ya no hay contradicción de
-mecanismo activa ni promesa de tiempo sin sustento (los dos que bloqueaban el gate), el uso de
-`--alerta` está acotado con la etiqueta "Ejemplo", el CTA nunca nace deshabilitado, y el chip
-Mordisco iguala el encabezado con el resto del set. El onboarding completo, incluida la pantalla
-nueva, cruza el umbral: 37/40 usabilidad (≥36) y 18/20 craft (≥16). LISTA.
+Impacto neto en la rúbrica: mejora conceptual sobre el placeholder (marca real vs cuadrito de color
+sólido, sube identidad ownable) compensada por la pérdida de legibilidad del detalle interno a
+24px (mantiene el eje encaje en 2/4, ya señalado en la ronda anterior por la card de AhaSimulacion
+y ahora reforzado por este mismo patrón — "arte con mucho detalle forzado a un tamaño pequeño").
+No hay regresión de ninguna heurística de usabilidad: el logo sigue siendo un enlace funcional a
+"/" con aria-label correcto, mismo tap-target, mismo comportamiento. Los totales se mantienen:
+37/40 usabilidad (≥36) y 18/20 craft (≥16). El onboarding completo sigue LISTA.
+
+Top defectos (ninguno bloqueante — arrastrados de la ronda anterior + 1 nuevo menor del logo):
+1. [Header, Pregunta 1 — logo de 24px] El detalle interno del isotipo (hoja, cubiertos, marco de
+   escaneo) se pierde a este tamaño y se lee como mancha clara sin forma reconocible → simplificar
+   el isotipo para el header a una versión "mark simplificado" de 1-2 trazos (ej. solo el marco de
+   escaneo + una hoja), reservando el isotipo completo con detalle para usos ≥48px (favicon grande,
+   splash, ícono de app).
+2. [Encabezado + demo de `AhaSimulacion`] La ventana de correlación de 48h no se nombra en esa
+   pantalla (arrastrado, ver ronda anterior) → agregar frase corta bajo la alerta de ejemplo.
+3. [Card de la demo, encaje óptico] Padding superior de la card de `AhaSimulacion` 4-6px más
+   apretado que en las cards de Reconocimiento (arrastrado) → igualar con `pt-6` explícito.
+4. [CTA en estado "Analizando…"] Label largo que mezcla estado + instrucción de atajo (arrastrado)
+   → acortar a "Analizando…" y mover "toca para saltar" a microcopy debajo del botón.
+5. [Alerta de ejemplo] `--alerta` sin tratamiento visual diferenciado para el caso "Ejemplo"
+   (arrastrado, no bloqueante) → opacidad reducida cuando `esEjemplo` es true.
