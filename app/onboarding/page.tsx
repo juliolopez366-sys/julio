@@ -230,7 +230,7 @@ function Pregunta({
   return (
     <div className="flex flex-1 flex-col justify-center gap-8">
       <div className="flex flex-col gap-4">
-        <span className="flex size-20 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
+        <span className="inline-flex w-fit items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] px-5 py-4 shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
           <Mordisco size="lg" />
         </span>
         <span className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">
@@ -267,7 +267,7 @@ function Reconocimiento({
   return (
     <div className="flex flex-1 flex-col">
       <div className="flex flex-1 flex-col items-center justify-center gap-5 text-center">
-        <span className="flex size-20 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
+        <span className="inline-flex w-fit items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] px-5 py-4 shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
           <Mordisco size="lg" />
         </span>
         <h1 className="text-balance text-[26px] font-bold leading-[1.15] [font-family:var(--font-display)]">{titulo}</h1>

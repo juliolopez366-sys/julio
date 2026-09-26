@@ -114,13 +114,13 @@ export function Mordisco({ color = 'var(--accent)', size = 'sm' }: { color?: str
     <svg
       aria-hidden="true"
       viewBox="0 0 56 14"
-      className={size === 'lg' ? 'h-[16px] w-[60px] shrink-0' : 'h-[12px] w-[44px] shrink-0'}
+      className={size === 'lg' ? 'h-[18px] w-[72px] shrink-0' : 'h-[12px] w-[44px] shrink-0'}
     >
       <path
         d="M0,0 L18,0 C21,0 22,14 28,14 C34,14 35,0 38,0 L56,0"
         fill="none"
         stroke={color}
-        strokeWidth={size === 'lg' ? 2.5 : 2}
+        strokeWidth={size === 'lg' ? 3 : 2}
         strokeLinecap="round"
       />
     </svg>
@@ -172,7 +172,7 @@ export function PantallaFunnel({ children }: { children: ReactNode }) {
   return (
     <div
       className="flex min-h-dvh flex-col bg-[var(--bg)] text-[var(--text-primary)] [font-family:var(--font-body)]"
-      style={{ backgroundImage: 'radial-gradient(ellipse 640px 420px at 50% -4%, color-mix(in oklab, var(--accent) 16%, transparent), transparent 72%)' }}
+      style={{ backgroundImage: 'radial-gradient(ellipse 600px 380px at 50% 0%, color-mix(in oklab, var(--accent) 24%, transparent), transparent 68%)' }}
     >
       {children}
     </div>

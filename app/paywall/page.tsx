@@ -7,11 +7,11 @@
 
 import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
-import { X, Lock } from 'lucide-react';
+import { X, Lock, Camera, Activity, ClipboardCheck } from 'lucide-react';
 import { Mordisco, CtaPrimario, PantallaFunnel } from '@/components/onboarding/funnel-ui';
 
 type Respuestas = { preocupacion?: string; momento?: string; intentos?: string; diasMeta: number; canal?: string };
-type EstadoCta = 'inicial' | 'procesando' | 'confirmado';
+type EstadoCta = 'inicial' | 'procesando' | 'confirmado' | 'error';
 
 const N_RESPUESTAS = 5;
 /** Toda salida del paywall va al mismo lugar (X y "Ahora no" — un solo modelo mental). */
@@ -53,7 +53,7 @@ export default function PaywallPage() {
           transition={{ duration: 0.3 }}
           className="flex flex-col gap-3 pt-1"
         >
-          <span className="flex size-12 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
+          <span className="inline-flex w-fit items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] px-4 py-3 shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
             <Mordisco size="lg" />
           </span>
           <div className="flex flex-col gap-1.5">
@@ -77,6 +77,27 @@ export default function PaywallPage() {
           <TimelineTrial />
         </motion.div>
 
+        {/* Qué incluye el plan */}
+        <motion.ul
+          initial={{ opacity: 0, y: reduce ? 0 : 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.12 }}
+          className="mt-6 flex flex-col gap-3"
+        >
+          {[
+            { icon: <Camera size={20} aria-hidden="true" />, texto: 'Escaneo de comidas sin límite' },
+            { icon: <Activity size={20} aria-hidden="true" />, texto: 'Motor de Detonante Real activo' },
+            { icon: <ClipboardCheck size={20} aria-hidden="true" />, texto: 'Registro de síntomas en 1 toque' },
+          ].map((item) => (
+            <li key={item.texto} className="flex items-center gap-3 text-[15px] text-[var(--text-primary)]">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] text-[var(--accent)]">
+                {item.icon}
+              </span>
+              {item.texto}
+            </li>
+          ))}
+        </motion.ul>
+
         {/* Cards de plan */}
         <motion.div
           initial={{ opacity: 0, y: reduce ? 0 : 10 }}
@@ -90,7 +111,7 @@ export default function PaywallPage() {
             onClick={() => setPlan('anual')}
             className="relative text-left"
           >
-            <span className="absolute -top-[10px] left-4 z-10 rounded-full bg-[var(--accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.06em] text-[var(--bg)]">
+            <span className="absolute -top-[10px] left-4 z-10 rounded-full bg-[var(--accent)] px-3 py-1 text-[12px] font-bold uppercase tracking-[0.06em] text-[var(--bg)]">
               Más popular · 2 meses gratis
             </span>
             <div
@@ -104,7 +125,9 @@ export default function PaywallPage() {
                   $4.17<span className="text-[12px] font-normal text-[var(--text-secondary)]">/mes</span>
                 </span>
               </div>
-              <p className="mt-1 text-[15px] text-[var(--text-secondary)]">Se cobra $49.99/año</p>
+              <p className="mt-1 inline-block rounded-full bg-[var(--bg)] px-3 py-1 text-[15px] text-[var(--text-secondary)] shadow-[inset_0_1px_3px_color-mix(in_oklab,var(--text-tertiary)_20%,transparent)]">
+                Se cobra $49.99/año
+              </p>
             </div>
           </motion.button>
 
@@ -145,13 +168,32 @@ export default function PaywallPage() {
                 ¿No llega? Escríbenos
               </a>
             </motion.div>
+          ) : estadoCta === 'error' ? (
+            <motion.div
+              role="alert"
+              aria-live="assertive"
+              initial={{ opacity: 0, y: reduce ? 0 : 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col items-center gap-3 rounded-[var(--radius-button)] bg-[var(--surface-2)] px-4 py-4 text-center"
+            >
+              <p className="text-[15px] font-medium text-[var(--text-primary)]">
+                No pudimos activar tu prueba gratis. Puede ser tu conexión o algo de nuestro lado.
+              </p>
+              <button
+                type="button"
+                onClick={() => setEstadoCta('procesando')}
+                className="text-[14px] font-semibold text-[var(--accent)] underline underline-offset-2"
+              >
+                Reintentar
+              </button>
+            </motion.div>
           ) : (
             <CtaPrimario onClick={() => setEstadoCta('procesando')} loading={estadoCta === 'procesando'}>
               {estadoCta === 'procesando' ? 'Activando tu pago seguro…' : 'Empezar mis 7 días gratis'}
             </CtaPrimario>
           )}
           <p className="text-center text-[15px] text-[var(--text-secondary)]">
-            Hoy no pagas nada · te avisamos 1 día antes del cobro · cancela en 1 tap
+            Hoy no pagas nada · te avisamos antes del cobro · cancela en 1 tap
           </p>
           <div className="flex items-center justify-center gap-4 text-[15px] text-[var(--text-secondary)]">
             <a href={SALIDA_HREF} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">Ahora no</a>
@@ -170,7 +212,7 @@ export default function PaywallPage() {
 function TimelineTrial() {
   const nodos = [
     { titulo: 'Hoy — acceso completo', detalle: 'Todo tu plan, sin límites', activo: true },
-    { titulo: 'Día 5 — te avisamos', detalle: 'Correo antes de cualquier cobro', activo: true },
+    { titulo: 'Día 5 — te avisamos', detalle: 'Correo 2 días antes del cobro', activo: true },
     { titulo: 'Día 7 — primer cobro: $49.99/año', detalle: 'Cancela antes sin costo', activo: false },
   ];
   return (

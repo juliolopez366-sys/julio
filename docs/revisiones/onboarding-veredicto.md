@@ -1,9 +1,9 @@
 # VEREDICTO revisor-visual — onboarding (paso 1/8)
 Fecha: 2026-09-25 00:00
 Screenshot: docs/revisiones/onboarding-375.png
-Usabilidad: 31/40
-Craft: 11/20
+Usabilidad: 33/40
+Craft: 12/20
 Copy (si vende): N-A
 Fidelidad (si hubo referencia): N-A
 Veredicto: NO LISTA
-Top defectos: 1) Mordisco lg (78px) desborda su badge de 56px (funnel-ui.tsx:116 + page.tsx:225-227/258-260). 2) Paleta crema+verde+slab-serif coincide con el ejemplo vetado "Capítulo" del test anti-clon (riesgo de identidad no resuelto). 3) ~35-40% de la pantalla sigue vacía (gaps arriba del badge y debajo del último chip, page.tsx:223). 4) Gradiente radial de fondo (funnel-ui.tsx:174) imperceptible en el render — profundidad sigue plana a simple vista. 5) Sombra tintada de los chips (funnel-ui.tsx:11) casi no contrasta contra --chip-bg/--bg.
+Top defectos: 1) Ícono circular negro con "N" superpuesto sobre el texto inferior (esquina inferior izquierda del screenshot, ~y=745px) — no existe en page.tsx ni funnel-ui.tsx, parece overlay de captura (extensión de navegador); si es real en el render de la app viola la regla 11 (elemento interactivo sin función) y ensucia el craft — recapturar el screenshot en un perfil de navegador limpio antes de repuntuar. 2) La paleta crema pergamino #F1E8D4 + verde bosque #47593A sigue siendo visualmente casi indistinguible del ejemplo vetado "papel cálido + tinta verde" (Capítulo) del test anti-clon del eje 3 — solo la tipografía (Fraunces/Work Sans vs Petrona/Karla) la separa; sin una 2ª nota de color, textura o tratamiento gráfico propio, el kit sigue leyéndose intercambiable con ese ejemplo → eje 3 penalizado a 1/4. 3) El Mordisco ya no desborda su badge (funnel-ui.tsx:112-128, 60x16px dentro de un badge de 80px) pero ahora es tan pequeño que se pierde como un garabato centrado — no se lee como dispositivo de marca a simple vista; agrandar el trazo (~28-32px de alto) o sumarle un segundo elemento gráfico. 4) Falta el 3er nivel de profundidad (hundido/sunken): solo hay base + elevado (chips y badge con sombra); el gradiente radial de fondo (funnel-ui.tsx:175, ahora 16%) sigue casi imperceptible en el render — usar un tono `--surface` hundido en algún bloque (ej. contenedor del microcopy) o subir más la opacidad/radio del gradiente. 5) Animación baseline #2 (conteo animado de números héroe) ausente: en `Compromiso` (page.tsx:294, el "días" grande) y en `PantallaCarga` (page.tsx:357, el "%") los números saltan de golpe en vez de contar — envolver con un hook de conteo animado (`animate`/`useSpring` de motion).
