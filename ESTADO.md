@@ -1,8 +1,21 @@
 # ESTADO.md — Memoria del proyecto
 
 ## Fase actual
-Sesión 5 (App interna) COMPLETA y verificada. Próximo: Sesión 6 (servicios externos —
-GitHub, Supabase, IA real, Vercel, Resend, dominio, Hotmart).
+Sesión 6 (servicios externos) en curso. Paso 1/7 (GitHub) LISTO. Próximo: paso 2/7
+(Supabase — base de datos y RLS reales).
+
+## Sesión 6 — Servicios externos (en curso)
+- **1. GitHub — LISTO.** Repositorio del usuario: `github.com/juliolopez366-sys/julio`
+  (privado). Remoto `origin` conectado, rama `master` subida con todo el historial de
+  commits. `.gitignore` ya cubre `node_modules/`, `.next/`, `.env*.local` — sin
+  archivos `.env` en el repo todavía (llegan en el paso 2-3).
+- **2. Supabase** — pendiente.
+- **3. IA real (BFF)** — pendiente, depende del paso 2 (auth + RLS antes de exponer
+  la IA, para no gastar créditos sin control de usuario).
+- **4. Vercel** — pendiente.
+- **5. Resend** — pendiente.
+- **6. Dominio** — pendiente.
+- **7. Hotmart** — pendiente.
 
 ## Idea del usuario — FoodScan
 Rastreador de detonantes digestivos con IA para personas con Síndrome del Intestino
