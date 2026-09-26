@@ -133,8 +133,17 @@ externos).
 - Tu Patrón: 1ª pasada del revisor dio 28/40 · 12/20 (NO LISTA). Se aplicaron 5 fixes
   (header sin ícono para consistencia, stagger real en la evidencia, CTA en el
   empty-state, nivel "hundido" en la sección de evidencia, `FilaComida` con
-  `line-clamp-2` en vez de truncate) y se commiteó (`ee8df74`). Falta relanzar el
-  revisor-visual (2ª pasada) — el usuario aún no confirma si seguir con esto.
+  `line-clamp-2` en vez de truncate) y se commiteó (`ee8df74`). 2ª pasada: 32/40 ·
+  18/20 (NO LISTA) — craft ya cruzaba el umbral, faltaba usabilidad por 4 defectos:
+  el número animado del 75% sin `aria-live`/`aria-hidden`, sin Error Boundary para la
+  ruta, sin el dispositivo ownable "mordisco" en esta pantalla, y los 4 badges "ALTO"
+  de la evidencia sin jerarquía entre ellos. Se corrigieron los 4: `aria-hidden` en el
+  anillo animado + anuncio único `aria-live` con el resultado final; se creó
+  `app/(app)/error.tsx` (Error Boundary COMPARTIDO para toda la app interna —
+  Hoy/Historial/Tu Patrón/Cuenta, no solo Patrón, causa raíz del hueco); se agregó
+  `<MordiscoAncho>` como transición entre la tarjeta de confianza y la evidencia; se
+  agregó numeración 1-4 a las filas de evidencia. Se relanzó el revisor (3ª pasada) —
+  resultado pendiente al momento de este checkpoint.
 - Se agregaron tokens semánticos nuevos a `tokens.css` (`--exito`, `--alerta`,
   `--error`) que estaban en FICHA-ARTE.md pero nunca se habían llevado a CSS; NO se
   tocó `--accent-2` (ya usado por Hero.tsx de la landing).

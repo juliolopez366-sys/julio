@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, useReducedMotion } from 'motion/react';
 import { Sparkles } from 'lucide-react';
+import { MordiscoAncho } from '@/components/app/mordisco-ancho';
 import {
   asegurarSemilla,
   getComidas,
@@ -82,7 +83,7 @@ export default function PatronPage() {
             className="flex flex-col items-center gap-4 rounded-[var(--radius-card)] bg-[var(--chip-bg)] p-6 text-center shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_10%,transparent)]"
           >
             <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">Sospechoso principal</p>
-            <div className="relative flex size-28 items-center justify-center">
+            <div aria-hidden="true" className="relative flex size-28 items-center justify-center">
               <svg viewBox="0 0 100 100" className="absolute inset-0 -rotate-90">
                 <circle cx="50" cy="50" r="42" fill="none" stroke="color-mix(in oklab, var(--alerta) 16%, transparent)" strokeWidth="9" />
                 <motion.circle
@@ -105,7 +106,12 @@ export default function PatronPage() {
             <p className="max-w-[32ch] text-[15px] leading-relaxed text-[var(--text-secondary)]">
               {correlacion.vecesConSintoma} de {correlacion.vecesComido} veces que comiste algo con {correlacion.ingrediente}, tuviste síntomas dentro de las siguientes 48 horas.
             </p>
+            <p role="status" aria-live="polite" className="sr-only">
+              {correlacion.ingrediente}, {confianzaPct}% de confianza como tu detonante principal.
+            </p>
           </motion.div>
+
+          <MordiscoAncho color="var(--surface-2)" />
 
           <div className="rounded-[var(--radius-card)] bg-[var(--surface-2)] p-4 shadow-[inset_0_2px_6px_color-mix(in_oklab,var(--text-primary)_10%,transparent)]">
             <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">La evidencia detrás de tu patrón</p>
@@ -116,7 +122,14 @@ export default function PatronPage() {
                   initial={{ opacity: reduce ? 1 : 0, y: reduce ? 0 : 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: reduce ? 0 : 0.25, delay: reduce ? 0 : i * 0.06 }}
+                  className="relative"
                 >
+                  <span
+                    aria-hidden="true"
+                    className="absolute -left-2 -top-2 z-10 flex size-6 items-center justify-center rounded-full bg-[var(--accent)] text-[12px] font-bold tabular-nums text-[var(--bg)] shadow-[0_2px_6px_color-mix(in_oklab,var(--accent)_35%,transparent)]"
+                  >
+                    {i + 1}
+                  </span>
                   <FilaComida comida={c} onClick={setDetalle} />
                 </motion.div>
               ))}
