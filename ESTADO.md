@@ -150,8 +150,14 @@ externos).
   ahora muestra un estado de éxito ("Registro eliminado" + check, `aria-live`) dentro
   del propio sheet ~900ms antes de cerrarse; se unificó `whileTap` (con
   `useReducedMotion`) en los 3 botones del sheet, el CTA del empty-state de Patrón, y
-  el botón de `error.tsx`. Se relanzó el revisor (4ª pasada) — resultado pendiente al
-  momento de este checkpoint.
+  el botón de `error.tsx`. 4ª pasada: 35/40 · 19/20 (NO LISTA por 1 punto) — el único
+  defecto real restante: la eliminación seguía siendo irreversible tras el segundo tap
+  (confirmación visible ≠ deshacer real). Se implementó "deshacer" real: al confirmar,
+  el borrado se difiere 4500ms (`setTimeout`) mientras se muestra "Registro eliminado"
+  + botón "Deshacer"; tocarlo cancela el timeout y el registro nunca se borra (probado
+  con Playwright: esperar 5s tras "Deshacer" mantiene el ítem con su % de confianza
+  intacto; no tocar nada sí ejecuta el borrado real al cumplirse el plazo). Se relanzó
+  el revisor (5ª pasada) — resultado pendiente al momento de este checkpoint.
 - Se agregaron tokens semánticos nuevos a `tokens.css` (`--exito`, `--alerta`,
   `--error`) que estaban en FICHA-ARTE.md pero nunca se habían llevado a CSS; NO se
   tocó `--accent-2` (ya usado por Hero.tsx de la landing).
