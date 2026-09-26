@@ -88,10 +88,10 @@ export default function LandingFoodScan() {
       <AppPorDentro
         tituloMarked="Tu próxima comida, [acento]sin miedo[/acento]"
         frames={[
-          { label: 'Tu primera foto', nombrePantalla: 'Registro de comida' },
-          { label: 'Tu detonante más probable', nombrePantalla: 'Panel de patrones' },
-          { label: 'Registra un síntoma en 2 segundos', nombrePantalla: 'Registro rápido' },
-          { label: 'Lo que le muestras a tu doctor', nombrePantalla: 'Reporte para tu médico' },
+          { label: 'Así empiezas', nombrePantalla: 'Bienvenida', src: '/carrusel-1-onboarding.png' },
+          { label: 'Fotografías tu plato', nombrePantalla: 'La IA analiza', src: '/carrusel-2-mecanismo.png' },
+          { label: 'Tu detonante más probable', nombrePantalla: 'Panel de patrones', src: '/hero-mockup.png' },
+          { label: 'Prueba gratis antes de pagar', nombrePantalla: 'Planes', src: '/carrusel-4-planes.png' },
         ]}
         ctaLabel={CTA_LABEL}
         ctaHref={CTA_HREF}

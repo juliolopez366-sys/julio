@@ -41,11 +41,11 @@
 
 ## 5. La app por dentro
 - tituloMarked: `Tu próxima comida, [acento]sin miedo[/acento]`
-- frames:
-  1. `Tu primera foto` · Registro de comida
-  2. `Tu detonante más probable` · Panel de patrones
-  3. `Registra un síntoma en 2 segundos` · Registro rápido
-  4. `Lo que le muestras a tu doctor` · Reporte para tu médico
+- frames (con captura real, recortada de vista-previa-app.html — FICHA-ARTE.md):
+  1. `Así empiezas` · Bienvenida (/carrusel-1-onboarding.png)
+  2. `Fotografías tu plato` · La IA analiza (/carrusel-2-mecanismo.png)
+  3. `Tu detonante más probable` · Panel de patrones (/hero-mockup.png)
+  4. `Prueba gratis antes de pagar` · Planes (/carrusel-4-planes.png)
 - ctaLabel: `Encontrar mi detonante gratis`
 
 ## 6. Oferta
