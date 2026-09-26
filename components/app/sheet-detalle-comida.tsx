@@ -20,6 +20,7 @@ export function SheetDetalleComida({
 }) {
   const [confirmando, setConfirmando] = useState(false);
   const [eliminado, setEliminado] = useState(false);
+  const [fallo, setFallo] = useState(false);
   const reduce = useReducedMotion();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -27,6 +28,7 @@ export function SheetDetalleComida({
     if (!comida) {
       setConfirmando(false);
       setEliminado(false);
+      setFallo(false);
     }
   }, [comida]);
 
@@ -38,11 +40,18 @@ export function SheetDetalleComida({
 
   function confirmarEliminar() {
     if (!comida) return;
+    setFallo(false);
     setEliminado(true);
     timeoutRef.current = setTimeout(() => {
-      eliminarComida(comida.id);
-      onEliminar?.();
-      onCerrar();
+      try {
+        eliminarComida(comida.id);
+        onEliminar?.();
+        onCerrar();
+      } catch {
+        setEliminado(false);
+        setConfirmando(false);
+        setFallo(true);
+      }
     }, 4500);
   }
 
@@ -97,6 +106,11 @@ export function SheetDetalleComida({
               })}
             </div>
           </div>
+          {fallo && (
+            <p role="alert" className="rounded-[var(--radius-button)] bg-[color-mix(in_oklab,var(--error)_12%,transparent)] px-3 py-2 text-[13px] font-medium text-[var(--error)]">
+              No se pudo eliminar — intenta de nuevo.
+            </p>
+          )}
           {onEliminar &&
             (confirmando ? (
               <div className="flex gap-2">

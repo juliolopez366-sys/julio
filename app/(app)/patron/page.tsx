@@ -90,7 +90,7 @@ export default function PatronPage() {
                 onClick={() => setMostrarAyuda((v) => !v)}
                 aria-expanded={mostrarAyuda}
                 aria-label="¿Qué significa esto?"
-                className="flex size-5 items-center justify-center rounded-full text-[var(--text-tertiary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                className="-m-3 flex min-h-11 min-w-11 items-center justify-center rounded-full text-[var(--text-tertiary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
               >
                 <Info size={14} aria-hidden="true" />
               </button>
@@ -104,7 +104,7 @@ export default function PatronPage() {
                   transition={{ duration: reduce ? 0 : 0.2 }}
                   className="max-w-[34ch] text-[13px] leading-snug text-[var(--text-secondary)]"
                 >
-                  "Confianza" es cuántas veces síntomas y este ingrediente coincidieron dentro de 48 horas. "Alto" es un ingrediente ya conocido como fuerte en FODMAP.
+                  "Confianza" es cuántas veces síntomas y este ingrediente coincidieron dentro de 48 horas. "Alto" es un ingrediente que suele causar molestias digestivas en mucha gente.
                 </motion.p>
               )}
             </AnimatePresence>
