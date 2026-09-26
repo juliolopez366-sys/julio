@@ -44,11 +44,11 @@ export function Garantia({ nombre, condicionMarked, pisoLegal, icon: Icono = Shi
             <div className="flex flex-col items-center gap-4 px-6 pb-10 pt-2 text-center">
               {/* Dispositivo ownable "mordisco" (FICHA-ARTE.md) repetido aquí para que
                   la identidad no viva solo en el Hero y el carrusel. */}
-              <svg aria-hidden="true" viewBox="0 0 120 14" className="h-[10px] w-[120px]">
+              <svg aria-hidden="true" viewBox="0 0 56 14" className="h-[12px] w-[44px]">
                 <path
-                  d="M0,0 L44,0 C50,0 52,14 60,14 C68,14 70,0 76,0 L120,0"
+                  d="M0,0 L18,0 C21,0 22,14 28,14 C34,14 35,0 38,0 L56,0"
                   fill="none"
-                  stroke="color-mix(in oklab, var(--accent) 35%, transparent)"
+                  stroke="var(--accent)"
                   strokeWidth="2"
                   strokeLinecap="round"
                 />

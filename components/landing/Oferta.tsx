@@ -150,7 +150,7 @@ export function Oferta({
       <motion.div variants={contenedor} initial="hidden" whileInView="visible" viewport={VIEWPORT_ONCE}>
         <motion.div variants={item} className="mx-auto max-w-[620px] text-center">
           <Kicker>{kicker}</Kicker>
-          <h2 className="text-balance text-[34px] font-bold leading-[1.1] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[46px]">
+          <h2 className="text-balance text-[32px] font-bold leading-[1.1] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[44px]">
             <MarkedCopy text={tituloMarked} />
           </h2>
         </motion.div>

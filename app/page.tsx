@@ -30,7 +30,14 @@ export default function LandingFoodScan() {
         ctaLabel={CTA_LABEL}
         ctaHref={CTA_HREF}
         socialProof={<span>7 días gratis · cancela cuando quieras</span>}
-        visualPlaceholderSugerencia="captura de la pantalla principal mostrando el riesgo de una comida"
+        visual={
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src="/hero-mockup.png"
+            alt="Pantalla principal de FoodScan mostrando el riesgo de una comida"
+            className="h-full w-full object-cover"
+          />
+        }
       />
 
       {/* 2. PROBLEMA */}
