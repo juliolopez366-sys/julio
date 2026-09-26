@@ -1,9 +1,19 @@
+import { Trash2 } from 'lucide-react';
 import { BottomSheet } from './bottom-sheet';
 import { FotoComida } from './foto-comida';
 import { BadgeRiesgo } from './badge-riesgo';
-import type { Comida } from '@/lib/foodscan-data';
+import { eliminarComida, type Comida } from '@/lib/foodscan-data';
 
-export function SheetDetalleComida({ comida, onCerrar }: { comida: Comida | null; onCerrar: () => void }) {
+export function SheetDetalleComida({
+  comida,
+  onCerrar,
+  onEliminar,
+}: {
+  comida: Comida | null;
+  onCerrar: () => void;
+  /** Se llama tras eliminar, para que la pantalla recargue sus datos. */
+  onEliminar?: () => void;
+}) {
   return (
     <BottomSheet abierto={comida !== null} onCerrar={onCerrar} titulo={comida?.descripcion ?? ''}>
       {comida && (
@@ -33,6 +43,19 @@ export function SheetDetalleComida({ comida, onCerrar }: { comida: Comida | null
               })}
             </div>
           </div>
+          {onEliminar && (
+            <button
+              type="button"
+              onClick={() => {
+                eliminarComida(comida.id);
+                onCerrar();
+                onEliminar();
+              }}
+              className="flex h-11 w-full items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--surface-2)] text-[15px] font-semibold text-[var(--error)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+            >
+              <Trash2 size={16} aria-hidden="true" /> Eliminar este registro
+            </button>
+          )}
         </div>
       )}
     </BottomSheet>

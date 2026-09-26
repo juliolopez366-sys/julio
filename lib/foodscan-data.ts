@@ -167,6 +167,10 @@ export function agregarSintoma(input: { tipo: TipoSintoma; intensidad: 1 | 2 | 3
   return sintoma;
 }
 
+export function eliminarComida(id: string) {
+  escribirJSON(CLAVE_COMIDAS, getComidas().filter((c) => c.id !== id));
+}
+
 export const COMIDAS_PRESET: { nombreComida: string; descripcion: string; ingredientes: string[]; colorFoto: [string, string] }[] = [
   { nombreComida: 'Desayuno', descripcion: 'Yogur con arándanos', ingredientes: ['yogur', 'arándanos'], colorFoto: ['#d8d3e0', '#8a7fa3'] },
   { nombreComida: 'Almuerzo', descripcion: 'Arroz con pollo y zanahoria', ingredientes: ['arroz', 'pollo', 'zanahoria'], colorFoto: ['#e4c98a', '#a37b34'] },

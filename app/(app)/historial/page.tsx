@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import { asegurarSemilla, getComidas, getSintomas, type Comida, type Sintoma } from '@/lib/foodscan-data';
 import { FilaComida } from '@/components/app/fila-comida';
 import { FilaSintoma } from '@/components/app/fila-sintoma';
+import { SheetDetalleComida } from '@/components/app/sheet-detalle-comida';
 
 type Filtro = 'todas' | 'comidas' | 'sintomas' | 'riesgo';
 
@@ -31,12 +32,17 @@ export default function HistorialPage() {
   const [comidas, setComidas] = useState<Comida[] | null>(null);
   const [sintomas, setSintomas] = useState<Sintoma[] | null>(null);
   const [filtro, setFiltro] = useState<Filtro>('todas');
+  const [detalle, setDetalle] = useState<Comida | null>(null);
   const reduce = useReducedMotion();
+
+  function recargar() {
+    setComidas(getComidas());
+    setSintomas(getSintomas());
+  }
 
   useEffect(() => {
     asegurarSemilla();
-    setComidas(getComidas());
-    setSintomas(getSintomas());
+    recargar();
   }, []);
 
   const grupos = useMemo(() => {
@@ -93,12 +99,20 @@ export default function HistorialPage() {
             <motion.div key={dia} initial={{ opacity: 0, y: reduce ? 0 : 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduce ? 0 : 0.2, delay: reduce ? 0 : gi * 0.05 }}>
               <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">{dia}</p>
               <div className="flex flex-col gap-3">
-                {eventos.map((ev) => (ev.tipo === 'comida' ? <FilaComida key={ev.dato.id} comida={ev.dato} /> : <FilaSintoma key={ev.dato.id} sintoma={ev.dato} />))}
+                {eventos.map((ev) =>
+                  ev.tipo === 'comida' ? (
+                    <FilaComida key={ev.dato.id} comida={ev.dato} onClick={setDetalle} />
+                  ) : (
+                    <FilaSintoma key={ev.dato.id} sintoma={ev.dato} />
+                  )
+                )}
               </div>
             </motion.div>
           ))}
         </div>
       )}
+
+      <SheetDetalleComida comida={detalle} onCerrar={() => setDetalle(null)} onEliminar={recargar} />
     </div>
   );
 }

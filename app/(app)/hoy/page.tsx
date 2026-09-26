@@ -5,7 +5,7 @@
 // de riesgo + insight del Motor de Detonante Real.
 
 import { useEffect, useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion, useReducedMotion, AnimatePresence } from 'motion/react';
 import { Camera, Flame, Plus, RotateCcw } from 'lucide-react';
 import { FotoComida } from '@/components/app/foto-comida';
 import { MordiscoAncho } from '@/components/app/mordisco-ancho';
@@ -69,6 +69,7 @@ export default function HoyPage() {
   const [sheetComida, setSheetComida] = useState(false);
   const [sheetSintoma, setSheetSintoma] = useState(false);
   const [detalle, setDetalle] = useState<Comida | null>(null);
+  const [aviso, setAviso] = useState<string | null>(null);
   const reduce = useReducedMotion();
   const rachaAnimada = useContadorAnimado(perfil?.rachaActual ?? 0);
 
@@ -134,6 +135,14 @@ export default function HoyPage() {
               {correlacion.vecesConSintoma} de tus últimos {correlacion.vecesComido} registros con este ingrediente terminaron en síntomas.{' '}
               <span className="text-[var(--text-secondary)]">Todavía es poca muestra — sigue registrando para confirmarlo.</span>
             </p>
+            <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[color-mix(in_oklab,var(--alerta)_16%,transparent)]">
+              <motion.div
+                className="h-full rounded-full bg-[var(--alerta)]"
+                initial={{ width: 0 }}
+                animate={{ width: `${Math.round((correlacion.vecesConSintoma / correlacion.vecesComido) * 100)}%` }}
+                transition={{ duration: reduce ? 0 : 0.8, delay: reduce ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
+              />
+            </div>
           </motion.div>
         )}
 
@@ -151,6 +160,8 @@ export default function HoyPage() {
             onClick={() => {
               agregarComida(ultima);
               recargar();
+              setAviso(`Agregado: ${ultima.descripcion}`);
+              setTimeout(() => setAviso(null), 2200);
             }}
             className="flex items-center justify-center gap-1.5 self-center text-[12px] font-medium text-[var(--text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
           >
@@ -166,7 +177,7 @@ export default function HoyPage() {
           </motion.button>
         </motion.div>
 
-        <div className="rounded-[var(--radius-card)] bg-[var(--surface-2)] p-4">
+        <div className="rounded-[var(--radius-card)] bg-[var(--surface-2)] p-4 shadow-[inset_0_2px_6px_color-mix(in_oklab,var(--text-primary)_10%,transparent)]">
           <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">
             Hoy registraste {comidasHoy.length} comida{comidasHoy.length === 1 ? '' : 's'}
           </p>
@@ -205,7 +216,23 @@ export default function HoyPage() {
           recargar();
         }}
       />
-      <SheetDetalleComida comida={detalle} onCerrar={() => setDetalle(null)} />
+      <SheetDetalleComida comida={detalle} onCerrar={() => setDetalle(null)} onEliminar={recargar} />
+
+      <AnimatePresence>
+        {aviso && (
+          <motion.div
+            role="status"
+            aria-live="polite"
+            initial={{ opacity: 0, y: reduce ? 0 : 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: reduce ? 0 : 12 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-x-0 bottom-[92px] z-50 mx-auto w-fit max-w-[90%] rounded-full bg-[var(--text-primary)] px-4 py-2 text-[12px] font-medium text-[var(--bg)] shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
+          >
+            {aviso}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

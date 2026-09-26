@@ -16,6 +16,7 @@ import {
   type Correlacion,
 } from '@/lib/foodscan-data';
 import { FilaComida } from '@/components/app/fila-comida';
+import { SheetDetalleComida } from '@/components/app/sheet-detalle-comida';
 
 function usePorcentajeAnimado(valor: number) {
   const [mostrado, setMostrado] = useState(0);
@@ -36,14 +37,19 @@ function usePorcentajeAnimado(valor: number) {
 export default function PatronPage() {
   const [comidas, setComidas] = useState<Comida[] | null>(null);
   const [correlacion, setCorrelacion] = useState<Correlacion | null | undefined>(undefined);
+  const [detalle, setDetalle] = useState<Comida | null>(null);
   const reduce = useReducedMotion();
 
-  useEffect(() => {
-    asegurarSemilla();
+  function recargar() {
     const cs = getComidas();
     const ss = getSintomas();
     setComidas(cs);
     setCorrelacion(calcularCorrelacion(cs, ss));
+  }
+
+  useEffect(() => {
+    asegurarSemilla();
+    recargar();
   }, []);
 
   const confianzaPct = Math.round((correlacion?.confianza ?? 0) * 100);
@@ -108,7 +114,7 @@ export default function PatronPage() {
             <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">La evidencia detrás de tu patrón</p>
             <div className="flex flex-col gap-3">
               {comidasRelacionadas.map((c) => (
-                <FilaComida key={c.id} comida={c} />
+                <FilaComida key={c.id} comida={c} onClick={setDetalle} />
               ))}
             </div>
           </div>
@@ -128,6 +134,8 @@ export default function PatronPage() {
           </p>
         </motion.div>
       )}
+
+      <SheetDetalleComida comida={detalle} onCerrar={() => setDetalle(null)} onEliminar={recargar} />
     </div>
   );
 }
