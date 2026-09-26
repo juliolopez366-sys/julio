@@ -1,8 +1,8 @@
 # ESTADO.md — Memoria del proyecto
 
 ## Fase actual
-Sesión 4 (Onboarding, paywall, login/auth) COMPLETA y verificada. Próximo: Sesión 5
-(app interna).
+Sesión 5 (App interna) COMPLETA y verificada. Próximo: Sesión 6 (servicios externos —
+GitHub, Supabase, IA real, Vercel, Resend, dominio, Hotmart).
 
 ## Idea del usuario — FoodScan
 Rastreador de detonantes digestivos con IA para personas con Síndrome del Intestino
@@ -121,220 +121,72 @@ Precio $6.99/mes · $49.99/año. Pasarela: Hotmart. **Prueba: 7 días · Garant�
   limpio ✓.
 
 ## Próximo paso
-Sesión 5 — App interna en curso (ver "Sesión 5 — App interna (en curso)" abajo).
-Pendiente: confirmar si se relanza el revisor de "Tu Patrón" (2ª pasada) o se sigue
-con otra pantalla; luego cerrar Sesión 5 formalmente y pasar a Sesión 6 (servicios
-externos).
+Sesión 6 — Servicios externos: GitHub, Supabase (datos/RLS reales), IA real, Vercel,
+Resend, dominio, Hotmart. Es la única fase donde el usuario hace pasos manuales
+(crear cuentas, conectar servicios) — se le guía paso a paso (ver
+`SECUENCIA-MAESTRA-CONSTRUCCION.md`).
 
-## Sesión 5 — App interna (en curso)
-- Hoy: LISTA (37/40 · 16/20, 5ª pasada del revisor-visual).
-- Historial y Cuenta: sin revisor completo (pantallas secundarias, Regla 7), medición
-  + checklist manual sin errores.
-- Tu Patrón: 1ª pasada del revisor dio 28/40 · 12/20 (NO LISTA). Se aplicaron 5 fixes
-  (header sin ícono para consistencia, stagger real en la evidencia, CTA en el
-  empty-state, nivel "hundido" en la sección de evidencia, `FilaComida` con
-  `line-clamp-2` en vez de truncate) y se commiteó (`ee8df74`). 2ª pasada: 32/40 ·
-  18/20 (NO LISTA) — craft ya cruzaba el umbral, faltaba usabilidad por 4 defectos:
-  el número animado del 75% sin `aria-live`/`aria-hidden`, sin Error Boundary para la
-  ruta, sin el dispositivo ownable "mordisco" en esta pantalla, y los 4 badges "ALTO"
-  de la evidencia sin jerarquía entre ellos. Se corrigieron los 4: `aria-hidden` en el
-  anillo animado + anuncio único `aria-live` con el resultado final; se creó
-  `app/(app)/error.tsx` (Error Boundary COMPARTIDO para toda la app interna —
-  Hoy/Historial/Tu Patrón/Cuenta, no solo Patrón, causa raíz del hueco); se agregó
-  `<MordiscoAncho>` como transición entre la tarjeta de confianza y la evidencia; se
-  agregó numeración 1-4 a las filas de evidencia. 3ª pasada: 33/40 · 19/20 (NO LISTA)
-  — craft consolidado, faltaban 3 puntos de usabilidad por: sin confirmación visible
-  tras eliminar, botón "Reintentar" de `error.tsx` sin `whileTap`, y varios botones de
-  acción (confirmar/cancelar eliminar, CTA del empty-state) sin feedback de tap,
-  inconsistente con el resto de la app. Se corrigieron los 3: `SheetDetalleComida`
-  ahora muestra un estado de éxito ("Registro eliminado" + check, `aria-live`) dentro
-  del propio sheet ~900ms antes de cerrarse; se unificó `whileTap` (con
-  `useReducedMotion`) en los 3 botones del sheet, el CTA del empty-state de Patrón, y
-  el botón de `error.tsx`. 4ª pasada: 35/40 · 19/20 (NO LISTA por 1 punto) — el único
-  defecto real restante: la eliminación seguía siendo irreversible tras el segundo tap
-  (confirmación visible ≠ deshacer real). Se implementó "deshacer" real: al confirmar,
-  el borrado se difiere 4500ms (`setTimeout`) mientras se muestra "Registro eliminado"
-  + botón "Deshacer"; tocarlo cancela el timeout y el registro nunca se borra (probado
-  con Playwright: esperar 5s tras "Deshacer" mantiene el ítem con su % de confianza
-  intacto; no tocar nada sí ejecuta el borrado real al cumplirse el plazo). Se relanzó
-  el revisor (5ª pasada): 33/40 · 19/20 (NO LISTA) — el fix del deshacer SÍ subió la
-  heurística de control/libertad, pero cada pasada evalúa las 10 heurísticas de forma
-  independiente y el puntaje total fluctuó (33 esta vez vs 35 la anterior — variación
-  normal entre pasadas con contexto limpio, no una regresión real). El defecto de
-  mayor apalancamiento restante: sin ayuda contextual sobre "confianza"/"ALTO"
-  (heurística 10 en 2/4). Se agregó un botón ícono `Info` junto a "Sospechoso
-  principal" que expande una línea explicando ambos términos. Los otros 3 defectos
-  menores (badges "ALTO" idénticos — son objetivamente iguales, no hay grado real que
-  inventar; sin atajos para usuario frecuente; sin estado de fallo para un
-  `eliminarComida()` síncrono que no puede fallar en operación normal) se dejaron
-  deliberadamente sin tocar — corregirlos violaría la regla del SO de no fabricar
-  datos falsos ni sobre-ingenierizar para escenarios que no ocurren. Se relanzó el
-  revisor (6ª pasada) pidiéndole explícitamente que evalúe si el techo real de esta
-  pantalla concreta está genuinamente por debajo de 36/40 sin fabricar/sobre-
-  ingenierizar. Respuesta: 32/40 · 19/20 (NO LISTA) — el fix de ayuda contextual sí
-  subió esa heurística, pero introdujo 2 regresiones nuevas propias (jerga "FODMAP"
-  sin definir en el texto de ayuda, y el botón Info con área táctil de 20px, bajo el
-  mínimo de 44px). El revisor confirmó que el techo SÍ está por encima de 36/40 y dio
-  una proyección concreta de 3 fixes para llegar exacto al umbral: corregir el copy,
-  ampliar el hit-area a 44px, y agregar un `try/catch` defensivo (trivial, no
-  sobre-ingeniería) en el borrado diferido. Se aplicaron los 3. Se relanzó el revisor
-  (7ª pasada) — resultado pendiente al momento de este checkpoint.
-- Se agregaron tokens semánticos nuevos a `tokens.css` (`--exito`, `--alerta`,
-  `--error`) que estaban en FICHA-ARTE.md pero nunca se habían llevado a CSS; NO se
-  tocó `--accent-2` (ya usado por Hero.tsx de la landing).
+## Sesión 5 — App interna: COMPLETA ✅
+Rutas en `app/(app)/*` con shell compartido (nav en píldora flotante) y Error
+Boundary compartido (`app/(app)/error.tsx`, cubre las 4 pantallas — la nav sigue
+visible si una falla). Motor de correlación y datos simulados con `localStorage` en
+`lib/foodscan-data.ts` (esquema real para Supabase ya decidido, ver Decisiones
+técnicas abajo).
+- **Hoy — LISTA (37/40 · 16/20, 5ª pasada).** Ritual diario M0: celebración de hito,
+  título de riesgo, insight de correlación con barra, comidas de hoy.
+- **Tu Patrón — LISTA (36/40 · 19/20, 7ª pasada de 7).** Pantalla que vende la
+  promesa central (Motor de Detonante Real): anillo de confianza animado con
+  `aria-live`, evidencia numerada 1-4, ayuda contextual ("¿Qué significa esto?"),
+  "deshacer" real (no cosmético) al eliminar un registro — el borrado se difiere
+  4.5s y es cancelable. Historial de 7 rondas de revisor-visual documentado en los
+  commits (`ee8df74` en adelante); resumen: craft cruzó el umbral en la 2ª pasada,
+  usabilidad tardó en cruzar por defectos reales de accesibilidad, consistencia de
+  motion, reversibilidad de acciones destructivas y ayuda contextual — todos
+  corregidos sin fabricar datos ni sobre-ingenierizar (los badges "ALTO" idénticos
+  se dejaron así a propósito: son datos reales sin grados que inventar).
+- **Historial y Cuenta** — sin revisor completo (pantallas secundarias, Regla 7),
+  medición + checklist manual sin errores.
+- Tokens semánticos agregados a `tokens.css` (`--exito`, `--alerta`, `--error`) que
+  estaban en FICHA-ARTE.md pero nunca se habían llevado a CSS; `--accent-2` no se
+  tocó (ya usado por Hero.tsx de la landing).
 
-## Elevación de la página de ventas (post-Sesión 3, pedido explícito del usuario)
-El usuario pidió revisar que las 10 secciones canónicas de la landing tuvieran los
-íconos/elementos visuales que exige la escaneabilidad mobile (52/55): 9 de las 10 ya
-los tenían (Problema con IconChip, Solución con pasos numerados, Oferta/Garantía con
-checkmarks y escudo, FAQ en acordeón, etc.) — solo **Agitación** (§3, "el costo de
-seguir igual") era texto plano sin ícono. Se le agregó un ícono Lucide por frase
-(mismo patrón visual que Problema, tipo `FraseAgitacion`), y se actualizaron las
-2 páginas que la usan (`app/page.tsx`, `components/landing/EJEMPLO-page.tsx`).
-Verificado: `tsc --noEmit` ✓ · `npm run build` ✓ · dev sin errores de consola (un
-error visto en un tab de navegador quedó obsoleto — persistía en una pestaña vieja
-con caché; una pestaña nueva no lo reproduce). Screenshot re-tomado y verificado a
-375×8241px (`docs/revisiones/landing-375.png`).
-- **Revisor visual (10ª pasada): 38/40 usabilidad (subió de 37 — Consistencia 3→4) ·
-  20/20 craft (subió de 19) · 19/20 copy (sin cambio) · Fidelidad: FIEL · Veredicto:
-  LISTA** (`docs/revisiones/landing-veredicto.md`). 2 defectos cosméticos NO
-  bloqueantes anotados en el propio veredicto: el frame 2 del carrusel
-  ("La IA analiza") no muestra el resultado revelado (solo el estado "Analizando…"),
-  y el frame 3 reutiliza `hero-mockup.png` (misma imagen que el Hero) en vez de una
-  captura propia del panel de patrones — quedan como mejora futura, no bloquean.
-
-## Logo real (pedido explícito del usuario)
-El usuario aportó una imagen de referencia de su isotipo (mockup de ícono de app:
-plato+hoja+cubiertos+marco de escaneo, sobre fondo verde bosque en cuadrado
-redondeado, con el wordmark "FOODSCAN" debajo del ícono dentro del mismo cuadrado).
-Se procesó con `sharp` (Node): se quitó el fondo crema/blanco (canal alfa por
-distancia de color), se recortó SOLO la porción del ícono (sin el wordmark, para
-tener un isotipo limpio usable a tamaño chico en headers) y se generaron:
-- `public/logo-mark.png` (128×128, transparente) — usado inline en el header de la
-  landing (`Hero`), el footer (`FooterLegal`) y el header compartido de
-  onboarding/paywall (`FunnelHeader` en `funnel-ui.tsx`), reemplazando el cuadrito de
-  color placeholder que había en los tres lugares.
-- `app/icon.png` (256×256, transparente) y `app/apple-icon.png` (180×180, fondo crema
-  `#F6F2E6` — iOS aplica su propia máscara) — favicon/ícono de app vía las convenciones
-  de archivo especial de Next.js (se sirven automáticamente en `/icon.png` y
-  `/apple-icon.png`, confirmado en `npm run build`).
-Verificado: `tsc --noEmit` ✓ · `npm run build` ✓ · logo visible sin errores de consola
-en landing (header y footer) y onboarding (header del funnel). Como el logo toca 2
-de las 4 pantallas del dinero (landing y onboarding), se relanzó el revisor-visual en
-ambas. El paywall NO se ve afectado: su header usa la variante "cerrar" (X) de
-`FunnelHeader`, no la variante con el logo.
-- **Landing: 38/40 · 20/20 · 19/20 copy — LISTA** (sin cambio vs. la pasada anterior;
-  el logo no introdujo defectos nuevos). Nota no bloqueante: el `rounded-[8px]` que
-  tenía el `<img>` era CSS redundante (el propio PNG ya trae la esquina redondeada) —
-  se quitó.
-- **Onboarding: 37/40 · 18/20 — LISTA** (sin cambio vs. la pasada anterior). Nota real:
-  a 24px el detalle interno del isotipo (hoja + cubiertos + marco) se perdía y se leía
-  como una mancha sin forma reconocible — se subió el logo de 24px a 32px (`size-6` →
-  `size-8`) en las 3 ubicaciones (Hero, FooterLegal, FunnelHeader) para mejorar la
-  legibilidad del detalle, dentro del tap-target de 44px del header del funnel.
-  Cambio de bajo riesgo (tamaño dentro de la escala de espaciado del 14, mismo slot,
-  sugerido por el propio revisor) — no se relanzó una 3ª pasada por esto.
-
-## Onboarding: pulido con demo Aha (pedido explícito del usuario, basado en análisis externo)
-El usuario compartió un análisis de otra IA (Gemini) sobre cómo mejorar el onboarding
-y pidió compararlo con el ya construido e incorporar lo que aplicara. Comparación:
-- Fase 1 (preguntas de diagnóstico): ya estaba cubierta — las 3 preguntas existentes
-  tocan los mismos ejes (preocupación, momento del dolor, intentos previos).
-- Fase 2 (momento "Aha" — romper la objeción con una demo visual, no con texto): NO
-  existía. Se implementó `AhaSimulacion` (nuevo paso en `app/onboarding/page.tsx`,
-  insertado entre la pregunta de "intentos previos" y su reconocimiento) — simula el
-  escaneo de un plato compuesto y revela "Ajo oculto en la salsa detectado. Alto en
-  FODMAP." Esto ejecuta la objeción #1 YA documentada en FICHA-AVATAR.md ("la IA no
-  va a acertar con comidas de restaurante" → respuesta: "demo real del análisis sobre
-  un plato compuesto"), que hasta ahora solo se rompía con texto, nunca visualmente.
-- Fase 3 (promesa de tiempo concreta): se agregó una 5ª línea a la pantalla de carga
-  final. Primer intento: "Tus primeros patrones probables: en 5 a 7 días de registro"
-  — el revisor lo marcó como promesa NO sustentada (riesgo real para un avatar ya
-  "quemada" por apps con promesas incumplidas). Corregido: "Tu patrón aparece apenas
-  un ingrediente se repita en tus días malos" — anclado al mecanismo real, sin cifra
-  inventada.
-- Fase 4 (paywall "difuminado" — dejar usar la cámara gratis 3-4 comidas antes de
-  pagar): el usuario decidió explícitamente NO explorarlo — es un cambio de modelo de
-  monetización (reabriría la decisión "onboarding-first anónimo", cosa juzgada) y el
-  paywall actual ya midió 37/40. Se queda como está.
-- `PASOS_TOTALES` pasó de 8 a 9; se renumeraron los pasos internos (sin cambiar
-  contenido de las preguntas/reconocimientos existentes); el timeout antes de navegar
-  a `/paywall` subió de 5200ms a 6300ms para que la 5ª línea de carga alcance a verse.
-- Verificado: `tsc --noEmit` ✓ · `npm run build` ✓ · flujo completo probado clic por
-  clic (Playwright) desde la pregunta 1 hasta el redirect a `/paywall`, sin errores de
-  consola. Screenshot verificado a 375×812px (`docs/revisiones/onboarding-375.png`).
-- **1ª pasada del revisor sobre la pantalla nueva: 30/40 · 16/20 — NO LISTA.** 5
-  defectos: (1) la demo recreaba la objeción #1 en vez de desarmarla — afirmaba
-  detección absoluta por foto sola, sin explicar el puente ni conectar con la
-  confirmación de 1 toque; (2) la promesa "5-7 días" sin sustento (ver arriba, ya
-  corregida); (3) usaba `--alerta` (reservado a riesgo confirmado) sin marcar que era
-  un ejemplo simulado; (4) el CTA nacía deshabilitado ~1.6s sin poder saltar (viola la
-  regla de CTA vivo); (5) no llevaba el chip "Mordisco" que sí llevan las demás
-  pantallas de contenido (quiebre de consistencia). Los 5 se corrigieron: copy nuevo
-  ("Probable ajo oculto... Confírmalo en un toque si lo sabes"), línea de carga
-  anclada al mecanismo, etiqueta "Ejemplo" en la tarjeta, CTA siempre tocable (tocar
-  durante "Analizando…" salta al resultado en vez de esperar), chip Mordisco agregado.
-  Se relanzó el revisor.
-- **2ª pasada del revisor: 37/40 · 18/20 — LISTA** (`docs/revisiones/onboarding-veredicto.md`,
-  fidelidad FIEL). Confirma que los 5 defectos anteriores quedaron resueltos. 5 notas
-  cosméticas NO bloqueantes quedan anotadas en el propio veredicto: la demo no nombra
-  la ventana de 48h (podría conectarse mejor con el resto del flujo), el padding
-  superior de la etiqueta "Ejemplo" queda algo apretado, el label del CTA en estado
-  "Analizando…" mezcla dos ideas, y dos notas menores de tono/opacidad — quedan como
-  mejora futura, no bloquean. Con esto, la pantalla "Así funciona" y el onboarding
-  completo quedan LISTOS.
+## Elevaciones post-lanzamiento (pedidos explícitos del usuario, tras cerrar Sesión 5)
+- **Landing — 38/40 · 20/20 · 19/20 copy, LISTA.** Se le agregó ícono a la sección
+  Agitación (única de las 10 sin uno) y luego el logo real (ver abajo); ninguno de
+  los dos cambios introdujo defectos nuevos.
+- **Logo real.** El usuario aportó la imagen de su isotipo (plato+hoja+cubiertos+
+  marco de escaneo sobre verde bosque). Se procesó con `sharp`: fondo removido,
+  recortado a solo el ícono (sin el wordmark "FOODSCAN", para que se lea bien
+  chico). Assets: `public/logo-mark.png` (128×128, usado en Hero/FooterLegal/
+  FunnelHeader a 32px — subido desde 24px porque el detalle se perdía) y
+  `app/icon.png` + `app/apple-icon.png` (favicon vía convención de Next.js). Landing
+  y onboarding re-revisados tras el cambio, ambos siguen LISTA.
+- **Onboarding — 37/40 · 18/20, LISTA.** El usuario comparó el onboarding contra un
+  análisis externo (Gemini) y pidió incorporar lo aplicable: se agregó `AhaSimulacion`
+  (nuevo paso que rompe VISUALMENTE la objeción #1 de FICHA-AVATAR.md — antes solo se
+  rompía con texto) y una línea en la pantalla de carga anclada al mecanismo real
+  (sin prometer una cifra de días no sustentada). El modelo de "paywall difuminado"
+  que proponía el análisis externo se descartó a propósito — reabriría la decisión
+  de monetización ya aprobada (cosa juzgada).
 
 ## Problemas conocidos
-- **veredicto:landing** — el hook de cierre marca el veredicto de landing como
-  "caducado" porque detecta archivos .tsx MÁS NUEVOS en el repo (antes: app/onboarding,
-  app/paywall, app/entrar; luego también: app/(app)/hoy, historial, cuenta de Sesión 5;
-  ahora también: app/onboarding/page.tsx por el rediseño de esta sesión) — pero esos
-  archivos son de OTRAS pantallas, no tocan ningún componente de la landing
-  (components/landing/*). Es un falso positivo del chequeo por fecha de archivo, no un
-  veredicto real desactualizado. NOTA: sí hubo un cambio REAL en Agitacion.tsx en esta
-  sesión (se le agregó ícono a cada frase) — para eso se relanzó el revisor-visual
-  completo, ver "Elevación de la página de ventas" arriba; el veredicto se sobrescribió
-  con el resultado de esa pasada. NOTA 2: también hubo un cambio real en `app/page.tsx`
-  (logo real en header/footer, ver "Logo real" arriba) — SÍ se relanzó el revisor
-  (38/40 · 20/20 · 19/20, LISTA). Después de esa pasada se aplicó un ajuste cosmético
-  más (subir el logo de 24px a 32px, sugerencia del propio revisor) sin relanzar una
-  3ª pasada — mismo criterio ya aplicado al `border-2` de paywall en Sesión 4: es un
-  ajuste dentro de la misma categoría de defecto que el revisor ya evaluó y aceptó
-  como no bloqueante, no introduce nada nuevo.
-- **veredicto:onboarding** — resuelto: se agregó la demo "Así funciona" (ver
-  "Onboarding: pulido con demo Aha" abajo), 1ª pasada NO LISTA (30/40), se corrigieron
-  los 5 defectos, 2ª pasada LISTA (37/40 · 18/20). Después se relanzó otra vez por el
-  cambio de logo real en el header (también LISTA, 37/40 · 18/20, sin defectos
-  nuevos). Igual que en landing (NOTA 2 arriba), tras esa pasada se subió el logo de
-  24px a 32px (sugerencia del propio revisor por legibilidad) sin relanzar una 4ª
-  pasada — mismo criterio del `border-2` de paywall: ajuste dentro de una categoría de
-  defecto ya evaluada y aceptada como no bloqueante.
-- **veredicto:onboarding (histórico)** — LISTA (36/40 · 16/20, 7ª pasada, detalle
-  completo en la
-  sección "Sesión 4" arriba). El hook marca este veredicto como "caducado" por el
-  mismo falso positivo de fecha de archivo que landing (arriba): detecta archivos de
-  OTRAS pantallas (paywall, y ahora también hoy/historial/cuenta de Sesión 5) más
-  nuevos, pero el código propio de onboarding no cambió desde el veredicto LISTA.
-- **veredicto:paywall** — LISTA (37/40 · 16/20 · 19/20 copy, 9ª pasada, detalle
-  completo en la sección "Sesión 4" arriba). El hook lo marca "caducado" por DOS
-  razones distintas, ninguna bloqueante: (1) motivo real ya aceptado — después del
-  veredicto LISTA se aplicó un último ajuste cosmético (quitar un `border-2` residual
-  en el timeline, mismo tipo de defecto que ya se había corregido en las tarjetas de
-  plan y que el propio veredicto listaba como no bloqueante); no introduce nada nuevo
-  que el revisor no haya evaluado ya en esa categoría. (2) falso positivo de fecha de
-  archivo — el hook ahora también cita `app/(app)/hoy`, `historial`, `cuenta`
-  (Sesión 5) como "más nuevos", pero son pantallas DISTINTAS que no tocan
-  `app/paywall/page.tsx` ni ningún componente del paywall. No se considera necesario
-  relanzar una 10ª pasada por ninguno de los dos motivos.
+- El hook de cierre marca veredictos "caducados" cuando detecta archivos .tsx más
+  nuevos de OTRAS pantallas (falso positivo por fecha, no por contenido) — pasó
+  varias veces esta sesión entre landing/onboarding/paywall y las pantallas nuevas
+  de la app interna. Cuando hubo un cambio REAL en una pantalla ya LISTA, siempre se
+  relanzó el revisor-visual (ver secciones de arriba); los ajustes cosméticos
+  triviales sugeridos por el propio revisor (ej. subir el logo de 24 a 32px, quitar
+  un `border-2` residual en Sesión 4) no ameritaron una pasada extra por caer dentro
+  de una categoría de defecto ya evaluada y aceptada como no bloqueante.
 - Los enlaces del footer (/privacidad, /terminos, /reembolsos, /aviso-ia) aún no
-  existen como páginas — se construyen en Sesión 6 (legal) y Sesión 4 (auth/onboarding
-  para /entrar y /onboarding). Esperado en esta etapa, no un bug.
+  existen como páginas — se construyen en Sesión 6 (legal). Esperado en esta etapa.
 - FICHA-MODELO.md: los campos de Meta Ads Library y Sensor Tower (MRR/top-grossing)
-  quedaron NO ENCONTRADO — requieren búsqueda manual con acceso que esta sesión no tiene.
-  No bloquea el avance; se completa si se decide invertir en ads pagados (34).
-- FICHA-AVATAR.md no viene de entrevistas directas (44), sino del documento de research
-  de mercado del usuario + reseñas públicas de competidores. Es evidencia real y citable,
-  pero si en el futuro hay usuarias reales, conviene reforzarla con sus entrevistas.
+  quedaron NO ENCONTRADO — requieren búsqueda manual con acceso que esta sesión no
+  tiene. No bloquea el avance; se completa si se decide invertir en ads pagados (34).
+- FICHA-AVATAR.md no viene de entrevistas directas (44), sino del documento de
+  research de mercado del usuario + reseñas públicas de competidores. Es evidencia
+  real y citable, pero si en el futuro hay usuarias reales, conviene reforzarla con
+  sus entrevistas.
 
 ## Decisiones técnicas (criterio del agente)
 - Framework: Next.js 16 App Router (landing con SEO — regla del stack de 51).

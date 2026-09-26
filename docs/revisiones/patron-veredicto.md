@@ -1,65 +1,60 @@
 # VEREDICTO revisor-visual — Tu Patrón
 Fecha: 2026-09-26 00:00
 Screenshot: docs/revisiones/patron-375.png
-Usabilidad: 32/40
+Usabilidad: 36/40
 Craft: 19/20
 Copy (si vende): N-A
 Fidelidad (si hubo referencia): FIEL
-Veredicto: NO LISTA
+Veredicto: LISTA
 
 Top defectos:
-1. [Card "Sospechoso principal", texto de ayuda expandido — ver patron-ayuda-375.png] El nuevo texto que explica "confianza" y "alto" introduce un término técnico SIN definir: `"Alto" es un ingrediente ya conocido como fuerte en FODMAP.` "FODMAP" es jerga dietética/médica (acrónimo en inglés) que el fix debía eliminar, no sumar — exactamente el defecto que la heurística 2 prohíbe. → Reemplazar "fuerte en FODMAP" por lenguaje llano, ej.: "Alto es un ingrediente que suele causar molestias digestivas en mucha gente." (heurística 2, baja de 4/4 a 3/4).
-2. [Botón `Info` junto a "SOSPECHOSO PRINCIPAL", `app/(app)/patron/page.tsx:88-96`] El área táctil real del botón es `size-5` = 20×20px sin padding extra — muy por debajo del mínimo de 44×44px que exige la propia regla dura del sistema ("botones ≥44px"). Es el único elemento nuevo interactivo de esta pasada y nace ya con un riesgo de mis-tap. → Envolver el ícono en un botón de `min-h-11 min-w-11` (o `p-2.5` sobre el `size-5` actual) manteniendo el ícono visual en 14px (heurística 5, baja a 3/4).
-3. [Sección "La evidencia detrás de tu patrón", las 4 tarjetas] Los 4 badges "ALTO" siguen siendo visualmente idénticos — correcto dado que los datos no tienen grados reales (persiste sin cambios desde la 2da pasada; NO es fabricable sin inventar variación falsa). Heurística 8 se mantiene en 3/4.
-4. [Sheet de detalle, flujo de error] Sigue sin existir evidencia de un estado de fallo propio para `eliminarComida()` (solo el `error.tsx` genérico de la ruta) — no verificado para este flujo exacto. Es de bajo riesgo real (localStorage síncrono) pero un `try/catch` con un toast corto de 1 línea es defensa razonable, no sobre-ingeniería. Heurística 9 se mantiene en 3/4.
-5. [Heurística 7 — flexibilidad] Sigue sin existir acceso rápido a esta pantalla para el usuario frecuente (ej. desde un resumen en Hoy/Home). No bloqueante por naturaleza de pantalla de solo-lectura; persiste en 2/4 sin cambios desde la 2da pasada.
+1. [Heurística 3 — control y libertad, sin cambios] El "deshacer" solo existe dentro del sheet de detalle (no hay affordance de deshacer accesible desde fuera del modal si el usuario navega). Riesgo bajo, no bloqueante — persiste en 3/4 sin cambios desde pasadas previas.
+2. [Heurística 7 — flexibilidad, sin cambios] Sigue sin existir acceso rápido a esta pantalla para el usuario frecuente (ej. resumen en Home). No aplicable de forma forzada a una pantalla de solo-lectura; persiste en 2/4.
+3. [Heurística 8 — estético/minimalista, sin cambios] Los 4 badges "ALTO" en "La evidencia detrás de tu patrón" siguen siendo visualmente idénticos — correcto porque los datos reales no tienen grados; no es fabricable sin inventar variación falsa. Persiste en 3/4.
+4. [Craft eje 5 — encaje óptico] El hit-area de 44×44px del botón `Info` (margen negativo `-m-3`) se solapa visualmente con la etiqueta "SOSPECHOSO PRINCIPAL" — funcional y verificado, pero un ojo entrenado nota que el área tocable invade texto no interactivo. No baja de nivel porque no genera confusión real (el único elemento tocable en la zona es el botón), pero es el matiz que impide craft 20/20.
+5. Sin defectos nuevos detectados en esta pasada — los 3 fixes de la 6ª revisión se verificaron limpios (ver abajo).
 
-## Verificación del fix de ayuda contextual (heurística 10, defecto TOP #1 de la 5ta pasada)
-IMPLEMENTADO Y VERIFICADO — botón `Info` (Lucide, 14px) junto a "SOSPECHOSO PRINCIPAL" con
-`aria-expanded`, `aria-label="¿Qué significa esto?"` y `focus-visible:ring`; al activarlo despliega
-(`AnimatePresence`, `height: 0 → auto`, respeta `useReducedMotion`) el texto: `"Confianza" es cuántas
-veces síntomas y este ingrediente coincidieron dentro de 48 horas. "Alto" es un ingrediente ya
-conocido como fuerte en FODMAP.` Visible y correctamente posicionado en `patron-ayuda-375.png`
-(aparece justo debajo de la etiqueta, antes del anillo — no rompe la jerarquía ni desplaza el
-badge "ALTO" de las tarjetas). Esto SÍ sube heurística 10 de 2/4 a 3/4 — bien resuelto, con un
-único matiz de "ojo entrenado": (a) el propio texto de ayuda introduce el término sin definir
-"FODMAP" (ver defecto TOP #1) y (b) solo cubre el término una vez, en la card superior, no
-junto a cada badge "ALTO" repetido en la lista de evidencia (aceptable, redundancia innecesaria
-si ya se explicó arriba). No alcanza 4/4 por (a).
+## Verificación de los 3 fixes de la 6ª pasada (proyectados para cruzar el umbral)
 
-## Por qué el puntaje de usabilidad BAJÓ en vez de subir (33/40 → 32/40)
-El fix de heurística 10 es real y sube esa heurística (+1). Pero esta pasada, al re-evaluar los
-10 criterios completos con criterio estricto e independiente sobre el código y ambos screenshots
-nuevos, aparecen DOS defectos NUEVOS que introdujo el propio parche y que una pasada anterior no
-pudo ver porque el código no existía:
-- El texto de ayuda resuelve la ambigüedad de "confianza" y "alto" pero introduce "FODMAP" sin
-  glosar — jerga que la heurística 2 (lenguaje del usuario) prohíbe explícitamente. (h2: 4→3, -1)
-- El botón `Info` nuevo tiene un área táctil de 20×20px, por debajo del mínimo de 44px que las
-  reglas duras de este mismo sistema exigen para cualquier elemento tocable en mobile. (h5: 4→3, -1)
-Neto: +1 (h10) -1 (h2) -1 (h5) = -1 sobre el total anterior. Esto es exactamente lo que exige la
-instrucción "ante la duda, el problema baja el puntaje": un fix bien intencionado que no se verificó
-con la misma rigurosidad que el defecto original queda, en esta pasada, como regresión neta.
-Gate doble NO se cumple (32/40 < 36/40; craft 19/20 ≥ 16/20 sí). Veredicto: NO LISTA.
+1. **[Copy con jerga — heurística 2]** RESUELTO. `app/(app)/patron/page.tsx:107` ya no dice
+   "fuerte en FODMAP"; dice `"Alto" es un ingrediente que suele causar molestias digestivas en
+   mucha gente.` Confirmado en código y en `patron-ayuda-375.png`. Cero jerga técnica/inglés
+   crudo restante en la pantalla. h2: 3→4.
 
-## ¿Es alcanzable ≥36/40 sin fabricar datos ni sobre-ingenierizar, o el techo real está por debajo?
-ALCANZABLE — el techo de esta pantalla concreta (dado su contenido de solo-lectura y sus datos)
-está POR ENCIMA de 36/40, no por debajo. La proyección honesta, con fixes que NO fabrican variación
-falsa ni sobre-ingenierizan:
+2. **[Hit-area del botón Info — heurística 5]** RESUELTO. `app/(app)/patron/page.tsx:88-96`:
+   el botón ahora usa `-m-3 flex min-h-11 min-w-11 items-center justify-center`, manteniendo el
+   ícono visual en 14px (sin cambio de tamaño percibido — confirmado comparando `patron-375.png`
+   con la versión anterior) mientras el área tocable real mide 44×44px (verificado con Playwright
+   `getBoundingClientRect()`). Cumple el mínimo de accesibilidad táctil. h5: 3→4.
+
+3. **[Manejo de fallo al eliminar — heurística 9]** RESUELTO. `components/app/sheet-detalle-comida.tsx:41-56`:
+   el borrado diferido dentro del `setTimeout` ahora corre en `try/catch`; si `eliminarComida()`
+   lanza, se hace `setEliminado(false)`, `setConfirmando(false)`, `setFallo(true)`, y se renderiza
+   `role="alert"` con `"No se pudo eliminar — intenta de nuevo."` (línea 109-113) — dice qué pasó
+   y qué hacer, sin código técnico, sin dejar a la persona en el estado "eliminado" fantasma. h9: 3→4.
+
+**Consecuencia sobre heurística 10 (ayuda contextual):** al quedar limpio el texto de ayuda de
+`h2`, el mismo contenido pasa de "bien, con un término sin glosar" a "ejemplar" — coincide
+exactamente con la proyección de la pasada anterior. h10: 3→4.
+
+## Regresiones — NINGUNA detectada
+Se revisó el flujo completo tocado por los 3 fixes contra el screenshot de "Registro eliminado"
+(`patron-deshacer-375.png`, sin cambios respecto a la pasada anterior) y el árbol de estados del
+sheet (`confirmando` → `eliminado` → éxito, o `eliminado` → fallo → vista normal con alerta). El
+`try/catch` no interfiere con el camino feliz (mismo `onEliminar?.()` + `onCerrar()` que antes), el
+`clearTimeout` en el cleanup de desmontaje sigue intacto, y el nuevo margen negativo del botón
+`Info` no desplaza ni tapa ningún otro elemento en el screenshot normal ni en el expandido. Los 5
+defectos TOP de la 6ª pasada que NO se tocaron (h3, h7, h8, y los dos ya resueltos aquí) se
+verificaron sin cambio de comportamiento.
+
+## Puntaje final y gate doble
 ```
-h1=4 h2=4* h3=3 h4=4 h5=4* h6=4 h7=2 h8=3 h9=4** h10=4*  →  36/40
+h1=4 h2=4 h3=3 h4=4 h5=4 h6=4 h7=2 h8=3 h9=4 h10=4  →  36/40
+Craft: jerarquía:4 profundidad:4 identidad:4 movimiento:4 encaje:3 → 19/20
 ```
-- h2=4*: reemplazar "fuerte en FODMAP" por lenguaje llano (1 línea de copy, cero riesgo).
-- h5=4*: agrandar el hit-area del botón `Info` a ≥44px sin cambiar el ícono visual de 14px
-  (1 línea de clases Tailwind, cero riesgo).
-- h10=4*: consecuencia directa de resolver h2 — el mismo texto de ayuda, sin el término sin
-  glosar, pasa de "bien" a "ejemplar".
-- h9=4**: un `try/catch` alrededor de `eliminarComida()` con un toast corto de 1 línea
-  ("No se pudo eliminar — intenta de nuevo") es manejo defensivo estándar, NO sobre-ingeniería
-  (es exactamente lo que pide la heurística 9), aunque el escenario de fallo real sea raro.
-h3 (3/4, afford de deshacer solo dentro del modal) y h7 (2/4, sin atajos) y h8 (3/4, badges
-idénticos por datos reales) NO se tocan — moverlos exigiría fabricar variación falsa en los
-badges o inventar un caso de uso de "usuario power" que esta pantalla de solo-lectura no tiene;
-eso SÍ violaría las reglas del SO. Con los 3 fixes de arriba (todos triviales, ningún dato falso,
-ninguna sobre-ingeniería) el puntaje llega exactamente a 36/40, cruzando el umbral. El craft ya
-lo cruza (19/20 ≥ 16/20) desde hace varias rondas y no requiere cambios adicionales — solo
-corregir el hit-area del botón `Info` cuando se toque el código de nuevo.
+Gate doble: 36/40 ≥ 36 Y 19/20 ≥ 16 → **CUMPLE**. La proyección de la 6ª pasada era exacta: los 3
+fixes puntuales, sin fabricar datos ni sobre-ingeniería, cruzan el umbral exactamente en 36/40.
+Sin referencia nueva de usuario esta pasada — fidelidad se mantiene FIEL sobre la verificación
+previa de FICHA-ARTE.md (paleta papel cálido/oliva/terracota, display serif, radios consistentes).
+
+Veredicto: **LISTA**.
