@@ -198,7 +198,15 @@ y pidió compararlo con el ya construido e incorporar lo que aplicara. Comparaci
   ("Probable ajo oculto... Confírmalo en un toque si lo sabes"), línea de carga
   anclada al mecanismo, etiqueta "Ejemplo" en la tarjeta, CTA siempre tocable (tocar
   durante "Analizando…" salta al resultado en vez de esperar), chip Mordisco agregado.
-  Se relanzó el revisor — resultado pendiente al momento de este checkpoint.
+  Se relanzó el revisor.
+- **2ª pasada del revisor: 37/40 · 18/20 — LISTA** (`docs/revisiones/onboarding-veredicto.md`,
+  fidelidad FIEL). Confirma que los 5 defectos anteriores quedaron resueltos. 5 notas
+  cosméticas NO bloqueantes quedan anotadas en el propio veredicto: la demo no nombra
+  la ventana de 48h (podría conectarse mejor con el resto del flujo), el padding
+  superior de la etiqueta "Ejemplo" queda algo apretado, el label del CTA en estado
+  "Analizando…" mezcla dos ideas, y dos notas menores de tono/opacidad — quedan como
+  mejora futura, no bloquean. Con esto, la pantalla "Así funciona" y el onboarding
+  completo quedan LISTOS.
 
 ## Problemas conocidos
 - **veredicto:landing** — el hook de cierre marca el veredicto de landing como
