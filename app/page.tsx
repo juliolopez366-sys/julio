@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertCircle, Clock, XCircle, UtensilsCrossed } from 'lucide-react';
+import { AlertCircle, Clock, XCircle, UtensilsCrossed, CalendarClock, TrendingDown, Repeat } from 'lucide-react';
 import { Hero } from '@/components/landing/Hero';
 import { Problema } from '@/components/landing/Problema';
 import { Agitacion } from '@/components/landing/Agitacion';
@@ -54,9 +54,9 @@ export default function LandingFoodScan() {
       {/* 3. AGITACIÓN */}
       <Agitacion
         frases={[
-          'Cada mes sigues sin saber qué alimento te ataca, aunque comas "con cuidado".',
-          'En un año, seguirás en el mismo punto: [acento]meses de datos que nadie sabe usar[/acento].',
-          'Otra app de registro manual no lo arregla: [b]más tecleo no es más respuesta[/b].',
+          { icon: CalendarClock, textoMarked: 'Cada mes sigues sin saber qué alimento te ataca, aunque comas "con cuidado".' },
+          { icon: TrendingDown, textoMarked: 'En un año, seguirás en el mismo punto: [acento]meses de datos que nadie sabe usar[/acento].' },
+          { icon: Repeat, textoMarked: 'Otra app de registro manual no lo arregla: [b]más tecleo no es más respuesta[/b].' },
         ]}
         contraste={{
           labelHoy: 'Hoy',

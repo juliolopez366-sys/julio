@@ -121,33 +121,70 @@ Precio $6.99/mes · $49.99/año. Pasarela: Hotmart. **Prueba: 7 días · Garant�
   limpio ✓.
 
 ## Próximo paso
-Sesión 5 — App interna: `SECUENCIA-MAESTRA-CONSTRUCCION.md` (siguiente etapa) +
-`03-PRINCIPIOS-APP-EXITOSA.md` + `15-PATRONES-UX.md`. Antes de codear, definir los
-3 pilares técnicos (loop de retención, método de auth, modelo de datos + RLS) según
-la Regla de Oro 6 de CLAUDE.md.
+Sesión 5 — App interna en curso (ver "Sesión 5 — App interna (en curso)" abajo).
+Pendiente: confirmar si se relanza el revisor de "Tu Patrón" (2ª pasada) o se sigue
+con otra pantalla; luego cerrar Sesión 5 formalmente y pasar a Sesión 6 (servicios
+externos).
+
+## Sesión 5 — App interna (en curso)
+- Hoy: LISTA (37/40 · 16/20, 5ª pasada del revisor-visual).
+- Historial y Cuenta: sin revisor completo (pantallas secundarias, Regla 7), medición
+  + checklist manual sin errores.
+- Tu Patrón: 1ª pasada del revisor dio 28/40 · 12/20 (NO LISTA). Se aplicaron 5 fixes
+  (header sin ícono para consistencia, stagger real en la evidencia, CTA en el
+  empty-state, nivel "hundido" en la sección de evidencia, `FilaComida` con
+  `line-clamp-2` en vez de truncate) y se commiteó (`ee8df74`). Falta relanzar el
+  revisor-visual (2ª pasada) — el usuario aún no confirma si seguir con esto.
+- Se agregaron tokens semánticos nuevos a `tokens.css` (`--exito`, `--alerta`,
+  `--error`) que estaban en FICHA-ARTE.md pero nunca se habían llevado a CSS; NO se
+  tocó `--accent-2` (ya usado por Hero.tsx de la landing).
+
+## Elevación de la página de ventas (post-Sesión 3, pedido explícito del usuario)
+El usuario pidió revisar que las 10 secciones canónicas de la landing tuvieran los
+íconos/elementos visuales que exige la escaneabilidad mobile (52/55): 9 de las 10 ya
+los tenían (Problema con IconChip, Solución con pasos numerados, Oferta/Garantía con
+checkmarks y escudo, FAQ en acordeón, etc.) — solo **Agitación** (§3, "el costo de
+seguir igual") era texto plano sin ícono. Se le agregó un ícono Lucide por frase
+(mismo patrón visual que Problema, tipo `FraseAgitacion`), y se actualizaron las
+2 páginas que la usan (`app/page.tsx`, `components/landing/EJEMPLO-page.tsx`).
+Verificado: `tsc --noEmit` ✓ · `npm run build` ✓ · dev sin errores de consola (un
+error visto en un tab de navegador quedó obsoleto — persistía en una pestaña vieja
+con caché; una pestaña nueva no lo reproduce). Screenshot re-tomado y verificado a
+375×8241px (`docs/revisiones/landing-375.png`).
+- **Revisor visual (10ª pasada): 38/40 usabilidad (subió de 37 — Consistencia 3→4) ·
+  20/20 craft (subió de 19) · 19/20 copy (sin cambio) · Fidelidad: FIEL · Veredicto:
+  LISTA** (`docs/revisiones/landing-veredicto.md`). 2 defectos cosméticos NO
+  bloqueantes anotados en el propio veredicto: el frame 2 del carrusel
+  ("La IA analiza") no muestra el resultado revelado (solo el estado "Analizando…"),
+  y el frame 3 reutiliza `hero-mockup.png` (misma imagen que el Hero) en vez de una
+  captura propia del panel de patrones — quedan como mejora futura, no bloquean.
 
 ## Problemas conocidos
 - **veredicto:landing** — el hook de cierre marca el veredicto de landing como
-  "caducado" porque detecta archivos .tsx MÁS NUEVOS en el repo (app/onboarding,
-  app/paywall, app/entrar) — pero esos archivos son de OTRAS pantallas (Sesión 4),
-  no tocan ningún componente de la landing (components/landing/*, app/page.tsx no
-  cambiaron desde el veredicto LISTA de landing). Es un falso positivo del chequeo
-  por fecha de archivo, no un veredicto real desactualizado. Si se quiere limpiar la
-  señal, re-lanzar el revisor sobre landing sin cambios reales no aporta nada nuevo.
+  "caducado" porque detecta archivos .tsx MÁS NUEVOS en el repo (antes: app/onboarding,
+  app/paywall, app/entrar; ahora también: app/(app)/hoy, historial, cuenta de la
+  Sesión 5) — pero esos archivos son de OTRAS pantallas, no tocan ningún componente de
+  la landing (components/landing/*). Es un falso positivo del chequeo por fecha de
+  archivo, no un veredicto real desactualizado. NOTA: sí hubo un cambio REAL en
+  Agitacion.tsx en esta sesión (se le agregó ícono a cada frase) — para eso se
+  relanzó el revisor-visual completo, ver "Elevación de la página de ventas" arriba;
+  el veredicto se sobrescribió con el resultado de esa pasada.
 - **veredicto:onboarding** — LISTA (36/40 · 16/20, 7ª pasada, detalle completo en la
   sección "Sesión 4" arriba). El hook marca este veredicto como "caducado" por el
-  mismo falso positivo de fecha de archivo que landing (arriba): detecta
-  `app/paywall/page.tsx` más nuevo, pero es una pantalla DISTINTA — el código propio
-  de onboarding no cambió desde el veredicto LISTA.
+  mismo falso positivo de fecha de archivo que landing (arriba): detecta archivos de
+  OTRAS pantallas (paywall, y ahora también hoy/historial/cuenta de Sesión 5) más
+  nuevos, pero el código propio de onboarding no cambió desde el veredicto LISTA.
 - **veredicto:paywall** — LISTA (37/40 · 16/20 · 19/20 copy, 9ª pasada, detalle
-  completo en la sección "Sesión 4" arriba). El hook lo marca "caducado" porque
-  `app/paywall/page.tsx` es más nuevo que el archivo del veredicto: es real, no falso
-  positivo — después del veredicto LISTA se aplicó un último ajuste cosmético (quitar
-  un `border-2` residual en el timeline, mismo tipo de defecto que ya se había
-  corregido en las tarjetas de plan y que el propio veredicto listaba como no
-  bloqueante). El cambio no introduce nada nuevo que el revisor no haya evaluado ya
-  en esa categoría de defecto; no se considera necesario relanzar una 10ª pasada por
-  un ajuste puramente visual de un punto ya cubierto.
+  completo en la sección "Sesión 4" arriba). El hook lo marca "caducado" por DOS
+  razones distintas, ninguna bloqueante: (1) motivo real ya aceptado — después del
+  veredicto LISTA se aplicó un último ajuste cosmético (quitar un `border-2` residual
+  en el timeline, mismo tipo de defecto que ya se había corregido en las tarjetas de
+  plan y que el propio veredicto listaba como no bloqueante); no introduce nada nuevo
+  que el revisor no haya evaluado ya en esa categoría. (2) falso positivo de fecha de
+  archivo — el hook ahora también cita `app/(app)/hoy`, `historial`, `cuenta`
+  (Sesión 5) como "más nuevos", pero son pantallas DISTINTAS que no tocan
+  `app/paywall/page.tsx` ni ningún componente del paywall. No se considera necesario
+  relanzar una 10ª pasada por ninguno de los dos motivos.
 - Los enlaces del footer (/privacidad, /terminos, /reembolsos, /aviso-ia) aún no
   existen como páginas — se construyen en Sesión 6 (legal) y Sesión 4 (auth/onboarding
   para /entrar y /onboarding). Esperado en esta etapa, no un bug.

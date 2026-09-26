@@ -8,12 +8,20 @@
 // (un solo movimiento visual, sin separador). Cero decoración de miedo.
 
 import { motion } from 'motion/react';
-import { SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
+import type { LucideIcon } from 'lucide-react';
+import { IconChip, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
 import { MarkedCopy, warnCopy, warnRango } from './MarkedCopy';
 
+export interface FraseAgitacion {
+  /** Ícono de costo/urgencia de Lucide (TrendingDown, Repeat, CalendarClock…) — jamás emoji. */
+  icon: LucideIcon;
+  /** Copy MARCADO — corta (máx 18 palabras). */
+  textoMarked: string;
+}
+
 export interface AgitacionProps {
-  /** 2-4 frases MARCADAS y cortas — el array es el contrato: nada de párrafos. */
-  frases: string[];
+  /** 2-4 frases MARCADAS y cortas, cada una con su ícono — el array es el contrato: nada de párrafos. */
+  frases: FraseAgitacion[];
   /** Mini-card opcional "hoy vs en 6 meses" (55 §3). */
   contraste?: {
     labelHoy: string;
@@ -26,7 +34,7 @@ export interface AgitacionProps {
 
 export function Agitacion({ frases, contraste, id }: AgitacionProps) {
   warnRango('Agitación → frases', frases.length, 2, 4);
-  frases.forEach((f, i) => warnCopy(`Agitación → frase ${i + 1}`, f, 18));
+  frases.forEach((f, i) => warnCopy(`Agitación → frase ${i + 1}`, f.textoMarked, 18));
   const { contenedor, item } = useReveal();
 
   return (
@@ -40,13 +48,16 @@ export function Agitacion({ frases, contraste, id }: AgitacionProps) {
       >
         <div className="flex flex-col gap-4">
           {frases.map((f, i) => (
-            <motion.p
+            <motion.div
               key={i}
               variants={item}
-              className="text-[17px] leading-[1.6] text-[var(--text-secondary)]"
+              className="flex items-start gap-4 rounded-[var(--radius-card)] bg-[var(--bg)] p-4 shadow-[var(--shadow-1)]"
             >
-              <MarkedCopy text={f} />
-            </motion.p>
+              <IconChip icon={f.icon} tone="muted" />
+              <p className="pt-2 text-[16px] leading-snug text-[var(--text-secondary)]">
+                <MarkedCopy text={f.textoMarked} />
+              </p>
+            </motion.div>
           ))}
         </div>
 

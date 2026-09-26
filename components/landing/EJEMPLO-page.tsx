@@ -13,7 +13,7 @@
 // componentes de función no cruzan la frontera server→client de RSC). En un
 // proyecto real puedes mantener la página igual: la landing es interactiva.
 
-import { AlarmClock, BatteryLow, Inbox, Repeat } from 'lucide-react';
+import { AlarmClock, BatteryLow, Inbox, Repeat, Hourglass, TrendingDown } from 'lucide-react';
 import { Hero } from './Hero';
 import { Problema } from './Problema';
 import { Agitacion } from './Agitacion';
@@ -60,9 +60,9 @@ export default function EjemploLandingDespeja() {
       {/* 3. AGITACIÓN — mismo fondo elevado que 2 (un solo movimiento visual) */}
       <Agitacion
         frases={[
-          'Cada semana pierdes [b]5 horas[/b] solo decidiendo por dónde empezar.',
-          'En 6 meses, ese caos suma [acento]130 horas[/acento] que no vuelven.',
-          'Otra lista de tareas no lo arregla: [b]más lista no es más claridad[/b].',
+          { icon: Hourglass, textoMarked: 'Cada semana pierdes [b]5 horas[/b] solo decidiendo por dónde empezar.' },
+          { icon: TrendingDown, textoMarked: 'En 6 meses, ese caos suma [acento]130 horas[/acento] que no vuelven.' },
+          { icon: Repeat, textoMarked: 'Otra lista de tareas no lo arregla: [b]más lista no es más claridad[/b].' },
         ]}
         contraste={{
           labelHoy: 'Hoy',
