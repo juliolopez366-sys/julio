@@ -71,6 +71,7 @@ export default function OnboardingPage() {
           >
             {paso === 0 && (
               <Pregunta
+                numeroPregunta={1}
                 titulo="¿Qué es lo que más te preocupa de tu SII?"
                 acento="preocupa"
                 microcopy="Así priorizamos qué te mostramos primero."
@@ -86,6 +87,7 @@ export default function OnboardingPage() {
 
             {paso === 1 && (
               <Pregunta
+                numeroPregunta={2}
                 titulo="¿Cuándo sueles sentir tus peores síntomas?"
                 acento="peores síntomas"
                 microcopy="Esto ajusta la ventana de horas que revisamos por cada comida."
@@ -115,6 +117,7 @@ export default function OnboardingPage() {
 
             {paso === 3 && (
               <Pregunta
+                numeroPregunta={3}
                 titulo="¿Ya intentaste otras apps para esto?"
                 acento="otras apps"
                 microcopy="Queremos saber qué no te funcionó."
@@ -151,6 +154,7 @@ export default function OnboardingPage() {
 
             {paso === 6 && (
               <Pregunta
+                numeroPregunta={4}
                 titulo="¿Cómo conociste FoodScan?"
                 acento="FoodScan"
                 microcopy="Nos ayuda a saber qué está funcionando."
@@ -200,13 +204,17 @@ function TituloConAcento({ titulo, acento, className }: { titulo: string; acento
   );
 }
 
+const PREGUNTAS_TOTAL = 4;
+
 function Pregunta({
+  numeroPregunta,
   titulo,
   acento,
   microcopy,
   opciones,
   onSeleccionar,
 }: {
+  numeroPregunta: number;
   titulo: string;
   acento?: string;
   microcopy?: string;
@@ -222,8 +230,11 @@ function Pregunta({
   return (
     <div className="flex flex-1 flex-col justify-center gap-8">
       <div className="flex flex-col gap-4">
-        <span className="flex size-14 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
+        <span className="flex size-20 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
           <Mordisco size="lg" />
+        </span>
+        <span className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">
+          Pregunta {numeroPregunta} de {PREGUNTAS_TOTAL}
         </span>
         <TituloConAcento
           titulo={titulo}
@@ -237,6 +248,7 @@ function Pregunta({
           <Chip key={op.label} index={i} label={op.label} icon={op.icon} seleccionado={seleccionado === op.label} onClick={() => elegir(op.label)} />
         ))}
       </div>
+      <p className="text-center text-[12px] text-[var(--text-tertiary)]">Puedes cambiar tu respuesta después desde tu perfil.</p>
     </div>
   );
 }
@@ -255,7 +267,7 @@ function Reconocimiento({
   return (
     <div className="flex flex-1 flex-col">
       <div className="flex flex-1 flex-col items-center justify-center gap-5 text-center">
-        <span className="flex size-16 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
+        <span className="flex size-20 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
           <Mordisco size="lg" />
         </span>
         <h1 className="text-balance text-[26px] font-bold leading-[1.15] [font-family:var(--font-display)]">{titulo}</h1>

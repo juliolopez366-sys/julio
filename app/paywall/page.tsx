@@ -11,6 +11,7 @@ import { X, Lock } from 'lucide-react';
 import { Mordisco, CtaPrimario, PantallaFunnel } from '@/components/onboarding/funnel-ui';
 
 type Respuestas = { preocupacion?: string; momento?: string; intentos?: string; diasMeta: number; canal?: string };
+type EstadoCta = 'inicial' | 'procesando' | 'confirmado';
 
 const N_RESPUESTAS = 5;
 /** Toda salida del paywall va al mismo lugar (X y "Ahora no" — un solo modelo mental). */
@@ -19,13 +20,19 @@ const SALIDA_HREF = '/';
 export default function PaywallPage() {
   const [plan, setPlan] = useState<'anual' | 'mensual'>('anual');
   const [respuestas, setRespuestas] = useState<Respuestas | null>(null);
-  const [checkoutPendiente, setCheckoutPendiente] = useState(false);
+  const [estadoCta, setEstadoCta] = useState<EstadoCta>('inicial');
   const reduce = useReducedMotion();
 
   useEffect(() => {
     const raw = sessionStorage.getItem('foodscan_onboarding');
     if (raw) setRespuestas(JSON.parse(raw));
   }, []);
+
+  useEffect(() => {
+    if (estadoCta !== 'procesando') return;
+    const t = setTimeout(() => setEstadoCta('confirmado'), 1400);
+    return () => clearTimeout(t);
+  }, [estadoCta]);
 
   return (
     <PantallaFunnel>
@@ -44,16 +51,20 @@ export default function PaywallPage() {
           initial={{ opacity: 0, y: reduce ? 0 : 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="flex flex-col gap-1.5 pt-1"
+          className="flex flex-col gap-3 pt-1"
         >
-          <div className="flex items-center gap-2">
-            <Mordisco />
+          <span className="flex size-12 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
+            <Mordisco size="lg" />
+          </span>
+          <div className="flex flex-col gap-1.5">
             <span className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">Tu plan está listo</span>
+            <h1 className="text-balance text-[28px] font-bold leading-[1.1] [font-family:var(--font-display)]">
+              Se acabó <span className="text-[var(--accent)]">cancelar planes por miedo</span> a un mal día
+            </h1>
+            <p className="text-[15px] leading-relaxed text-[var(--text-secondary)]">
+              Tu <span className="font-semibold text-[var(--text-primary)]">Motor de Detonante Real</span> queda configurado con tus {N_RESPUESTAS} respuestas — ajustado a tu meta de {respuestas?.diasMeta ?? 5} días/semana.
+            </p>
           </div>
-          <h1 className="text-balance text-[28px] font-bold leading-[1.1] [font-family:var(--font-display)]">
-            Tu <span className="text-[var(--accent)]">Motor de Detonante Real</span> está configurado
-          </h1>
-          <p className="text-[14px] text-[var(--text-secondary)]">Hecho con tus {N_RESPUESTAS} respuestas — ajustado a tu meta de {respuestas?.diasMeta ?? 5} días/semana.</p>
         </motion.div>
 
         {/* Timeline del trial (C4) — visual default con trial */}
@@ -61,7 +72,7 @@ export default function PaywallPage() {
           initial={{ opacity: 0, y: reduce ? 0 : 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.08 }}
-          className="mt-6 rounded-[var(--radius-card)] bg-[var(--surface)] p-5"
+          className="mt-6 rounded-[var(--radius-card)] bg-[var(--surface)] p-5 shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_10%,transparent)]"
         >
           <TimelineTrial />
         </motion.div>
@@ -83,17 +94,17 @@ export default function PaywallPage() {
               Más popular · 2 meses gratis
             </span>
             <div
-              className={`rounded-[var(--radius-card)] p-4 pt-5 transition-colors ${
+              className={`rounded-[var(--radius-card)] p-4 pt-5 shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_10%,transparent)] transition-colors ${
                 plan === 'anual' ? 'border-[1.5px] border-[var(--accent)] bg-[var(--chip-bg)]' : 'border border-[color-mix(in_oklab,var(--text-tertiary)_28%,transparent)] bg-[var(--surface)]'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[16px] font-semibold">Anual</span>
-                <span className="text-[22px] font-bold tabular-nums [font-family:var(--font-display)]">
-                  $4.17<span className="text-[13px] font-normal text-[var(--text-secondary)]">/mes</span>
+                <span className="text-[18px] font-semibold">Anual</span>
+                <span className="text-[28px] font-bold tabular-nums [font-family:var(--font-display)]">
+                  $4.17<span className="text-[12px] font-normal text-[var(--text-secondary)]">/mes</span>
                 </span>
               </div>
-              <p className="mt-1 text-[13px] text-[var(--text-secondary)]">Se cobra $49.99/año</p>
+              <p className="mt-1 text-[15px] text-[var(--text-secondary)]">Se cobra $49.99/año</p>
             </div>
           </motion.button>
 
@@ -104,14 +115,14 @@ export default function PaywallPage() {
             className="text-left"
           >
             <div
-              className={`rounded-[var(--radius-card)] p-4 transition-colors ${
+              className={`rounded-[var(--radius-card)] p-4 shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_10%,transparent)] transition-colors ${
                 plan === 'mensual' ? 'border-[1.5px] border-[var(--accent)] bg-[var(--chip-bg)]' : 'border border-[color-mix(in_oklab,var(--text-tertiary)_28%,transparent)] bg-[var(--surface)]'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[16px] font-semibold">Mensual</span>
-                <span className="text-[22px] font-bold tabular-nums [font-family:var(--font-display)]">
-                  $6.99<span className="text-[13px] font-normal text-[var(--text-secondary)]">/mes</span>
+                <span className="text-[18px] font-semibold">Mensual</span>
+                <span className="text-[28px] font-bold tabular-nums [font-family:var(--font-display)]">
+                  $6.99<span className="text-[12px] font-normal text-[var(--text-secondary)]">/mes</span>
                 </span>
               </div>
             </div>
@@ -119,22 +130,30 @@ export default function PaywallPage() {
         </motion.div>
 
         <div className="mt-6 flex flex-col gap-3">
-          <CtaPrimario onClick={() => setCheckoutPendiente(true)}>
-            Empezar mis 7 días gratis
-          </CtaPrimario>
-          {checkoutPendiente && (
-            <motion.p
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              className="rounded-[var(--radius-button)] bg-[var(--surface)] px-4 py-3 text-center text-[13px] text-[var(--text-secondary)]"
+          {estadoCta === 'confirmado' ? (
+            <motion.div
+              role="status"
+              aria-live="polite"
+              initial={{ opacity: 0, y: reduce ? 0 : 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col items-center gap-2 rounded-[var(--radius-button)] bg-[var(--chip-bg)] px-4 py-4 text-center"
             >
-              Ya casi — estamos activando el pago seguro. Vuelve pronto para empezar tu prueba gratis.
-            </motion.p>
+              <p className="text-[15px] font-medium text-[var(--text-primary)]">
+                Vas a recibir un correo para confirmar tu prueba gratis.
+              </p>
+              <a href="mailto:soporte@foodscan.app" className="text-[14px] font-medium text-[var(--accent)] underline underline-offset-2">
+                ¿No llega? Escríbenos
+              </a>
+            </motion.div>
+          ) : (
+            <CtaPrimario onClick={() => setEstadoCta('procesando')} loading={estadoCta === 'procesando'}>
+              {estadoCta === 'procesando' ? 'Activando tu pago seguro…' : 'Empezar mis 7 días gratis'}
+            </CtaPrimario>
           )}
-          <p className="text-center text-[13px] text-[var(--text-secondary)]">
+          <p className="text-center text-[15px] text-[var(--text-secondary)]">
             Hoy no pagas nada · te avisamos 1 día antes del cobro · cancela en 1 tap
           </p>
-          <div className="flex items-center justify-center gap-4 text-[14px] text-[var(--text-secondary)]">
+          <div className="flex items-center justify-center gap-4 text-[15px] text-[var(--text-secondary)]">
             <a href={SALIDA_HREF} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">Ahora no</a>
             <span aria-hidden="true">·</span>
             <a href="/entrar" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">Restaurar compra</a>
@@ -167,8 +186,8 @@ function TimelineTrial() {
             )}
           </div>
           <div>
-            <p className="text-[15px] font-semibold text-[var(--text-primary)]">{n.titulo}</p>
-            <p className="text-[13px] text-[var(--text-secondary)]">{n.detalle}</p>
+            <p className="text-[18px] font-semibold text-[var(--text-primary)]">{n.titulo}</p>
+            <p className="text-[15px] text-[var(--text-secondary)]">{n.detalle}</p>
           </div>
         </div>
       ))}

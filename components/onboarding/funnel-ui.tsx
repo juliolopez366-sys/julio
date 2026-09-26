@@ -8,7 +8,8 @@ import { motion, useReducedMotion } from 'motion/react';
 import { ChevronLeft, Check } from 'lucide-react';
 
 /** Sombra tintada de acento para elementos flotantes (FICHA-ARTE.md — profundidad de 3 niveles). */
-const SOMBRA_FLOTANTE = 'shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_14%,transparent)]';
+const SOMBRA_FLOTANTE =
+  'shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent),0_1px_3px_color-mix(in_oklab,var(--accent)_14%,transparent)]';
 
 /** Header de marca — logo + nombre, siempre presente, vuelve a "/" (regla de marca del 50). */
 export function FunnelHeader({
@@ -88,7 +89,7 @@ export function Chip({
       className={`flex h-14 w-full items-center gap-3 rounded-[var(--radius-button)] border px-4 text-left text-[16px] font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] ${
         seleccionado
           ? `border-[var(--accent)] border-[1.5px] bg-[var(--chip-bg)] text-[var(--text-primary)] ${SOMBRA_FLOTANTE}`
-          : `border-[color-mix(in_oklab,var(--text-tertiary)_28%,transparent)] bg-[var(--surface)] text-[var(--text-primary)] ${SOMBRA_FLOTANTE}`
+          : `border-[color-mix(in_oklab,var(--text-tertiary)_28%,transparent)] bg-[var(--surface-2)] text-[var(--text-primary)] ${SOMBRA_FLOTANTE}`
       }`}
     >
       {icon && <span className="shrink-0 text-[var(--accent)]">{icon}</span>}
@@ -113,7 +114,7 @@ export function Mordisco({ color = 'var(--accent)', size = 'sm' }: { color?: str
     <svg
       aria-hidden="true"
       viewBox="0 0 56 14"
-      className={size === 'lg' ? 'h-[20px] w-[78px] shrink-0' : 'h-[12px] w-[44px] shrink-0'}
+      className={size === 'lg' ? 'h-[16px] w-[60px] shrink-0' : 'h-[12px] w-[44px] shrink-0'}
     >
       <path
         d="M0,0 L18,0 C21,0 22,14 28,14 C34,14 35,0 38,0 L56,0"
@@ -171,7 +172,7 @@ export function PantallaFunnel({ children }: { children: ReactNode }) {
   return (
     <div
       className="flex min-h-dvh flex-col bg-[var(--bg)] text-[var(--text-primary)] [font-family:var(--font-body)]"
-      style={{ backgroundImage: 'radial-gradient(ellipse 640px 420px at 50% -8%, color-mix(in oklab, var(--accent) 8%, transparent), transparent 70%)' }}
+      style={{ backgroundImage: 'radial-gradient(ellipse 640px 420px at 50% -4%, color-mix(in oklab, var(--accent) 16%, transparent), transparent 72%)' }}
     >
       {children}
     </div>
