@@ -84,11 +84,18 @@ Sesión 4 — Onboarding, paywall y login/auth: `02B-ONBOARDING-Y-PAYWALL.md` +
 rutas `/onboarding` y `/entrar` que la landing ya referencia.
 
 ## Problemas conocidos
-- **veredicto:onboarding** — el onboarding/paywall/login (Sesión 4) TODAVÍA NO SE
-  CONSTRUYÓ. No existe código, no existe screenshot, no existe veredicto del revisor.
-  Es el próximo paso propuesto al usuario, no algo declarado como listo. No confundir
-  la ruta `/onboarding` referenciada por el CTA de la landing (Sesión 3, ya lista) con
-  la pantalla en sí, que se construye recién en Sesión 4.
+- **veredicto:onboarding** — el código de onboarding/paywall/login (Sesión 4) YA SE
+  CONSTRUYÓ y verificó (tsc + build + dev limpios). El veredicto del revisor-visual
+  para `onboarding-375.png` y `paywall-375.png` está EN PROCESO (agentes lanzados,
+  Regla 7 — son 2 de las 4 pantallas obligatorias). No declarar la Sesión 4 cerrada en
+  ESTADO.md hasta que ambos veredictos digan LISTA.
+- **veredicto:landing** — el hook de cierre marca el veredicto de landing como
+  "caducado" porque detecta archivos .tsx MÁS NUEVOS en el repo (app/onboarding,
+  app/paywall, app/entrar) — pero esos archivos son de OTRAS pantallas (Sesión 4),
+  no tocan ningún componente de la landing (components/landing/*, app/page.tsx no
+  cambiaron desde el veredicto LISTA de landing). Es un falso positivo del chequeo
+  por fecha de archivo, no un veredicto real desactualizado. Si se quiere limpiar la
+  señal, re-lanzar el revisor sobre landing sin cambios reales no aporta nada nuevo.
 - Los enlaces del footer (/privacidad, /terminos, /reembolsos, /aviso-ia) aún no
   existen como páginas — se construyen en Sesión 6 (legal) y Sesión 4 (auth/onboarding
   para /entrar y /onboarding). Esperado en esta etapa, no un bug.
