@@ -172,7 +172,11 @@ y pidió compararlo con el ya construido e incorporar lo que aplicara. Comparaci
   va a acertar con comidas de restaurante" → respuesta: "demo real del análisis sobre
   un plato compuesto"), que hasta ahora solo se rompía con texto, nunca visualmente.
 - Fase 3 (promesa de tiempo concreta): se agregó una 5ª línea a la pantalla de carga
-  final: "Tus primeros patrones probables: en 5 a 7 días de registro".
+  final. Primer intento: "Tus primeros patrones probables: en 5 a 7 días de registro"
+  — el revisor lo marcó como promesa NO sustentada (riesgo real para un avatar ya
+  "quemada" por apps con promesas incumplidas). Corregido: "Tu patrón aparece apenas
+  un ingrediente se repita en tus días malos" — anclado al mecanismo real, sin cifra
+  inventada.
 - Fase 4 (paywall "difuminado" — dejar usar la cámara gratis 3-4 comidas antes de
   pagar): el usuario decidió explícitamente NO explorarlo — es un cambio de modelo de
   monetización (reabriría la decisión "onboarding-first anónimo", cosa juzgada) y el
@@ -182,9 +186,19 @@ y pidió compararlo con el ya construido e incorporar lo que aplicara. Comparaci
   a `/paywall` subió de 5200ms a 6300ms para que la 5ª línea de carga alcance a verse.
 - Verificado: `tsc --noEmit` ✓ · `npm run build` ✓ · flujo completo probado clic por
   clic (Playwright) desde la pregunta 1 hasta el redirect a `/paywall`, sin errores de
-  consola. Screenshot de la pantalla nueva verificado a 375×812px
-  (`docs/revisiones/onboarding-375.png`) y se relanzó el revisor-visual completo sobre
-  el flujo — resultado pendiente al momento de este checkpoint.
+  consola. Screenshot verificado a 375×812px (`docs/revisiones/onboarding-375.png`).
+- **1ª pasada del revisor sobre la pantalla nueva: 30/40 · 16/20 — NO LISTA.** 5
+  defectos: (1) la demo recreaba la objeción #1 en vez de desarmarla — afirmaba
+  detección absoluta por foto sola, sin explicar el puente ni conectar con la
+  confirmación de 1 toque; (2) la promesa "5-7 días" sin sustento (ver arriba, ya
+  corregida); (3) usaba `--alerta` (reservado a riesgo confirmado) sin marcar que era
+  un ejemplo simulado; (4) el CTA nacía deshabilitado ~1.6s sin poder saltar (viola la
+  regla de CTA vivo); (5) no llevaba el chip "Mordisco" que sí llevan las demás
+  pantallas de contenido (quiebre de consistencia). Los 5 se corrigieron: copy nuevo
+  ("Probable ajo oculto... Confírmalo en un toque si lo sabes"), línea de carga
+  anclada al mecanismo, etiqueta "Ejemplo" en la tarjeta, CTA siempre tocable (tocar
+  durante "Analizando…" salta al resultado en vez de esperar), chip Mordisco agregado.
+  Se relanzó el revisor — resultado pendiente al momento de este checkpoint.
 
 ## Problemas conocidos
 - **veredicto:landing** — el hook de cierre marca el veredicto de landing como

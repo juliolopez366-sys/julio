@@ -305,17 +305,23 @@ function AhaSimulacion({ onContinuar }: { onContinuar: () => void }) {
 
   return (
     <div className="flex flex-1 flex-col gap-6 pt-8">
-      <div className="flex flex-col gap-2">
-        <span className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--accent)]">Así funciona</span>
+      <div className="flex flex-col gap-4">
+        <span className="inline-flex w-fit items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] px-5 py-4 shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
+          <Mordisco size="lg" />
+        </span>
+        <span className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">Así funciona</span>
         <h1 className="text-balance text-[26px] font-bold leading-[1.15] [font-family:var(--font-display)]">
           Un plato compuesto, sin adivinar
         </h1>
         <p className="text-[14px] text-[var(--text-secondary)]">
-          Una salsa de restaurante puede esconder ajo o cebolla que ni el menú menciona.
+          Reconocemos el plato y lo cruzamos con recetas típicas para marcar ingredientes de riesgo — luego tú confirmas en un toque lo que sí llevaba.
         </p>
       </div>
 
       <div className="relative flex flex-col items-center gap-5 rounded-[var(--radius-card)] bg-[var(--surface)] p-6 shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_10%,transparent)]">
+        <span className="absolute right-4 top-4 rounded-full bg-[var(--surface-2)] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">
+          Ejemplo
+        </span>
         <div className="relative flex size-40 items-center justify-center overflow-hidden rounded-full bg-[var(--surface-2)] shadow-[inset_0_2px_8px_color-mix(in_oklab,var(--text-primary)_12%,transparent)]">
           {/* Plato simulado: pasta (trazos) + 3 piezas de "ajo" — una se marca al detectar */}
           <svg viewBox="0 0 100 100" className="size-28" aria-hidden="true">
@@ -371,7 +377,7 @@ function AhaSimulacion({ onContinuar }: { onContinuar: () => void }) {
             >
               <TriangleAlert size={20} className="mt-0.5 shrink-0 text-[var(--alerta)]" aria-hidden="true" />
               <p className="text-[15px] leading-snug text-[var(--text-primary)]">
-                <b className="font-semibold">Ajo oculto en la salsa detectado.</b> Alto en FODMAP.
+                <b className="font-semibold">Probable ajo oculto en la salsa — Alto en FODMAP.</b> Confírmalo en un toque si lo sabes.
               </p>
             </motion.div>
           )}
@@ -379,12 +385,12 @@ function AhaSimulacion({ onContinuar }: { onContinuar: () => void }) {
       </div>
 
       <p className="text-center text-[14px] text-[var(--text-secondary)]">
-        Así identificamos lo que ni el menú ni la etiqueta te dicen.
+        Te avisamos del riesgo probable — tú tienes la última palabra.
       </p>
 
       <div className="mt-auto">
-        <CtaPrimario onClick={onContinuar} disabled={!detectado}>
-          {detectado ? 'Así de simple' : 'Analizando…'}
+        <CtaPrimario onClick={() => (detectado ? onContinuar() : setDetectado(true))}>
+          {detectado ? 'Así de simple' : 'Analizando… (toca para ver el resultado)'}
         </CtaPrimario>
       </div>
     </div>
@@ -436,7 +442,7 @@ function PantallaCarga({ respuestas }: { respuestas: Respuestas }) {
       `Ajustando tu ventana de correlación a 48 horas`,
       `Configurando tu meta de ${respuestas.diasMeta} días de registro`,
       `Preparando tu Motor de Detonante Real`,
-      `Tus primeros patrones probables: en 5 a 7 días de registro`,
+      `Tu patrón aparece apenas un ingrediente se repita en tus días malos`,
     ],
     [respuestas]
   );
