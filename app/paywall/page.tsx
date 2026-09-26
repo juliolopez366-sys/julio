@@ -253,7 +253,7 @@ function TimelineTrial() {
         <div key={n.titulo} className="grid grid-cols-[16px_1fr] gap-x-3 pb-4 last:pb-0">
           <div className="relative flex justify-center">
             <span
-              className={`mt-1 size-3 rounded-full ${n.activo ? 'bg-[var(--accent)]' : 'border-2 border-[color-mix(in_oklab,var(--text-tertiary)_45%,transparent)] bg-transparent'}`}
+              className={`mt-1 size-3 rounded-full ${n.activo ? 'bg-[var(--accent)]' : 'bg-[color-mix(in_oklab,var(--text-tertiary)_35%,transparent)]'}`}
             />
             {i < nodos.length - 1 && (
               <span className="absolute top-4 h-full w-[2px]" style={{ background: n.activo ? 'var(--accent)' : 'color-mix(in oklab, var(--text-tertiary) 30%, transparent)' }} />

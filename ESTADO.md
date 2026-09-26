@@ -1,8 +1,8 @@
 # ESTADO.md — Memoria del proyecto
 
 ## Fase actual
-Sesión 3 (Página de ventas) COMPLETA y verificada. Próximo: Sesión 4 (onboarding,
-paywall, login/auth).
+Sesión 4 (Onboarding, paywall, login/auth) COMPLETA y verificada. Próximo: Sesión 5
+(app interna).
 
 ## Idea del usuario — FoodScan
 Rastreador de detonantes digestivos con IA para personas con Síndrome del Intestino
@@ -59,8 +59,8 @@ Precio $6.99/mes · $49.99/año. Pasarela: Hotmart. **Prueba: 7 días · Garant�
 - Nombre de la app: **FoodScan** (decisión del usuario)
 - Stack: Next.js 16 (App Router) + TypeScript + Tailwind v4 + motion + lucide-react
   (decisión técnica — landing con SEO). Proyecto scaffoldeado en la raíz.
-- Modelo de monetización: **onboarding-first registrado** (decisión técnica — CTA →
-  `/onboarding`, no directo a checkout).
+- Modelo de monetización: **onboarding-first anónimo** (decisión técnica — CTA →
+  `/onboarding`, no directo a checkout; corregido en Sesión 4, ver Decisiones técnicas).
 - Landing construida desde el KIT canónico (`plantillas-codigo/landing/` →
   `components/landing/`), tokens.css tematizado con FICHA-ARTE.md, copy marcado en
   `docs/copy/landing.md` (10 secciones, trazado a FICHA-AVATAR.md), compuesta en
@@ -78,41 +78,55 @@ Precio $6.99/mes · $49.99/año. Pasarela: Hotmart. **Prueba: 7 días · Garant�
   2 notas cosméticas no bloqueantes quedan anotadas en el propio veredicto (frame
   "analizando" sin resultado revelado, y una imagen repetida entre Hero y carrusel).
 
+## Sesión 4 — Onboarding, paywall, login/auth: COMPLETA ✅
+- Rutas creadas: `app/onboarding/page.tsx` (8 pasos: 4 preguntas + 3 reconocimientos +
+  pantalla de carga), `app/paywall/page.tsx`, `app/entrar/page.tsx` (login con magic
+  link + Google OAuth, mock — backend real en Sesión 6). UI compartida en
+  `components/onboarding/funnel-ui.tsx` (FunnelHeader, Chip, Mordisco, CtaPrimario,
+  PantallaFunnel).
+- Flujo: quiz de onboarding (anónimo) → paywall → login (`/entrar`) para persistir
+  la compra. Ver corrección de la etiqueta de monetización abajo.
+- **Onboarding — Revisor visual: 36/40 usabilidad · 16/20 craft · Veredicto: LISTA**
+  (`docs/revisiones/onboarding-veredicto.md`, 7ª pasada — 6 rondas de fondo +1 de
+  regresión tras un fix a un componente compartido). Historial: mordisco desbordando
+  su badge, vacío vertical asimétrico, fondo plano sin profundidad, chips sin
+  contraste, bordes contra la regla "sin bordes" de FICHA-ARTE, y un falso positivo
+  real (el indicador de dev de Next.js contaminaba los screenshots — corregido con
+  `devIndicators: false` en next.config.ts). Techo de craft aceptado: la paleta
+  verde+crema es cosa juzgada (referencia real del usuario) y queda cerca de un
+  ejemplo vetado del test anti-clon — no se puede subir más sin reabrir esa decisión.
+- **Paywall — Revisor visual: 37/40 usabilidad · 16/20 craft · 19/20 copy ·
+  Veredicto: LISTA** (`docs/revisiones/paywall-veredicto.md`, 9ª pasada). Historial:
+  spinner de pago sin resolución (se agregó máquina de estados inicial/procesando/
+  confirmado/error con reintento), inconsistencia de días entre el timeline y el
+  footer, falta de nivel "hundido" de profundidad, sin lista de beneficios, jerarquía
+  tipográfica sin alinear a la escala de FICHA-ARTE (26-34/18/15/12), tarjetas de
+  plan con `border` contra la regla "sin bordes", titular con resalte de más de una
+  palabra. Tras el veredicto LISTA se aplicó un pulido cosmético más (quitar un
+  último `border-2` residual en un punto del timeline) sin relanzar el revisor —
+  cambio puramente visual ya cubierto por los defectos no-bloqueantes que el propio
+  veredicto listó.
+  ⚠️ **Hallazgo de proceso importante**: tras un corte de sesión por límite de uso,
+  el navegador de Playwright perdió el viewport de 375px al reiniciarse y 2 capturas
+  se tomaron sin querer a ~1024px (escritorio). Un veredicto "LISTA" se emitió sobre
+  esa evidencia inválida y se DESCARTÓ por completo al detectarse verificando las
+  dimensiones reales del PNG. Lección para el futuro: tras cualquier reinicio de
+  sesión/navegador, verificar el ANCHO REAL del archivo (no asumir) antes de invocar
+  al revisor — un veredicto sobre evidencia incorrecta no cuenta aunque diga "LISTA".
+- **Login (`/entrar`)** — sin revisor (pantalla secundaria, Regla 7). Medición +
+  checklist completos: screenshots reales a 375px de los estados inicial y "enviado"
+  (`docs/revisiones/entrar-375.png`, `entrar-enviado-375.png`), estado de error con
+  reintento agregado (faltaba), foco de teclado agregado al botón "Reenviar".
+- Verificado en las 3 pantallas: `tsc --noEmit` ✓ · `npm run build` ✓ · dev server
+  limpio ✓.
+
 ## Próximo paso
-Sesión 4 — Onboarding, paywall y login/auth: `02B-ONBOARDING-Y-PAYWALL.md` +
-`50-DISENO-ONBOARDING-PAYWALL.md` + `26-AUTH-MODERNO.md`. Ahí se crean por fin las
-rutas `/onboarding` y `/entrar` que la landing ya referencia.
+Sesión 5 — App interna: `SECUENCIA-MAESTRA-CONSTRUCCION.md` (siguiente etapa) +
+`03-PRINCIPIOS-APP-EXITOSA.md` + `15-PATRONES-UX.md`. Antes de codear, definir los
+3 pilares técnicos (loop de retención, método de auth, modelo de datos + RLS) según
+la Regla de Oro 6 de CLAUDE.md.
 
 ## Problemas conocidos
-- **veredicto:onboarding** — LISTA (36/40 usabilidad · 16/20 craft, 6ª pasada del
-  revisor-visual, `docs/revisiones/onboarding-veredicto.md`, código sin cambios desde
-  entonces). Se necesitaron 6 rondas: mordisco desbordando su badge, vacío vertical
-  asimétrico, fondo plano sin profundidad, chips sin contraste contra el fondo, y un
-  falso positivo real (el indicador de desarrollo de Next.js contaminaba los
-  screenshots — corregido con `devIndicators: false` en next.config.ts). Craft tiene
-  un techo aceptado: la paleta verde+crema es cosa juzgada de FICHA-ARTE (referencia
-  real del usuario) y el revisor nota que queda cerca de un ejemplo vetado — no se
-  puede subir más sin reabrir una decisión ya aprobada.
-  ⚠️ El hook de cierre vuelve a marcar este veredicto como "caducado" porque
-  `app/paywall/page.tsx` (pantalla DISTINTA) es más nuevo que el archivo del
-  veredicto — mismo falso positivo por fecha de archivo que el de landing (abajo).
-  El código de onboarding en sí no cambió desde el veredicto LISTA.
-- **veredicto:paywall** — en revisión (8ª pasada en curso). Historial relevante:
-  ⚠️ **hallazgo de proceso**: tras un corte de sesión por límite de uso, el navegador
-  de Playwright perdió el tamaño de viewport (375×812) al reiniciarse y las capturas
-  de paywall/entrar se tomaron sin querer a ~1024px de ancho (escritorio). Un
-  veredicto "LISTA" (36/40·16/20·19/20) se emitió sobre esa evidencia inválida y se
-  DESCARTÓ por completo al detectarse (verificación con dimensiones reales del PNG,
-  no solo mirar el screenshot). Lección: tras cualquier reinicio de sesión/navegador,
-  verificar el ANCHO REAL del PNG (no asumir) antes de invocar al revisor — un
-  veredicto sobre evidencia incorrecta no cuenta aunque diga "LISTA". Con el
-  screenshot corregido a 375px real, la 7ª pasada (evidencia válida) dio 33/40·15/20·
-  19/20 y encontró un defecto real que las pasadas anteriores no habían visto:
-  las tarjetas de plan usaban `border`, violando la regla explícita de FICHA-ARTE.md
-  ("sin bordes — todo por color plano y curvas"). Corregido (bordes fuera, check
-  circular en la tarjeta activa, contraste del timeline subido, micro-título "Qué
-  incluye tu plan", enlaces secundarios con underline consistente) y se relanzó la
-  8ª pasada — resultado pendiente al cierre de este checkpoint.
 - **veredicto:landing** — el hook de cierre marca el veredicto de landing como
   "caducado" porque detecta archivos .tsx MÁS NUEVOS en el repo (app/onboarding,
   app/paywall, app/entrar) — pero esos archivos son de OTRAS pantallas (Sesión 4),
@@ -120,18 +134,6 @@ rutas `/onboarding` y `/entrar` que la landing ya referencia.
   cambiaron desde el veredicto LISTA de landing). Es un falso positivo del chequeo
   por fecha de archivo, no un veredicto real desactualizado. Si se quiere limpiar la
   señal, re-lanzar el revisor sobre landing sin cambios reales no aporta nada nuevo.
-- **entrar (login)** — sin revisor (pantalla secundaria, Regla 7). Medición +
-  checklist completados: screenshots a 375px reales de los 3 estados
-  (`docs/revisiones/entrar-375.png` inicial, `entrar-enviado-375.png` éxito) más el
-  estado de carga y error probados en código. Checklist núcleo: tsc/build/dev
-  limpios ✓ · min-h-dvh sin vacío muerto ✓ · llena de valor (input + Google OAuth +
-  microcopy de confianza + contacto, no "input+2 botones") ✓ · estados
-  inicial/enviando/enviado/error/disabled todos presentes (se agregó el estado de
-  error con reintento, que faltaba) ✓ · flujo feliz + borde (email vacío bloquea
-  envío, countdown de reenvío) probados a mano ✓ · copy humano, sin jerga ✓ · foco de
-  teclado visible en los 3 botones/links (se agregó al botón "Reenviar", que no lo
-  tenía) ✓ · tokens de FICHA-ARTE respetados (excepción documentada: los colores del
-  ícono de Google son su paleta oficial de marca, no tokens propios) ✓.
 - Los enlaces del footer (/privacidad, /terminos, /reembolsos, /aviso-ia) aún no
   existen como páginas — se construyen en Sesión 6 (legal) y Sesión 4 (auth/onboarding
   para /entrar y /onboarding). Esperado en esta etapa, no un bug.
@@ -144,7 +146,8 @@ rutas `/onboarding` y `/entrar` que la landing ya referencia.
 
 ## Decisiones técnicas (criterio del agente)
 - Framework: Next.js 16 App Router (landing con SEO — regla del stack de 51).
-- Monetización: onboarding-first registrado (necesita persistir historial de comidas/
-  síntomas entre sesiones antes del paywall, para que el motor de correlación tenga
-  datos que mostrar).
+- Monetización: **onboarding-first anónimo** en la práctica — el quiz de onboarding
+  no pide registro, va directo a paywall; el registro/login (`/entrar`) ocurre
+  DESPUÉS de elegir plan, para persistir la compra (corrige la etiqueta "registrado"
+  usada al cerrar la Sesión 3, que no coincidía con el flujo construido).
 - Idioma UI: español latino neutro, mono-idioma.
