@@ -59,7 +59,7 @@ export function Garantia({ nombre, condicionMarked, pisoLegal, icon: Icono = Shi
               >
                 <Icono size={32} strokeWidth={1.8} color="var(--accent)" aria-hidden="true" />
               </span>
-              <h2 className="text-balance text-[22px] font-bold leading-tight [font-family:var(--font-display)]">
+              <h2 className="text-balance text-[26px] font-bold leading-tight [font-family:var(--font-display)] md:text-[32px]">
                 <Accent>{nombre}</Accent>
               </h2>
               <p className="max-w-[44ch] text-[15px] leading-[1.6] text-[var(--text-secondary)]">

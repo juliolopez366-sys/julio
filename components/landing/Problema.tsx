@@ -43,8 +43,18 @@ export function Problema({ titulo, preguntas, id }: ProblemaProps) {
         {titulo && (
           <motion.h2
             variants={item}
-            className="mb-8 text-balance text-[24px] font-bold leading-[1.15] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[28px]"
+            className="mb-8 flex items-center gap-3 text-balance text-[26px] font-bold leading-[1.15] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[32px]"
           >
+            {/* Dispositivo ownable "mordisco" (FICHA-ARTE.md), repetido en toda la página */}
+            <svg aria-hidden="true" viewBox="0 0 56 14" className="h-[12px] w-[44px] shrink-0">
+              <path
+                d="M0,0 L18,0 C21,0 22,14 28,14 C34,14 35,0 38,0 L56,0"
+                fill="none"
+                stroke="var(--accent)"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
             {titulo}
           </motion.h2>
         )}

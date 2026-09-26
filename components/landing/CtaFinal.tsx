@@ -67,9 +67,19 @@ export function CtaFinal({
         viewport={VIEWPORT_ONCE}
         className="relative mx-auto flex max-w-[680px] flex-col items-center px-5 text-center"
       >
+        {/* Dispositivo ownable "mordisco" (FICHA-ARTE.md), en --bg sobre el fondo invertido */}
+        <motion.svg variants={item} aria-hidden="true" viewBox="0 0 56 14" className="mb-4 h-[12px] w-[44px]">
+          <path
+            d="M0,0 L18,0 C21,0 22,14 28,14 C34,14 35,0 38,0 L56,0"
+            fill="none"
+            stroke="var(--bg)"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+        </motion.svg>
         <motion.h2
           variants={item}
-          className="text-balance text-[30px] font-bold leading-[1.15] [font-family:var(--font-display)] md:text-[44px]"
+          className="text-balance text-[32px] font-bold leading-[1.15] [font-family:var(--font-display)] md:text-[44px]"
           style={{ color: 'var(--bg)' }}
         >
           <MarkedCopy text={h2Marked} />

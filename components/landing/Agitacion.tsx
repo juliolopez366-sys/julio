@@ -51,7 +51,23 @@ export function Agitacion({ frases, contraste, id }: AgitacionProps) {
         </div>
 
         {contraste && (
-          <motion.div variants={item} className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <>
+            {/* Dispositivo ownable "mordisco" (FICHA-ARTE.md), como separador */}
+            <motion.svg
+              variants={item}
+              aria-hidden="true"
+              viewBox="0 0 56 14"
+              className="mt-8 h-[12px] w-[44px]"
+            >
+              <path
+                d="M0,0 L18,0 C21,0 22,14 28,14 C34,14 35,0 38,0 L56,0"
+                fill="none"
+                stroke="var(--accent)"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </motion.svg>
+            <motion.div variants={item} className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="rounded-[var(--radius-card)] bg-[var(--bg)] p-5">
               <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text-tertiary)]">
                 {contraste.labelHoy}
@@ -65,7 +81,8 @@ export function Agitacion({ frases, contraste, id }: AgitacionProps) {
               </p>
               <p className="mt-2 text-[15px] leading-snug text-[var(--text-secondary)]">{contraste.futuro}</p>
             </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </motion.div>
     </SectionShell>

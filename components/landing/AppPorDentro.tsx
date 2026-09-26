@@ -84,7 +84,7 @@ export function AppPorDentro({
       <motion.div variants={contenedor} initial="hidden" whileInView="visible" viewport={VIEWPORT_ONCE}>
         <motion.div variants={item} className="mx-auto max-w-[620px] text-center">
           <Kicker>{kicker}</Kicker>
-          <h2 className="text-balance text-[30px] font-bold leading-[1.15] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[38px]">
+          <h2 className="text-balance text-[26px] font-bold leading-[1.15] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[32px]">
             <MarkedCopy text={tituloMarked} />
           </h2>
         </motion.div>
