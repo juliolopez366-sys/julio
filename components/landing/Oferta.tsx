@@ -8,7 +8,8 @@
 // la card recomendada (el uso canónico de la técnica) · checkmarks custom.
 // El destino de los CTAs sigue al MODELO de 02C (checkout vs /onboarding).
 
-import { motion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useInView } from 'motion/react';
 import { Star } from 'lucide-react';
 import { CheckCustom, CtaButton, Hairline, Kicker, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
 import { MarkedCopy, warnCopy, warnRango } from './MarkedCopy';
@@ -60,12 +61,53 @@ function TrialBadge({ dias }: { dias: number }) {
   );
 }
 
+/** Conteo animado del precio (baseline #2 de CLAUDE.md): separa el prefijo/número/decimales
+    para animar SOLO el número, respetando prefers-reduced-motion. */
+function PrecioAnimado({ texto }: { texto: string }) {
+  const match = texto.match(/^([^\d]*)(\d+(?:[.,]\d+)?)(.*)$/);
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const enVista = useInView(ref, { once: true, amount: 0.6 });
+  const [valor, setValor] = useState(0);
+  const objetivo = match ? parseFloat(match[2].replace(',', '.')) : 0;
+  const decimales = match?.[2].includes('.') || match?.[2].includes(',') ? match[2].split(/[.,]/)[1].length : 0;
+
+  useEffect(() => {
+    if (!enVista || !match) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      setValor(objetivo);
+      return;
+    }
+    const duracion = 450;
+    const inicio = performance.now();
+    let frame: number;
+    const paso = (ahora: number) => {
+      const t = Math.min(1, (ahora - inicio) / duracion);
+      const eased = 1 - (1 - t) * (1 - t);
+      setValor(objetivo * eased);
+      if (t < 1) frame = requestAnimationFrame(paso);
+    };
+    frame = requestAnimationFrame(paso);
+    return () => cancelAnimationFrame(frame);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enVista]);
+
+  if (!match) return <span ref={ref}>{texto}</span>;
+  return (
+    <span ref={ref}>
+      {match[1]}
+      {valor.toFixed(decimales)}
+      {match[3]}
+    </span>
+  );
+}
+
 function Precio({ plan }: { plan: PlanOferta }) {
   return (
     <div>
       <p className="flex items-baseline gap-1">
         <span className="text-[36px] font-bold leading-none tabular-nums text-[var(--text-primary)] [font-family:var(--font-display)]">
-          {plan.precioMes}
+          <PrecioAnimado texto={plan.precioMes} />
         </span>
         <span className="text-[14px] text-[var(--text-secondary)]">{plan.sufijo ?? '/mes'}</span>
       </p>
@@ -108,7 +150,7 @@ export function Oferta({
       <motion.div variants={contenedor} initial="hidden" whileInView="visible" viewport={VIEWPORT_ONCE}>
         <motion.div variants={item} className="mx-auto max-w-[620px] text-center">
           <Kicker>{kicker}</Kicker>
-          <h2 className="text-balance text-[32px] font-bold leading-[1.1] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[46px]">
+          <h2 className="text-balance text-[34px] font-bold leading-[1.1] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[46px]">
             <MarkedCopy text={tituloMarked} />
           </h2>
         </motion.div>
@@ -154,7 +196,19 @@ export function Oferta({
             <Hairline emphasis surface="surface" className="shadow-[0_12px_36px_color-mix(in_oklab,var(--accent)_16%,transparent)]">
               <div className="rounded-[var(--radius-card)] bg-[color-mix(in_oklab,var(--accent)_5%,transparent)] p-6 md:p-7">
                 <div className="flex items-center justify-between gap-3">
-                  <h3 className="text-[18px] font-semibold text-[var(--text-primary)]">{anual.nombre}</h3>
+                  <h3 className="flex items-center gap-2 text-[18px] font-semibold text-[var(--text-primary)]">
+                    {/* Dispositivo ownable "mordisco" (FICHA-ARTE.md), versión compacta */}
+                    <svg aria-hidden="true" viewBox="0 0 28 10" className="h-[8px] w-[22px] shrink-0">
+                      <path
+                        d="M0,0 L9,0 C10.5,0 11,10 14,10 C17,10 17.5,0 19,0 L28,0"
+                        fill="none"
+                        stroke="var(--accent)"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    {anual.nombre}
+                  </h3>
                   {trialDias !== undefined && <TrialBadge dias={trialDias} />}
                 </div>
                 <div className="mt-4">
@@ -189,7 +243,7 @@ export function Oferta({
             <motion.a
               whileTap={{ scale: 0.97 }}
               href={mensual.ctaHref}
-              className="mt-6 flex h-12 w-full items-center justify-center rounded-[var(--radius-button)] border border-[color-mix(in_oklab,var(--accent)_45%,transparent)] text-[16px] font-semibold text-[var(--accent)] transition-colors duration-150 hover:bg-[var(--chip-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] [touch-action:manipulation]"
+              className="mt-6 flex h-12 w-full items-center justify-center rounded-[var(--radius-button)] border border-[color-mix(in_oklab,var(--accent)_45%,transparent)] text-[16px] font-semibold text-[var(--accent)] transition-colors duration-150 hover:bg-[var(--chip-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)] [touch-action:manipulation]"
             >
               {mensual.ctaLabel}
             </motion.a>

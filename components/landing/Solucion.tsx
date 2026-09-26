@@ -64,7 +64,7 @@ export function Solucion({
       >
         <motion.div variants={item}>
           <Kicker>{kicker}</Kicker>
-          <h2 className="text-balance text-[28px] font-bold leading-[1.15] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[38px]">
+          <h2 className="text-balance text-[28px] font-bold leading-[1.15] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[34px]">
             <MarkedCopy text={tituloMarked} />
           </h2>
         </motion.div>
@@ -72,7 +72,17 @@ export function Solucion({
         {/* El chip del mecanismo bautizado — hairline + <Accent> (55 §4) */}
         <motion.div variants={item} className="mt-4">
           <Hairline surface="bg" className="w-fit">
-            <span className="block px-4 py-2 text-[15px] font-semibold">
+            <span className="flex items-center gap-2 px-4 py-2 text-[15px] font-semibold">
+              {/* Dispositivo ownable "mordisco" (FICHA-ARTE.md), versión compacta */}
+              <svg aria-hidden="true" viewBox="0 0 28 10" className="h-[8px] w-[22px] shrink-0">
+                <path
+                  d="M0,0 L9,0 C10.5,0 11,10 14,10 C17,10 17.5,0 19,0 L28,0"
+                  fill="none"
+                  stroke="var(--accent)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
               <Accent>{mecanismo}</Accent>
             </span>
           </Hairline>
