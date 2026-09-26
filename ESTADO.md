@@ -159,16 +159,49 @@ con caché; una pestaña nueva no lo reproduce). Screenshot re-tomado y verifica
   y el frame 3 reutiliza `hero-mockup.png` (misma imagen que el Hero) en vez de una
   captura propia del panel de patrones — quedan como mejora futura, no bloquean.
 
+## Onboarding: pulido con demo Aha (pedido explícito del usuario, basado en análisis externo)
+El usuario compartió un análisis de otra IA (Gemini) sobre cómo mejorar el onboarding
+y pidió compararlo con el ya construido e incorporar lo que aplicara. Comparación:
+- Fase 1 (preguntas de diagnóstico): ya estaba cubierta — las 3 preguntas existentes
+  tocan los mismos ejes (preocupación, momento del dolor, intentos previos).
+- Fase 2 (momento "Aha" — romper la objeción con una demo visual, no con texto): NO
+  existía. Se implementó `AhaSimulacion` (nuevo paso en `app/onboarding/page.tsx`,
+  insertado entre la pregunta de "intentos previos" y su reconocimiento) — simula el
+  escaneo de un plato compuesto y revela "Ajo oculto en la salsa detectado. Alto en
+  FODMAP." Esto ejecuta la objeción #1 YA documentada en FICHA-AVATAR.md ("la IA no
+  va a acertar con comidas de restaurante" → respuesta: "demo real del análisis sobre
+  un plato compuesto"), que hasta ahora solo se rompía con texto, nunca visualmente.
+- Fase 3 (promesa de tiempo concreta): se agregó una 5ª línea a la pantalla de carga
+  final: "Tus primeros patrones probables: en 5 a 7 días de registro".
+- Fase 4 (paywall "difuminado" — dejar usar la cámara gratis 3-4 comidas antes de
+  pagar): el usuario decidió explícitamente NO explorarlo — es un cambio de modelo de
+  monetización (reabriría la decisión "onboarding-first anónimo", cosa juzgada) y el
+  paywall actual ya midió 37/40. Se queda como está.
+- `PASOS_TOTALES` pasó de 8 a 9; se renumeraron los pasos internos (sin cambiar
+  contenido de las preguntas/reconocimientos existentes); el timeout antes de navegar
+  a `/paywall` subió de 5200ms a 6300ms para que la 5ª línea de carga alcance a verse.
+- Verificado: `tsc --noEmit` ✓ · `npm run build` ✓ · flujo completo probado clic por
+  clic (Playwright) desde la pregunta 1 hasta el redirect a `/paywall`, sin errores de
+  consola. Screenshot de la pantalla nueva verificado a 375×812px
+  (`docs/revisiones/onboarding-375.png`) y se relanzó el revisor-visual completo sobre
+  el flujo — resultado pendiente al momento de este checkpoint.
+
 ## Problemas conocidos
 - **veredicto:landing** — el hook de cierre marca el veredicto de landing como
   "caducado" porque detecta archivos .tsx MÁS NUEVOS en el repo (antes: app/onboarding,
-  app/paywall, app/entrar; ahora también: app/(app)/hoy, historial, cuenta de la
-  Sesión 5) — pero esos archivos son de OTRAS pantallas, no tocan ningún componente de
-  la landing (components/landing/*). Es un falso positivo del chequeo por fecha de
-  archivo, no un veredicto real desactualizado. NOTA: sí hubo un cambio REAL en
-  Agitacion.tsx en esta sesión (se le agregó ícono a cada frase) — para eso se
-  relanzó el revisor-visual completo, ver "Elevación de la página de ventas" arriba;
-  el veredicto se sobrescribió con el resultado de esa pasada.
+  app/paywall, app/entrar; luego también: app/(app)/hoy, historial, cuenta de Sesión 5;
+  ahora también: app/onboarding/page.tsx por el rediseño de esta sesión) — pero esos
+  archivos son de OTRAS pantallas, no tocan ningún componente de la landing
+  (components/landing/*). Es un falso positivo del chequeo por fecha de archivo, no un
+  veredicto real desactualizado. NOTA: sí hubo un cambio REAL en Agitacion.tsx en esta
+  sesión (se le agregó ícono a cada frase) — para eso se relanzó el revisor-visual
+  completo, ver "Elevación de la página de ventas" arriba; el veredicto se sobrescribió
+  con el resultado de esa pasada.
+- **veredicto:onboarding — EN PROGRESO REAL (no falso positivo)** — se le agregó una
+  pantalla nueva al flujo (demo "Así funciona", ver "Onboarding: pulido con demo Aha"
+  abajo) y se relanzó el revisor-visual sobre el flujo completo; el veredicto anterior
+  (36/40 · 16/20) queda obsoleto a propósito hasta que la nueva pasada devuelva
+  resultado y sobrescriba `docs/revisiones/onboarding-veredicto.md`.
 - **veredicto:onboarding** — LISTA (36/40 · 16/20, 7ª pasada, detalle completo en la
   sección "Sesión 4" arriba). El hook marca este veredicto como "caducado" por el
   mismo falso positivo de fecha de archivo que landing (arriba): detecta archivos de

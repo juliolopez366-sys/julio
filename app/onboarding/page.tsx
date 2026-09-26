@@ -7,7 +7,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { AlertCircle, Clock, HelpCircle, XCircle, Instagram, Search, Users, Sparkles } from 'lucide-react';
+import { AlertCircle, Clock, HelpCircle, XCircle, Instagram, Search, Users, Sparkles, Camera, ScanLine, TriangleAlert } from 'lucide-react';
 import { FunnelHeader, Chip, CtaPrimario, Mordisco, PantallaFunnel } from '@/components/onboarding/funnel-ui';
 
 type Respuestas = {
@@ -18,7 +18,7 @@ type Respuestas = {
   canal?: string;
 };
 
-const PASOS_TOTALES = 8; // para el % de la barra (incluye reconocimientos, 02B)
+const PASOS_TOTALES = 9; // para el % de la barra (incluye reconocimientos + demo Aha, 02B)
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -42,7 +42,7 @@ export default function OnboardingPage() {
   useEffect(() => {
     if (paso === PASOS_TOTALES) {
       sessionStorage.setItem('foodscan_onboarding', JSON.stringify(respuestas));
-      const t = setTimeout(() => router.push('/paywall'), 5200);
+      const t = setTimeout(() => router.push('/paywall'), 6300);
       return () => clearTimeout(t);
     }
   }, [paso, respuestas, router]);
@@ -130,7 +130,9 @@ export default function OnboardingPage() {
               />
             )}
 
-            {paso === 4 && (
+            {paso === 4 && <AhaSimulacion onContinuar={() => avanzar()} />}
+
+            {paso === 5 && (
               <Reconocimiento
                 titulo="No fue falta de disciplina"
                 texto={
@@ -145,14 +147,14 @@ export default function OnboardingPage() {
               />
             )}
 
-            {paso === 5 && (
+            {paso === 6 && (
               <Compromiso
                 valorInicial={respuestas.diasMeta}
                 onConfirmar={(dias) => avanzar({ diasMeta: dias })}
               />
             )}
 
-            {paso === 6 && (
+            {paso === 7 && (
               <Pregunta
                 numeroPregunta={4}
                 titulo="¿Cómo conociste FoodScan?"
@@ -168,7 +170,7 @@ export default function OnboardingPage() {
               />
             )}
 
-            {paso === 7 && (
+            {paso === 8 && (
               <Reconocimiento
                 titulo="Tus respuestas te describen"
                 texto={
@@ -289,6 +291,106 @@ function Reconocimiento({
   );
 }
 
+/** Rompe la objeción #1 de FICHA-AVATAR.md ("la IA no va a acertar con comidas de
+    restaurante") con una DEMO simulada, no una promesa abstracta — justo después de
+    que ella cuenta qué apps ya abandonó (paso 3), antes del reconocimiento de texto. */
+function AhaSimulacion({ onContinuar }: { onContinuar: () => void }) {
+  const reduce = useReducedMotion();
+  const [detectado, setDetectado] = useState(reduce ?? false);
+  useEffect(() => {
+    if (reduce) return;
+    const t = setTimeout(() => setDetectado(true), 1600);
+    return () => clearTimeout(t);
+  }, [reduce]);
+
+  return (
+    <div className="flex flex-1 flex-col gap-6 pt-8">
+      <div className="flex flex-col gap-2">
+        <span className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--accent)]">Así funciona</span>
+        <h1 className="text-balance text-[26px] font-bold leading-[1.15] [font-family:var(--font-display)]">
+          Un plato compuesto, sin adivinar
+        </h1>
+        <p className="text-[14px] text-[var(--text-secondary)]">
+          Una salsa de restaurante puede esconder ajo o cebolla que ni el menú menciona.
+        </p>
+      </div>
+
+      <div className="relative flex flex-col items-center gap-5 rounded-[var(--radius-card)] bg-[var(--surface)] p-6 shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_10%,transparent)]">
+        <div className="relative flex size-40 items-center justify-center overflow-hidden rounded-full bg-[var(--surface-2)] shadow-[inset_0_2px_8px_color-mix(in_oklab,var(--text-primary)_12%,transparent)]">
+          {/* Plato simulado: pasta (trazos) + 3 piezas de "ajo" — una se marca al detectar */}
+          <svg viewBox="0 0 100 100" className="size-28" aria-hidden="true">
+            <path d="M20,35 Q35,25 50,38 Q65,50 80,38" fill="none" stroke="var(--text-tertiary)" strokeWidth="4" strokeLinecap="round" opacity="0.5" />
+            <path d="M18,52 Q35,42 52,55 Q68,66 82,54" fill="none" stroke="var(--text-tertiary)" strokeWidth="4" strokeLinecap="round" opacity="0.5" />
+            <path d="M24,68 Q38,60 54,70 Q66,78 78,68" fill="none" stroke="var(--text-tertiary)" strokeWidth="4" strokeLinecap="round" opacity="0.5" />
+            <circle cx="34" cy="30" r="4" fill="var(--text-tertiary)" opacity="0.6" />
+            <motion.circle
+              cx="58"
+              cy="45"
+              r={detectado ? 6 : 4}
+              fill={detectado ? 'var(--alerta)' : 'var(--text-tertiary)'}
+              opacity={detectado ? 1 : 0.6}
+              animate={detectado && !reduce ? { scale: [1, 1.3, 1] } : undefined}
+              transition={{ duration: 0.6 }}
+            />
+            <circle cx="44" cy="62" r="4" fill="var(--text-tertiary)" opacity="0.6" />
+          </svg>
+
+          {!detectado && (
+            <motion.div
+              aria-hidden="true"
+              className="absolute inset-x-3 h-[3px] rounded-full bg-[color-mix(in_oklab,var(--accent)_70%,transparent)] shadow-[0_0_12px_2px_color-mix(in_oklab,var(--accent)_50%,transparent)]"
+              initial={{ top: '8%' }}
+              animate={reduce ? undefined : { top: ['8%', '92%', '8%'] }}
+              transition={reduce ? undefined : { duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          )}
+        </div>
+
+        <div className="flex items-center gap-2 text-[13px] font-medium text-[var(--text-secondary)]">
+          {detectado ? (
+            <>
+              <ScanLine size={16} className="text-[var(--accent)]" aria-hidden="true" /> Análisis completo
+            </>
+          ) : (
+            <>
+              <Camera size={16} aria-hidden="true" />
+              <motion.span animate={reduce ? undefined : { opacity: [1, 0.4, 1] }} transition={reduce ? undefined : { duration: 1, repeat: Infinity }}>
+                Analizando la foto…
+              </motion.span>
+            </>
+          )}
+        </div>
+
+        <AnimatePresence>
+          {detectado && (
+            <motion.div
+              initial={{ opacity: 0, y: 8, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="flex w-full items-start gap-3 rounded-[var(--radius-button)] bg-[color-mix(in_oklab,var(--alerta)_12%,transparent)] p-4"
+            >
+              <TriangleAlert size={20} className="mt-0.5 shrink-0 text-[var(--alerta)]" aria-hidden="true" />
+              <p className="text-[15px] leading-snug text-[var(--text-primary)]">
+                <b className="font-semibold">Ajo oculto en la salsa detectado.</b> Alto en FODMAP.
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <p className="text-center text-[14px] text-[var(--text-secondary)]">
+        Así identificamos lo que ni el menú ni la etiqueta te dicen.
+      </p>
+
+      <div className="mt-auto">
+        <CtaPrimario onClick={onContinuar} disabled={!detectado}>
+          {detectado ? 'Así de simple' : 'Analizando…'}
+        </CtaPrimario>
+      </div>
+    </div>
+  );
+}
+
 function Compromiso({ valorInicial, onConfirmar }: { valorInicial: number; onConfirmar: (v: number) => void }) {
   const [dias, setDias] = useState(valorInicial);
   const feedback = useMemo(() => {
@@ -334,6 +436,7 @@ function PantallaCarga({ respuestas }: { respuestas: Respuestas }) {
       `Ajustando tu ventana de correlación a 48 horas`,
       `Configurando tu meta de ${respuestas.diasMeta} días de registro`,
       `Preparando tu Motor de Detonante Real`,
+      `Tus primeros patrones probables: en 5 a 7 días de registro`,
     ],
     [respuestas]
   );
