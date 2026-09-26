@@ -32,7 +32,10 @@
       "Bash(node -e \"console.log\\(require.resolve\\('sharp'\\)\\)\")",
       "Bash(node scratch-logo.js)",
       "Bash(node scratch-logo2.js)",
-      "Bash(node scratch-logo3.js)"
+      "Bash(node scratch-logo3.js)",
+      "Bash(gh auth *)",
+      "Bash(gh --version)",
+      "Bash(git commit *)"
     ]
   }
 }
