@@ -5,7 +5,7 @@
 
 import { type ReactNode } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
-import { ChevronLeft, Check } from 'lucide-react';
+import { ChevronLeft, Check, X } from 'lucide-react';
 
 /** Sombra tintada de acento para elementos flotantes (FICHA-ARTE.md — profundidad de 3 niveles). */
 const SOMBRA_FLOTANTE =
@@ -14,9 +14,12 @@ const SOMBRA_FLOTANTE =
 /** Header de marca — logo + nombre, siempre presente, vuelve a "/" (regla de marca del 50). */
 export function FunnelHeader({
   onBack,
+  onCerrar,
   progreso,
 }: {
   onBack?: () => void;
+  /** Reemplaza el logo por una X que cierra el funnel (paywall). */
+  onCerrar?: string;
   /** 0-100. Si se omite, no se pinta la barra (pantallas de loading/paywall no la usan). */
   progreso?: number;
 }) {
@@ -33,6 +36,14 @@ export function FunnelHeader({
           >
             <ChevronLeft size={22} strokeWidth={2} aria-hidden="true" />
           </button>
+        ) : onCerrar ? (
+          <a
+            href={onCerrar}
+            aria-label="Cerrar"
+            className="flex size-11 shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+          >
+            <X size={22} strokeWidth={2} aria-hidden="true" />
+          </a>
         ) : (
           <a
             href="/"
@@ -172,7 +183,10 @@ export function PantallaFunnel({ children }: { children: ReactNode }) {
   return (
     <div
       className="flex min-h-dvh flex-col bg-[var(--bg)] text-[var(--text-primary)] [font-family:var(--font-body)]"
-      style={{ backgroundImage: 'radial-gradient(ellipse 600px 380px at 50% 0%, color-mix(in oklab, var(--accent) 24%, transparent), transparent 68%)' }}
+      style={{
+        backgroundImage:
+          'radial-gradient(ellipse 600px 380px at 50% 0%, color-mix(in oklab, var(--accent) 24%, transparent), transparent 68%), radial-gradient(ellipse 500px 500px at 15% 65%, color-mix(in oklab, var(--accent) 6%, transparent), transparent 70%)',
+      }}
     >
       {children}
     </div>

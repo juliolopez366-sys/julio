@@ -5,10 +5,32 @@
 // Precio/prueba/garantía = FICHA-MERCADO.md (cosa juzgada): 7 días prueba, 15 garantía.
 // Backend de pago no existe aún (Sesión 6) — el CTA simula el flujo con estado local (C3ter).
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
-import { X, Lock, Camera, Activity, ClipboardCheck } from 'lucide-react';
-import { Mordisco, CtaPrimario, PantallaFunnel } from '@/components/onboarding/funnel-ui';
+import { Lock, Camera, Activity, ClipboardCheck } from 'lucide-react';
+import { Mordisco, CtaPrimario, FunnelHeader, PantallaFunnel } from '@/components/onboarding/funnel-ui';
+
+/** Anima el precio mostrado entre el valor anterior y el nuevo al cambiar de plan (baseline #2). */
+function usePrecioAnimado(valor: number, duracionMs = 400) {
+  const [mostrado, setMostrado] = useState(valor);
+  const anterior = useRef(valor);
+  useEffect(() => {
+    const inicio = anterior.current;
+    const fin = valor;
+    if (inicio === fin) return;
+    const t0 = performance.now();
+    let raf: number;
+    const tick = (t: number) => {
+      const p = Math.min(1, (t - t0) / duracionMs);
+      setMostrado(inicio + (fin - inicio) * p);
+      if (p < 1) raf = requestAnimationFrame(tick);
+      else anterior.current = fin;
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [valor, duracionMs]);
+  return mostrado;
+}
 
 type Respuestas = { preocupacion?: string; momento?: string; intentos?: string; diasMeta: number; canal?: string };
 type EstadoCta = 'inicial' | 'procesando' | 'confirmado' | 'error';
@@ -34,19 +56,12 @@ export default function PaywallPage() {
     return () => clearTimeout(t);
   }, [estadoCta]);
 
+  const precioMostrado = usePrecioAnimado(plan === 'anual' ? 4.17 : 6.99);
+
   return (
     <PantallaFunnel>
-      <div className="mx-auto flex w-full max-w-[500px] flex-1 flex-col px-5 pb-6 pt-4">
-        <div className="flex h-11 items-center justify-between">
-          <a
-            href={SALIDA_HREF}
-            aria-label="Cerrar"
-            className="flex size-11 items-center justify-center rounded-full text-[var(--text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-          >
-            <X size={22} strokeWidth={2} aria-hidden="true" />
-          </a>
-        </div>
-
+      <FunnelHeader onCerrar={SALIDA_HREF} />
+      <div className="mx-auto flex w-full max-w-[500px] flex-1 flex-col px-5 pb-6 pt-2">
         <motion.div
           initial={{ opacity: 0, y: reduce ? 0 : 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -67,7 +82,7 @@ export default function PaywallPage() {
           </div>
         </motion.div>
 
-        {/* Timeline del trial (C4) — visual default con trial */}
+        {/* Timeline del trial (C4) + qué incluye el plan, en un solo bloque */}
         <motion.div
           initial={{ opacity: 0, y: reduce ? 0 : 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -75,28 +90,22 @@ export default function PaywallPage() {
           className="mt-6 rounded-[var(--radius-card)] bg-[var(--surface)] p-5 shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_10%,transparent)]"
         >
           <TimelineTrial />
+          <div className="my-4 h-px bg-[color-mix(in_oklab,var(--text-tertiary)_18%,transparent)]" />
+          <ul className="flex flex-col gap-3">
+            {[
+              { icon: <Camera size={20} aria-hidden="true" />, texto: 'Escaneo de comidas sin límite' },
+              { icon: <Activity size={20} aria-hidden="true" />, texto: 'Motor de Detonante Real activo' },
+              { icon: <ClipboardCheck size={20} aria-hidden="true" />, texto: 'Registro de síntomas en 1 toque' },
+            ].map((item) => (
+              <li key={item.texto} className="flex items-center gap-3 text-[15px] text-[var(--text-primary)]">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] text-[var(--accent)]">
+                  {item.icon}
+                </span>
+                {item.texto}
+              </li>
+            ))}
+          </ul>
         </motion.div>
-
-        {/* Qué incluye el plan */}
-        <motion.ul
-          initial={{ opacity: 0, y: reduce ? 0 : 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.12 }}
-          className="mt-6 flex flex-col gap-3"
-        >
-          {[
-            { icon: <Camera size={20} aria-hidden="true" />, texto: 'Escaneo de comidas sin límite' },
-            { icon: <Activity size={20} aria-hidden="true" />, texto: 'Motor de Detonante Real activo' },
-            { icon: <ClipboardCheck size={20} aria-hidden="true" />, texto: 'Registro de síntomas en 1 toque' },
-          ].map((item) => (
-            <li key={item.texto} className="flex items-center gap-3 text-[15px] text-[var(--text-primary)]">
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] text-[var(--accent)]">
-                {item.icon}
-              </span>
-              {item.texto}
-            </li>
-          ))}
-        </motion.ul>
 
         {/* Cards de plan */}
         <motion.div
@@ -112,7 +121,7 @@ export default function PaywallPage() {
             className="relative text-left"
           >
             <span className="absolute -top-[10px] left-4 z-10 rounded-full bg-[var(--accent)] px-3 py-1 text-[12px] font-bold uppercase tracking-[0.06em] text-[var(--bg)]">
-              Más popular · 2 meses gratis
+              Más popular · Ahorra 40%
             </span>
             <div
               className={`rounded-[var(--radius-card)] p-4 pt-5 shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_10%,transparent)] transition-colors ${
@@ -122,7 +131,8 @@ export default function PaywallPage() {
               <div className="flex items-center justify-between">
                 <span className="text-[18px] font-semibold">Anual</span>
                 <span className="text-[28px] font-bold tabular-nums [font-family:var(--font-display)]">
-                  $4.17<span className="text-[12px] font-normal text-[var(--text-secondary)]">/mes</span>
+                  ${plan === 'anual' ? precioMostrado.toFixed(2) : '4.17'}
+                  <span className="text-[12px] font-normal text-[var(--text-secondary)]">/mes</span>
                 </span>
               </div>
               <p className="mt-1 inline-block rounded-full bg-[var(--bg)] px-3 py-1 text-[15px] text-[var(--text-secondary)] shadow-[inset_0_1px_3px_color-mix(in_oklab,var(--text-tertiary)_20%,transparent)]">
@@ -145,7 +155,8 @@ export default function PaywallPage() {
               <div className="flex items-center justify-between">
                 <span className="text-[18px] font-semibold">Mensual</span>
                 <span className="text-[28px] font-bold tabular-nums [font-family:var(--font-display)]">
-                  $6.99<span className="text-[12px] font-normal text-[var(--text-secondary)]">/mes</span>
+                  ${plan === 'mensual' ? precioMostrado.toFixed(2) : '6.99'}
+                  <span className="text-[12px] font-normal text-[var(--text-secondary)]">/mes</span>
                 </span>
               </div>
             </div>
@@ -228,7 +239,7 @@ function TimelineTrial() {
             )}
           </div>
           <div>
-            <p className="text-[18px] font-semibold text-[var(--text-primary)]">{n.titulo}</p>
+            <p className="text-[16px] font-medium text-[var(--text-primary)]">{n.titulo}</p>
             <p className="text-[15px] text-[var(--text-secondary)]">{n.detalle}</p>
           </div>
         </div>

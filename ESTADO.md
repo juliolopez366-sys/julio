@@ -84,11 +84,30 @@ Sesión 4 — Onboarding, paywall y login/auth: `02B-ONBOARDING-Y-PAYWALL.md` +
 rutas `/onboarding` y `/entrar` que la landing ya referencia.
 
 ## Problemas conocidos
-- **veredicto:onboarding** — el código de onboarding/paywall/login (Sesión 4) YA SE
-  CONSTRUYÓ y verificó (tsc + build + dev limpios). El veredicto del revisor-visual
-  para `onboarding-375.png` y `paywall-375.png` está EN PROCESO (agentes lanzados,
-  Regla 7 — son 2 de las 4 pantallas obligatorias). No declarar la Sesión 4 cerrada en
-  ESTADO.md hasta que ambos veredictos digan LISTA.
+- **veredicto:onboarding** — LISTA (36/40 usabilidad · 16/20 craft, 6ª pasada del
+  revisor-visual, `docs/revisiones/onboarding-veredicto.md`, código sin cambios desde
+  entonces). Se necesitaron 6 rondas: mordisco desbordando su badge, vacío vertical
+  asimétrico, fondo plano sin profundidad, chips sin contraste contra el fondo, y un
+  falso positivo real (el indicador de desarrollo de Next.js contaminaba los
+  screenshots — corregido con `devIndicators: false` en next.config.ts). Craft tiene
+  un techo aceptado: la paleta verde+crema es cosa juzgada de FICHA-ARTE (referencia
+  real del usuario) y el revisor nota que queda cerca de un ejemplo vetado — no se
+  puede subir más sin reabrir una decisión ya aprobada.
+  ⚠️ El hook de cierre vuelve a marcar este veredicto como "caducado" porque
+  `app/paywall/page.tsx` (pantalla DISTINTA) es más nuevo que el archivo del
+  veredicto — mismo falso positivo por fecha de archivo que el de landing (abajo).
+  El código de onboarding en sí no cambió desde el veredicto LISTA.
+- **veredicto:paywall** — 6ª pasada: usabilidad 36/40 y copy 19/20 (ningún eje ≤2) ya
+  cruzaban el umbral en la 5ª ronda; se aplicaron 5 fixes de craft más (precio
+  animado al cambiar de plan, jerarquía tipográfica corregida, header compartido con
+  las demás pantallas del funnel, badge "Ahorra 40%" con matemática verificable en
+  vez de "2 meses gratis", timeline + beneficios fusionados en una sola tarjeta para
+  reducir el scroll) y se relanzó el revisor — **la 6ª pasada FALLÓ por el límite de
+  uso de la sesión (rate limit), no por un error de código o de diseño**. El build
+  (`npm run build`) pasa limpio y el screenshot actualizado ya está en
+  `docs/revisiones/paywall-375.png`. Pendiente: relanzar el revisor-visual cuando el
+  límite de la sesión se reinicie — es el único paso que falta para cerrar la
+  Sesión 4.
 - **veredicto:landing** — el hook de cierre marca el veredicto de landing como
   "caducado" porque detecta archivos .tsx MÁS NUEVOS en el repo (app/onboarding,
   app/paywall, app/entrar) — pero esos archivos son de OTRAS pantallas (Sesión 4),
@@ -96,6 +115,12 @@ rutas `/onboarding` y `/entrar` que la landing ya referencia.
   cambiaron desde el veredicto LISTA de landing). Es un falso positivo del chequeo
   por fecha de archivo, no un veredicto real desactualizado. Si se quiere limpiar la
   señal, re-lanzar el revisor sobre landing sin cambios reales no aporta nada nuevo.
+- **entrar (login)** — pantalla secundaria (Regla 7: solo necesita medición +
+  checklist, no revisor-visual completo). Screenshot tomado
+  (`docs/revisiones/entrar-375.png`) y el flujo feliz probado a mano (envío de
+  correo → estado "Revisa tu correo"), pero el checklist formal quedó sin anotar
+  cuando se cortó la sesión por el límite de uso. Pendiente: completar el checklist
+  del `docs/sistema/CHECKLIST-CIERRE.md` y anotar "sin revisor (pantalla secundaria)".
 - Los enlaces del footer (/privacidad, /terminos, /reembolsos, /aviso-ia) aún no
   existen como páginas — se construyen en Sesión 6 (legal) y Sesión 4 (auth/onboarding
   para /entrar y /onboarding). Esperado en esta etapa, no un bug.

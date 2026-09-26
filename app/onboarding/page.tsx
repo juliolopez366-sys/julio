@@ -228,7 +228,7 @@ function Pregunta({
     setTimeout(() => onSeleccionar(label), 300);
   };
   return (
-    <div className="flex flex-1 flex-col justify-center gap-8">
+    <div className="flex flex-1 flex-col gap-8 pt-8">
       <div className="flex flex-col gap-4">
         <span className="inline-flex w-fit items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] px-5 py-4 shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
           <Mordisco size="lg" />
@@ -243,7 +243,18 @@ function Pregunta({
         />
         {microcopy && <p className="text-[14px] text-[var(--text-secondary)]">{microcopy}</p>}
       </div>
-      <div className="flex flex-col gap-3">
+      <div
+        role="radiogroup"
+        className="flex flex-col gap-3"
+        onKeyDown={(e) => {
+          if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+          e.preventDefault();
+          const botones = Array.from(e.currentTarget.querySelectorAll('button'));
+          const actual = botones.indexOf(document.activeElement as HTMLButtonElement);
+          const siguiente = e.key === 'ArrowDown' ? (actual + 1) % botones.length : (actual - 1 + botones.length) % botones.length;
+          botones[siguiente]?.focus();
+        }}
+      >
         {opciones.map((op, i) => (
           <Chip key={op.label} index={i} label={op.label} icon={op.icon} seleccionado={seleccionado === op.label} onClick={() => elegir(op.label)} />
         ))}
