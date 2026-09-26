@@ -15,7 +15,7 @@ export function FilaComida({ comida, onClick }: { comida: Comida; onClick?: (com
     <>
       <FotoComida colores={comida.colorFoto} className="size-14 shrink-0 rounded-[var(--radius-button)]" />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[15px] font-semibold text-[var(--text-primary)]">{comida.descripcion}</p>
+        <p className="line-clamp-2 text-[15px] font-semibold leading-tight text-[var(--text-primary)]">{comida.descripcion}</p>
         <p className="text-[12px] text-[var(--text-secondary)]">
           {comida.nombreComida} · {formatearHora(comida.registradoEn)}
         </p>

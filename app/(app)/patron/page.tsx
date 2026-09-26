@@ -5,6 +5,7 @@
 // dato héroe + gráfico de apoyo + insight interpretado, nunca solo el número).
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, useReducedMotion } from 'motion/react';
 import { Sparkles } from 'lucide-react';
 import {
@@ -39,6 +40,7 @@ export default function PatronPage() {
   const [correlacion, setCorrelacion] = useState<Correlacion | null | undefined>(undefined);
   const [detalle, setDetalle] = useState<Comida | null>(null);
   const reduce = useReducedMotion();
+  const router = useRouter();
 
   function recargar() {
     const cs = getComidas();
@@ -69,12 +71,7 @@ export default function PatronPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-6 px-5 pb-28 pt-6">
-      <div className="flex items-center gap-3">
-        <span className="flex size-11 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] shadow-[0_6px_20px_color-mix(in_oklab,var(--accent)_20%,transparent)]">
-          <Sparkles size={20} className="text-[var(--accent)]" aria-hidden="true" />
-        </span>
-        <h1 className="text-[28px] font-bold leading-[1.1] [font-family:var(--font-display)]">Tu Patrón</h1>
-      </div>
+      <h1 className="text-[28px] font-bold leading-[1.1] [font-family:var(--font-display)]">Tu Patrón</h1>
 
       {correlacion ? (
         <>
@@ -110,11 +107,18 @@ export default function PatronPage() {
             </p>
           </motion.div>
 
-          <div>
+          <div className="rounded-[var(--radius-card)] bg-[var(--surface-2)] p-4 shadow-[inset_0_2px_6px_color-mix(in_oklab,var(--text-primary)_10%,transparent)]">
             <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">La evidencia detrás de tu patrón</p>
             <div className="flex flex-col gap-3">
-              {comidasRelacionadas.map((c) => (
-                <FilaComida key={c.id} comida={c} onClick={setDetalle} />
+              {comidasRelacionadas.map((c, i) => (
+                <motion.div
+                  key={c.id}
+                  initial={{ opacity: reduce ? 1 : 0, y: reduce ? 0 : 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: reduce ? 0 : 0.25, delay: reduce ? 0 : i * 0.06 }}
+                >
+                  <FilaComida comida={c} onClick={setDetalle} />
+                </motion.div>
               ))}
             </div>
           </div>
@@ -132,6 +136,13 @@ export default function PatronPage() {
           <p className="max-w-[32ch] text-[15px] text-[var(--text-secondary)]">
             Sigue registrando tus comidas y síntomas — necesitamos ver el mismo ingrediente repetirse junto a un síntoma para aislar tu detonante real.
           </p>
+          <button
+            type="button"
+            onClick={() => router.push('/hoy')}
+            className="mt-2 text-[15px] font-semibold text-[var(--accent)] underline underline-offset-2"
+          >
+            Registrar una comida
+          </button>
         </motion.div>
       )}
 
