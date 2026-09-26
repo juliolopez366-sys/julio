@@ -142,8 +142,16 @@ externos).
   `app/(app)/error.tsx` (Error Boundary COMPARTIDO para toda la app interna —
   Hoy/Historial/Tu Patrón/Cuenta, no solo Patrón, causa raíz del hueco); se agregó
   `<MordiscoAncho>` como transición entre la tarjeta de confianza y la evidencia; se
-  agregó numeración 1-4 a las filas de evidencia. Se relanzó el revisor (3ª pasada) —
-  resultado pendiente al momento de este checkpoint.
+  agregó numeración 1-4 a las filas de evidencia. 3ª pasada: 33/40 · 19/20 (NO LISTA)
+  — craft consolidado, faltaban 3 puntos de usabilidad por: sin confirmación visible
+  tras eliminar, botón "Reintentar" de `error.tsx` sin `whileTap`, y varios botones de
+  acción (confirmar/cancelar eliminar, CTA del empty-state) sin feedback de tap,
+  inconsistente con el resto de la app. Se corrigieron los 3: `SheetDetalleComida`
+  ahora muestra un estado de éxito ("Registro eliminado" + check, `aria-live`) dentro
+  del propio sheet ~900ms antes de cerrarse; se unificó `whileTap` (con
+  `useReducedMotion`) en los 3 botones del sheet, el CTA del empty-state de Patrón, y
+  el botón de `error.tsx`. Se relanzó el revisor (4ª pasada) — resultado pendiente al
+  momento de este checkpoint.
 - Se agregaron tokens semánticos nuevos a `tokens.css` (`--exito`, `--alerta`,
   `--error`) que estaban en FICHA-ARTE.md pero nunca se habían llevado a CSS; NO se
   tocó `--accent-2` (ya usado por Hero.tsx de la landing).

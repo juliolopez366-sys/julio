@@ -5,9 +5,11 @@
 // visible porque layout.tsx no se desmonta, así que la persona puede salir del error.
 
 import { useEffect } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import { AlertTriangle } from 'lucide-react';
 
 export default function ErrorAppInterna({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  const reduce = useReducedMotion();
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -21,13 +23,14 @@ export default function ErrorAppInterna({ error, reset }: { error: Error & { dig
       <p className="max-w-[32ch] text-[15px] text-[var(--text-secondary)]">
         Puede ser tu conexión o algo de nuestro lado. Tus comidas y síntomas registrados están a salvo.
       </p>
-      <button
+      <motion.button
         type="button"
+        whileTap={reduce ? undefined : { scale: 0.97 }}
         onClick={() => reset()}
         className="mt-2 flex h-11 items-center justify-center rounded-[var(--radius-button)] bg-[var(--accent)] px-6 text-[15px] font-semibold text-[var(--bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
       >
         Reintentar
-      </button>
+      </motion.button>
     </div>
   );
 }

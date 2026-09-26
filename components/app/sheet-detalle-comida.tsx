@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Trash2 } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
+import { Check, Trash2 } from 'lucide-react';
 import { BottomSheet } from './bottom-sheet';
 import { FotoComida } from './foto-comida';
 import { BadgeRiesgo } from './badge-riesgo';
@@ -18,14 +19,35 @@ export function SheetDetalleComida({
   onEliminar?: () => void;
 }) {
   const [confirmando, setConfirmando] = useState(false);
+  const [eliminado, setEliminado] = useState(false);
+  const reduce = useReducedMotion();
 
   useEffect(() => {
-    if (!comida) setConfirmando(false);
+    if (!comida) {
+      setConfirmando(false);
+      setEliminado(false);
+    }
   }, [comida]);
+
+  function confirmarEliminar() {
+    if (!comida) return;
+    eliminarComida(comida.id);
+    onEliminar?.();
+    setEliminado(true);
+    setTimeout(onCerrar, 900);
+  }
 
   return (
     <BottomSheet abierto={comida !== null} onCerrar={onCerrar} titulo={comida?.descripcion ?? ''}>
-      {comida && (
+      {comida && eliminado && (
+        <div role="status" aria-live="polite" className="flex flex-col items-center gap-3 py-6 text-center">
+          <span className="flex size-12 items-center justify-center rounded-full bg-[var(--chip-bg)]">
+            <Check size={22} className="text-[var(--accent)]" aria-hidden="true" />
+          </span>
+          <p className="text-[15px] font-semibold text-[var(--text-primary)]">Registro eliminado</p>
+        </div>
+      )}
+      {comida && !eliminado && (
         <div className="flex flex-col gap-4">
           <FotoComida colores={comida.colorFoto} className="h-32 w-full rounded-[var(--radius-card)]" />
           <div className="flex items-center gap-2">
@@ -55,33 +77,32 @@ export function SheetDetalleComida({
           {onEliminar &&
             (confirmando ? (
               <div className="flex gap-2">
-                <button
+                <motion.button
                   type="button"
+                  whileTap={reduce ? undefined : { scale: 0.97 }}
                   onClick={() => setConfirmando(false)}
                   className="flex h-11 flex-1 items-center justify-center rounded-[var(--radius-button)] bg-[var(--surface-2)] text-[15px] font-semibold text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                 >
                   Cancelar
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   type="button"
-                  onClick={() => {
-                    eliminarComida(comida.id);
-                    onCerrar();
-                    onEliminar();
-                  }}
+                  whileTap={reduce ? undefined : { scale: 0.97 }}
+                  onClick={confirmarEliminar}
                   className="flex h-11 flex-1 items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--error)] text-[15px] font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                 >
                   <Trash2 size={16} aria-hidden="true" /> Sí, eliminar
-                </button>
+                </motion.button>
               </div>
             ) : (
-              <button
+              <motion.button
                 type="button"
+                whileTap={reduce ? undefined : { scale: 0.97 }}
                 onClick={() => setConfirmando(true)}
                 className="flex h-11 w-full items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--surface-2)] text-[15px] font-semibold text-[var(--error)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
               >
                 <Trash2 size={16} aria-hidden="true" /> Eliminar este registro
-              </button>
+              </motion.button>
             ))}
         </div>
       )}

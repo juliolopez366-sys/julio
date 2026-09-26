@@ -149,13 +149,14 @@ export default function PatronPage() {
           <p className="max-w-[32ch] text-[15px] text-[var(--text-secondary)]">
             Sigue registrando tus comidas y síntomas — necesitamos ver el mismo ingrediente repetirse junto a un síntoma para aislar tu detonante real.
           </p>
-          <button
+          <motion.button
             type="button"
+            whileTap={reduce ? undefined : { scale: 0.97 }}
             onClick={() => router.push('/hoy')}
             className="mt-2 text-[15px] font-semibold text-[var(--accent)] underline underline-offset-2"
           >
             Registrar una comida
-          </button>
+          </motion.button>
         </motion.div>
       )}
 
