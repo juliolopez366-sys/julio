@@ -171,9 +171,14 @@ externos).
   datos falsos ni sobre-ingenierizar para escenarios que no ocurren. Se relanzó el
   revisor (6ª pasada) pidiéndole explícitamente que evalúe si el techo real de esta
   pantalla concreta está genuinamente por debajo de 36/40 sin fabricar/sobre-
-  ingenierizar — si la respuesta es que sí, se cierra Sesión 5 documentando el techo
-  como aceptado en vez de seguir iterando indefinidamente. Resultado pendiente al
-  momento de este checkpoint.
+  ingenierizar. Respuesta: 32/40 · 19/20 (NO LISTA) — el fix de ayuda contextual sí
+  subió esa heurística, pero introdujo 2 regresiones nuevas propias (jerga "FODMAP"
+  sin definir en el texto de ayuda, y el botón Info con área táctil de 20px, bajo el
+  mínimo de 44px). El revisor confirmó que el techo SÍ está por encima de 36/40 y dio
+  una proyección concreta de 3 fixes para llegar exacto al umbral: corregir el copy,
+  ampliar el hit-area a 44px, y agregar un `try/catch` defensivo (trivial, no
+  sobre-ingeniería) en el borrado diferido. Se aplicaron los 3. Se relanzó el revisor
+  (7ª pasada) — resultado pendiente al momento de este checkpoint.
 - Se agregaron tokens semánticos nuevos a `tokens.css` (`--exito`, `--alerta`,
   `--error`) que estaban en FICHA-ARTE.md pero nunca se habían llevado a CSS; NO se
   tocó `--accent-2` (ya usado por Hero.tsx de la landing).
