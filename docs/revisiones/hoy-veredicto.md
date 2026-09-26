@@ -1,15 +1,15 @@
-# VEREDICTO revisor-visual — Hoy (M0)
+# VEREDICTO revisor-visual — Hoy (M0, app interna FoodScan)
 Fecha: 2026-09-26 00:00
 Screenshot: docs/revisiones/hoy-375.png
-Usabilidad: 25/40
-Craft: 12/20
+Usabilidad: 28/40
+Craft: 14/20
 Copy (si vende): N-A
 Fidelidad (si hubo referencia): FIEL
 Veredicto: NO LISTA
 
 Top defectos:
-1. CTA "Escanear mi próxima comida" y "Registrar un síntoma" (app/(app)/hoy/page.tsx L110-123) sin whileTap/estado de respuesta al tacto → agregar `whileTap={{ scale: 0.97 }}` (falla ancla #2 del CTA héroe vivo).
-2. Resultado de riesgo de la comida (page.tsx L84-92) perdió el titular Fraunces 19px que el mockup aprobado usaba como héroe de la pantalla ("Medio · ajo", vista-previa-app.html L163) — quedó solo badge 12px + texto body de 15px, sin nivel jerárquico 1 → agregar un título en `--font-display` con el resultado antes/junto al badge.
-3. El handle del bottom sheet (components/app/bottom-sheet.tsx L42) es una barra decorativa sin lógica de swipe-to-dismiss ni botón de cierre visible → el usuario puede intentar arrastrar y no pasa nada (anti-patrón: elemento interactivo falso) → implementar drag real con Motion o reemplazar por un botón "Cerrar"/X visible.
-4. Tarjeta de insight (page.tsx L95-107) presenta "4 de tus últimos 4 registros" como 100% de confianza sin matiz de tamaño de muestra, en una app de salud digestiva → se siente un hallazgo demasiado categórico y poco creíble → agregar matiz ("con solo 4 registros, sigue confirmando" o un indicador de confianza n=4) en vez de presentarlo como certeza.
-5. Badge de racha "6 días" (page.tsx L74-76) es un número estático, sin conteo animado ni celebración de hito — dos de las 7 animaciones baseline obligatorias no aplicadas a esta pantalla → animar el conteo al montar y disparar celebración en hitos (ej. 7 días).
+1. [Lista "Hoy registraste 1 comida" — FilaComida] Las filas usan la MISMA tarjeta visual (mismo radius, mismo shadow, mismo padding) que los botones de preset de SheetNuevaComida, que SÍ son tappables — pero FilaComida es un `<div>` sin onClick ni rol de botón (fila-comida.tsx). El usuario aprende en el sheet que esa tarjeta se toca y luego la encuentra "muerta" en Hoy → viola la regla 11 (todo elemento con apariencia interactiva hace algo) y h4 consistencia. Fix: si no hay acción de detalle todavía, quitarle el shadow/hover de tarjeta interactiva o darle un onClick real (ver detalle de la comida).
+2. [Sección "Hoy registraste 0 comidas" — estado no visible en el screenshot pero sí en código, page.tsx L149-158] Cuando `comidasHoy.length === 0` solo queda el label y una lista vacía sin ilustración ni CTA — pantalla parcialmente muda en ese estado (h10). Fix: agregar 1 línea de empty-state ("Aún no registras nada hoy — tu próxima comida aparecerá aquí").
+3. [Área "hoja" crema, todo el contenido bajo el mordisco] El fondo de esta sección es `var(--bg)` totalmente plano — no hay el 3er nivel "hundido" que pide el sistema de profundidad de FICHA-ARTE (solo hay base plano + tarjetas elevadas, falta una superficie hundida real en esta pantalla). Baja EJE 2 (profundidad) a 2/4. Fix: dar a la card de insight o a la lista un tono `--hundido` sutil en vez de compartir el mismo `--chip-bg`/`--surface` que los botones elevados.
+4. [CTA secundario "Registrar un síntoma" + presets de comida] No hay ningún atajo de "repetir la última comida" pese a ser una app de registro diario de alta frecuencia — cada registro obliga a re-elegir entre 6 presets o recordar ingredientes. Baja h7 (flexibilidad/eficiencia) a 2/4. Fix: agregar un chip "Repetir: Pan tostado con miel" sobre los 2 CTA para el caso de uso más común (mismo desayuno).
+5. [Header con racha "6 días"] El contador anima de 0→6 en cada montaje de la pantalla (useContadorAnimado usa `anterior.current = 0` fijo al montar, no solo en el primer registro global) — cada vez que el usuario vuelve a "Hoy" ve la racha "recalcularse" desde cero, lo cual con el tiempo se siente como ruido/decoración vacía más que como feedback real de un cambio de estado (roza h1 sobreactuado). Fix: animar solo cuando `rachaActual` cambie respecto al valor previamente persistido (ej. en localStorage), no en cada mount.

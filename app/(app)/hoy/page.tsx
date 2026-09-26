@@ -6,12 +6,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
-import { Camera, Flame, Plus } from 'lucide-react';
+import { Camera, Flame, Plus, RotateCcw } from 'lucide-react';
 import { FotoComida } from '@/components/app/foto-comida';
 import { MordiscoAncho } from '@/components/app/mordisco-ancho';
 import { FilaComida } from '@/components/app/fila-comida';
 import { SheetNuevaComida } from '@/components/app/sheet-nueva-comida';
 import { SheetSintoma } from '@/components/app/sheet-sintoma';
+import { SheetDetalleComida } from '@/components/app/sheet-detalle-comida';
 import {
   asegurarSemilla,
   getComidas,
@@ -32,11 +33,16 @@ function esHoy(iso: string) {
   return fecha.toDateString() === hoy.toDateString();
 }
 
+/** Recuerda la última racha mostrada entre montajes de esta pestaña — solo anima
+ * cuando el valor REALMENTE cambió, nunca como ruido decorativo al revisitar la pantalla. */
+let ultimaRachaMostrada: number | null = null;
+
 /** Cuenta desde el valor anterior al nuevo (baseline #2 — nunca un número estático). */
 function useContadorAnimado(valor: number, duracionMs = 600) {
-  const [mostrado, setMostrado] = useState(valor);
-  const anterior = useRef(0);
+  const [mostrado, setMostrado] = useState(ultimaRachaMostrada ?? valor);
+  const anterior = useRef(ultimaRachaMostrada ?? valor);
   useEffect(() => {
+    if (ultimaRachaMostrada === valor) return;
     const inicio = anterior.current;
     const fin = valor;
     const t0 = performance.now();
@@ -45,7 +51,10 @@ function useContadorAnimado(valor: number, duracionMs = 600) {
       const p = Math.min(1, (t - t0) / duracionMs);
       setMostrado(Math.round(inicio + (fin - inicio) * p));
       if (p < 1) raf = requestAnimationFrame(tick);
-      else anterior.current = fin;
+      else {
+        anterior.current = fin;
+        ultimaRachaMostrada = fin;
+      }
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
@@ -59,6 +68,7 @@ export default function HoyPage() {
   const [correlacion, setCorrelacion] = useState<Correlacion | null>(null);
   const [sheetComida, setSheetComida] = useState(false);
   const [sheetSintoma, setSheetSintoma] = useState(false);
+  const [detalle, setDetalle] = useState<Comida | null>(null);
   const reduce = useReducedMotion();
   const rachaAnimada = useContadorAnimado(perfil?.rachaActual ?? 0);
 
@@ -136,6 +146,16 @@ export default function HoyPage() {
           >
             <Camera size={20} aria-hidden="true" /> Escanear mi próxima comida
           </motion.button>
+          <button
+            type="button"
+            onClick={() => {
+              agregarComida(ultima);
+              recargar();
+            }}
+            className="flex items-center justify-center gap-1.5 self-center text-[12px] font-medium text-[var(--text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+          >
+            <RotateCcw size={14} aria-hidden="true" /> Repetir &ldquo;{ultima.descripcion}&rdquo;
+          </button>
           <motion.button
             type="button"
             whileTap={reduce ? undefined : { scale: 0.97 }}
@@ -146,15 +166,24 @@ export default function HoyPage() {
           </motion.button>
         </motion.div>
 
-        <div>
+        <div className="rounded-[var(--radius-card)] bg-[var(--surface-2)] p-4">
           <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">
             Hoy registraste {comidasHoy.length} comida{comidasHoy.length === 1 ? '' : 's'}
           </p>
-          <div className="flex flex-col gap-3">
-            {comidasHoy.map((c) => (
-              <FilaComida key={c.id} comida={c} />
-            ))}
-          </div>
+          {comidasHoy.length === 0 ? (
+            <div className="flex flex-col items-center gap-2 py-4 text-center">
+              <p className="text-[15px] text-[var(--text-secondary)]">Nada registrado todavía hoy.</p>
+              <button type="button" onClick={() => setSheetComida(true)} className="text-[15px] font-semibold text-[var(--accent)] underline underline-offset-2">
+                Escanear tu primera comida del día
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {comidasHoy.map((c) => (
+                <FilaComida key={c.id} comida={c} onClick={setDetalle} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -176,6 +205,7 @@ export default function HoyPage() {
           recargar();
         }}
       />
+      <SheetDetalleComida comida={detalle} onCerrar={() => setDetalle(null)} />
     </div>
   );
 }
