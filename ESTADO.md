@@ -23,7 +23,12 @@ Sesión 6 (servicios externos) en curso. Paso 1/7 (GitHub) LISTO. Próximo: paso
   de `/entrar` por Supabase Auth real (magic link + Google OAuth) y las funciones de
   `lib/foodscan-data.ts` por queries reales (hoy leen/escriben `localStorage`).
   Verificado mientras tanto: `tsc --noEmit` ✓ · `npm run build` ✓ (middleware
-  detectado correctamente).
+  detectado correctamente). Este trabajo se subió en `feature/supabase-conexion`,
+  PR #1, fusionado a `master` (fast-forward, sin `gh` disponible en el entorno —
+  se hizo por git directo). Conectores MCP de Supabase y Vercel aparecieron
+  disponibles en esta sesión a mitad de la Sesión 6 — usarlos cuando toque crear
+  el proyecto/branches de Supabase y desplegar en Vercel, en vez de pedirle al
+  usuario que haga todo manual en los paneles.
 - **3. IA real (BFF)** — pendiente, depende del paso 2 (auth + RLS antes de exponer
   la IA, para no gastar créditos sin control de usuario).
 - **4. Vercel** — pendiente.
