@@ -45,7 +45,15 @@
       "Bash(env)",
       "Bash(gh pr *)",
       "Bash(git fetch *)",
-      "Bash(git merge *)"
+      "Bash(git merge *)",
+      "Bash(git branch *)",
+      "mcp__17854dd9-aaaa-484f-bcda-2de5fd252d7e__list_projects",
+      "mcp__17854dd9-aaaa-484f-bcda-2de5fd252d7e__apply_migration",
+      "mcp__17854dd9-aaaa-484f-bcda-2de5fd252d7e__list_tables",
+      "mcp__17854dd9-aaaa-484f-bcda-2de5fd252d7e__get_advisors",
+      "Bash(npm audit *)",
+      "Bash(curl -s -D - -o /dev/null http://localhost:3000/)",
+      "Bash(git worktree *)"
     ]
   }
 }

@@ -38,6 +38,44 @@ Sesión 6 (servicios externos) en curso. Paso 1/7 (GitHub) LISTO. Próximo: paso
   usuario que haga todo manual en los paneles.
 - **3. IA real (BFF)** — pendiente, depende del paso 2 (auth + RLS antes de exponer
   la IA, para no gastar créditos sin control de usuario).
+
+### Auditoría de seguridad y pulido (pedido explícito del usuario)
+Se exploró todo el código (rutas, seguridad, accesibilidad, dependencias, enlaces) con
+un subagente independiente. Hallazgos y qué se hizo con cada uno:
+- 🔴 **Crítico** — `/hoy`, `/historial`, `/patron`, `/cuenta` son accesibles sin ningún
+  chequeo de sesión (ni siquiera un `if (!user) redirect(...)` placeholder). NO se
+  corrigió todavía a propósito: el login (`/entrar`) sigue simulado (no crea sesión
+  real), así que agregar el gate ahora dejaría a CUALQUIERA sin poder entrar a esas
+  pantallas — se resuelve junto con el wireo de Supabase Auth real, no antes.
+- 🟠 **Alto, corregido** — los 4 enlaces legales del footer/Cuenta daban 404
+  (`/privacidad`, `/terminos`, `/reembolsos`, `/aviso-ia` no existían). Se crearon las
+  4 páginas (componente compartido `components/legal/legal-page.tsx`) con contenido
+  real basado en las decisiones YA aprobadas (precio, prueba de 7 días, Garantía del
+  Primer Patrón, límites de la app, disclaimer de IA de FICHA-AVATAR/47-LEGAL) — NO
+  son texto de relleno, pero SÍ necesitan revisión de un abogado antes de vender de
+  verdad (quedan como pantallas secundarias, Regla 7, sin revisor-visual).
+- 🟠 **Alto, anotado sin corregir** — el plan/precio elegido en el paywall vive en
+  `sessionStorage` (editable desde devtools) y nada lo valida contra el servidor. Hoy
+  no es explotable (no hay backend de pago conectado), pero es un patrón a vigilar:
+  cuando se conecte Hotmart, el estado de suscripción debe validarse siempre del lado
+  del servidor, nunca confiar en el valor del cliente.
+- 🟡 **Medio, corregido** — `next.config.ts` no tenía NINGÚN header de seguridad. Se
+  agregaron `X-Frame-Options: DENY` (evita clickjacking), `X-Content-Type-Options`,
+  `Referrer-Policy`, `Permissions-Policy` (verificado con `curl -D -`). CSP se dejó
+  fuera a propósito — agregarla antes de saber los hosts externos finales (IA real,
+  Resend, Hotmart) rompería scripts legítimos; se define en Sesión 6 cuando esos
+  servicios estén conectados.
+- 🟡 **Medio, corregido parcial** — Cuenta mostraba "te quedan 4 días" hardcodeado sin
+  relación con ningún dato real. Ahora lee el plan real de `sessionStorage` y muestra
+  "Prueba gratis · plan {anual/mensual} después" — ya no inventa una cifra de días que
+  nadie está contando de verdad.
+- 🟡 **Medio, sin corregir** — `/entrar` promete "revisa tu correo" sin enviar nada
+  real (ya documentado como simulación consciente de Sesión 4); y no hay rate-limit
+  real en el reenvío (solo un countdown de cliente, evitable). Ambos se resuelven con
+  el wireo de auth real, no antes.
+- 🟢 **Bajo / sin hallazgos** — `npm audit`: 0 vulnerabilidades en 453 dependencias.
+  Accesibilidad: labels, aria-checked, aria-hidden y alt ya están bien implementados
+  donde se revisó — sin hallazgos nuevos.
 - **4. Vercel** — pendiente.
 - **5. Resend** — pendiente.
 - **6. Dominio** — pendiente.

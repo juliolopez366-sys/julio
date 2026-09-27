@@ -15,11 +15,14 @@ const ENLACES_LEGALES = [
 export default function CuentaPage() {
   const [perfil, setPerfil] = useState<Perfil | null>(null);
   const [notificaciones, setNotificaciones] = useState(true);
+  const [plan, setPlan] = useState<'anual' | 'mensual'>('anual');
   const reduce = useReducedMotion();
 
   useEffect(() => {
     asegurarSemilla();
     setPerfil(getPerfil());
+    const planGuardado = sessionStorage.getItem('foodscan_plan');
+    if (planGuardado === 'anual' || planGuardado === 'mensual') setPlan(planGuardado);
   }, []);
 
   if (!perfil) {
@@ -42,7 +45,9 @@ export default function CuentaPage() {
         className="rounded-[var(--radius-card)] bg-[var(--chip-bg)] p-5 shadow-[0_4px_16px_color-mix(in_oklab,var(--accent)_10%,transparent)]"
       >
         <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[var(--text-tertiary)]">Tu plan</p>
-        <p className="mt-1 text-[18px] font-bold text-[var(--text-primary)]">Prueba gratis · te quedan 4 días</p>
+        <p className="mt-1 text-[18px] font-bold text-[var(--text-primary)]">
+          Prueba gratis · plan {plan === 'anual' ? 'anual' : 'mensual'} después
+        </p>
         <div className="mt-4 flex gap-3">
           <div className="flex flex-1 items-center gap-2 rounded-[var(--radius-button)] bg-[var(--bg)] px-3 py-2.5">
             <Flame size={18} className="text-[var(--alerta)]" aria-hidden="true" />

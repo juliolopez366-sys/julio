@@ -1,5 +1,6 @@
 .playwright-mcp/
 node_modules/
+.claude/worktrees/
 
 # Next.js
 .next/
