@@ -41,7 +41,8 @@
       "Bash(grep -c \"^https://.*\\\\.supabase\\\\.co$\")",
       "Bash(git check-ignore *)",
       "Bash(git ls-remote *)",
-      "Bash(git checkout *)"
+      "Bash(git checkout *)",
+      "Bash(env)"
     ]
   }
 }
