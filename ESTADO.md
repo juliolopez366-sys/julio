@@ -18,10 +18,17 @@ Sesión 6 (servicios externos) en curso. Paso 1/7 (GitHub) LISTO. Próximo: paso
   en `supabase/migrations/0001_init.sql` — espejo de `lib/foodscan-data.ts`: tablas
   `perfiles`/`comidas`/`sintomas`/`correlaciones`, RLS con policy
   `(select auth.uid()) = user_id` en USING y WITH CHECK en las 4, `user_id` indexado,
-  trigger que crea el perfil automáticamente al registrarse. Pendiente: que el
-  usuario corra el SQL en el editor de Supabase, y luego reemplazar el auth simulado
-  de `/entrar` por Supabase Auth real (magic link + Google OAuth) y las funciones de
-  `lib/foodscan-data.ts` por queries reales (hoy leen/escriben `localStorage`).
+  trigger que crea el perfil automáticamente al registrarse. Migración aplicada
+  directamente con el conector MCP de Supabase (`apply_migration`, proyecto
+  `pjssjkzqxyxnphwnxyoq`) — las 4 tablas existen con RLS activo, verificado con
+  `list_tables`. El escáner de seguridad (`get_advisors`) marcó el trigger
+  (`crear_perfil_nuevo_usuario`, SECURITY DEFINER) como invocable públicamente por
+  RPC — corregido con `0002_restringir_trigger_perfil.sql` (revoca EXECUTE de
+  public/anon/authenticated; no rompe el trigger, Postgres lo invoca sin chequear
+  permisos). Advisors de seguridad limpios tras el fix. Pendiente: reemplazar el
+  auth simulado de `/entrar` por Supabase Auth real (magic link + Google OAuth) y
+  las funciones de `lib/foodscan-data.ts` por queries reales (hoy leen/escriben
+  `localStorage`).
   Verificado mientras tanto: `tsc --noEmit` ✓ · `npm run build` ✓ (middleware
   detectado correctamente). Este trabajo se subió en `feature/supabase-conexion`,
   PR #1, fusionado a `master` (fast-forward, sin `gh` disponible en el entorno —
