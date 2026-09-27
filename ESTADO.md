@@ -9,7 +9,21 @@ Sesión 6 (servicios externos) en curso. Paso 1/7 (GitHub) LISTO. Próximo: paso
   (privado). Remoto `origin` conectado, rama `master` subida con todo el historial de
   commits. `.gitignore` ya cubre `node_modules/`, `.next/`, `.env*.local` — sin
   archivos `.env` en el repo todavía (llegan en el paso 2-3).
-- **2. Supabase** — pendiente.
+- **2. Supabase — EN CURSO.** Proyecto del usuario creado. `.env.local` con
+  `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` (nunca commiteado,
+  cubierto por `.gitignore`). Instalado `@supabase/supabase-js` + `@supabase/ssr`.
+  Creados `lib/supabase/client.ts` (browser), `lib/supabase/server.ts` (Server
+  Components/Actions), `lib/supabase/middleware.ts` + `middleware.ts` raíz (refresca
+  la sesión en cada request, patrón oficial de `@supabase/ssr`). Esquema SQL escrito
+  en `supabase/migrations/0001_init.sql` — espejo de `lib/foodscan-data.ts`: tablas
+  `perfiles`/`comidas`/`sintomas`/`correlaciones`, RLS con policy
+  `(select auth.uid()) = user_id` en USING y WITH CHECK en las 4, `user_id` indexado,
+  trigger que crea el perfil automáticamente al registrarse. Pendiente: que el
+  usuario corra el SQL en el editor de Supabase, y luego reemplazar el auth simulado
+  de `/entrar` por Supabase Auth real (magic link + Google OAuth) y las funciones de
+  `lib/foodscan-data.ts` por queries reales (hoy leen/escriben `localStorage`).
+  Verificado mientras tanto: `tsc --noEmit` ✓ · `npm run build` ✓ (middleware
+  detectado correctamente).
 - **3. IA real (BFF)** — pendiente, depende del paso 2 (auth + RLS antes de exponer
   la IA, para no gastar créditos sin control de usuario).
 - **4. Vercel** — pendiente.
