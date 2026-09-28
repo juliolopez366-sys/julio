@@ -53,7 +53,24 @@
       "mcp__17854dd9-aaaa-484f-bcda-2de5fd252d7e__get_advisors",
       "Bash(npm audit *)",
       "Bash(curl -s -D - -o /dev/null http://localhost:3000/)",
-      "Bash(git worktree *)"
+      "Bash(git worktree *)",
+      "mcp__17854dd9-aaaa-484f-bcda-2de5fd252d7e__get_project",
+      "mcp__17854dd9-aaaa-484f-bcda-2de5fd252d7e__execute_sql",
+      "mcp__17854dd9-aaaa-484f-bcda-2de5fd252d7e__query_logs",
+      "Bash(grep -rn \"sk-\\\\|service_role\\\\|SUPABASE_SERVICE_ROLE\\\\|api[_-]key.*=.*['\\\\\"][A-Za-z0-9]\\\\{20,\\\\}\" --include=\"*.ts\" --include=\"*.tsx\" --include=\"*.js\" .)",
+      "Bash(grep -i \"^\\\\.env$\\\\|^\\\\.env\\\\.\")",
+      "Bash(wc -l /c/Users/julio/.env.local && sed 's/=.*/=<oculto>/' /c/Users/julio/.env.local)",
+      "Bash(awk -F= '{print $1\"=\"length\\($2\\)\" caracteres\"}' .env.local)",
+      "mcp__dd464154-939c-49b6-a908-239d4ed05379__search_threads",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} -> %{redirect_url}\\\\n\" \"https://pjssjkzqxyxnphwnxyoq.supabase.co/auth/v1/verify?token=pkce_316c7244766aaeb809f22c7e8b9cbecf2eac19a29a12487f524f5d90&type=magiclink&redirect_to=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fconfirm%3Fnext%3D%2Fhoy\")",
+      "Bash(curl -s -D - -o /dev/null \"https://pjssjkzqxyxnphwnxyoq.supabase.co/auth/v1/verify?token=669746a5e1d9e5b3678b81804d451682ad0d73f99ff82cf5b8089886&type=magiclink&redirect_to=http://localhost:3000/auth/confirm?next=/hoy\")",
+      "Bash(node -e \"console.log\\(require\\('os'\\).tmpdir\\(\\)\\)\")",
+      "Bash(rm -f \"$\\(node -e \"console.log\\(require\\('os'\\).tmpdir\\(\\)\\)\"\\)/tokens.json\" \"$\\(node -e \"console.log\\(require\\('os'\\).tmpdir\\(\\)\\)\"\\)/cookies.json\" \"$\\(node -e \"console.log\\(require\\('os'\\).tmpdir\\(\\)\\)\"\\)/action_link.txt\")",
+      "mcp__2f5e9bb7-3b40-46c5-9ddc-e6dd50ebffc9__list_teams",
+      "mcp__2f5e9bb7-3b40-46c5-9ddc-e6dd50ebffc9__list_projects",
+      "mcp__2f5e9bb7-3b40-46c5-9ddc-e6dd50ebffc9__create_git_project",
+      "mcp__2f5e9bb7-3b40-46c5-9ddc-e6dd50ebffc9__get_project",
+      "mcp__2f5e9bb7-3b40-46c5-9ddc-e6dd50ebffc9__list_deployments"
     ]
   }
 }

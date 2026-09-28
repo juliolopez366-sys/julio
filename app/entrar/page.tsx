@@ -1,13 +1,14 @@
 'use client';
 
-// Login de FoodScan — Sesión 4 (50-DISENO-ONBOARDING-PAYWALL.md, sección E; 26-AUTH-MODERNO.md).
-// Magic link como método primario (decisión Hotmart-first). Backend aún no existe (Sesión 6):
-// los 3 estados (enviando/enviado/error) se simulan con estado local, sin enviar nada real.
+// Login de FoodScan — Sesión 6, paso 2 (50-DISENO-ONBOARDING-PAYWALL.md, sección E;
+// 26-AUTH-MODERNO.md). Magic link real por Supabase Auth (primario) + Google OAuth
+// (secundario). Los correos los envía Supabase (SMTP propio llega en el paso 5/Resend).
 
 import { useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
 import { Lock, Mail } from 'lucide-react';
 import { CtaPrimario, PantallaFunnel } from '@/components/onboarding/funnel-ui';
+import { crearClienteSupabase } from '@/lib/supabase/client';
 
 type Estado = 'inicial' | 'enviando' | 'enviado' | 'error';
 
@@ -15,24 +16,40 @@ export default function EntrarPage() {
   const [email, setEmail] = useState('');
   const [estado, setEstado] = useState<Estado>('inicial');
   const [countdown, setCountdown] = useState(0);
+  const [aceptaTerminos, setAceptaTerminos] = useState(false);
+  const supabase = crearClienteSupabase();
 
-  const enviar = (e: FormEvent) => {
+  const enviar = async (e: FormEvent) => {
     e.preventDefault();
-    if (!email || estado === 'enviando') return;
+    if (!email || !aceptaTerminos || estado === 'enviando') return;
     setEstado('enviando');
-    setTimeout(() => {
-      setEstado('enviado');
-      setCountdown(60);
-      const tick = setInterval(() => {
-        setCountdown((c) => {
-          if (c <= 1) {
-            clearInterval(tick);
-            return 0;
-          }
-          return c - 1;
-        });
-      }, 1000);
-    }, 900);
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: `${window.location.origin}/auth/confirm?next=/hoy` },
+    });
+    if (error) {
+      setEstado('error');
+      return;
+    }
+    setEstado('enviado');
+    setCountdown(60);
+    const tick = setInterval(() => {
+      setCountdown((c) => {
+        if (c <= 1) {
+          clearInterval(tick);
+          return 0;
+        }
+        return c - 1;
+      });
+    }, 1000);
+  };
+
+  const conGoogle = async () => {
+    if (!aceptaTerminos) return;
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/auth/callback?next=/hoy` },
+    });
   };
 
   return (
@@ -91,14 +108,29 @@ export default function EntrarPage() {
                   className="w-full bg-transparent text-[16px] text-[var(--text-primary)] outline-none placeholder:text-[var(--text-tertiary)]"
                 />
               </div>
-              <CtaPrimario type="submit" disabled={!email || estado === 'enviando'}>
+              <label className="flex items-start gap-2.5 py-1 text-left">
+                <input
+                  type="checkbox"
+                  checked={aceptaTerminos}
+                  onChange={(e) => setAceptaTerminos(e.target.checked)}
+                  className="mt-0.5 size-4 shrink-0 accent-[var(--accent)]"
+                />
+                <span className="text-[13px] leading-snug text-[var(--text-secondary)]">
+                  Acepto los <a href="/terminos" target="_blank" className="font-medium text-[var(--accent)] underline underline-offset-2">Términos</a> y el{' '}
+                  <a href="/privacidad" target="_blank" className="font-medium text-[var(--accent)] underline underline-offset-2">Aviso de Privacidad</a>
+                </span>
+              </label>
+
+              <CtaPrimario type="submit" disabled={!email || !aceptaTerminos || estado === 'enviando'}>
                 {estado === 'enviando' ? 'Enviando…' : 'Enviarme mi enlace de acceso'}
               </CtaPrimario>
             </form>
 
             <button
               type="button"
-              className="mt-3 flex h-[52px] w-full items-center justify-center gap-2 rounded-[var(--radius-button)] border border-[color-mix(in_oklab,var(--text-tertiary)_30%,transparent)] text-[15px] font-medium text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+              onClick={conGoogle}
+              disabled={!aceptaTerminos}
+              className="mt-3 flex h-[52px] w-full items-center justify-center gap-2 rounded-[var(--radius-button)] border border-[color-mix(in_oklab,var(--text-tertiary)_30%,transparent)] text-[15px] font-medium text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:opacity-50"
             >
               <GoogleIcon />
               Continuar con Google

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
-import { asegurarSemilla, getComidas, getSintomas, type Comida, type Sintoma } from '@/lib/foodscan-data';
+import { getComidas, getSintomas, type Comida, type Sintoma } from '@/lib/foodscan-data';
 import { FilaComida } from '@/components/app/fila-comida';
 import { FilaSintoma } from '@/components/app/fila-sintoma';
 import { SheetDetalleComida } from '@/components/app/sheet-detalle-comida';
@@ -35,13 +35,13 @@ export default function HistorialPage() {
   const [detalle, setDetalle] = useState<Comida | null>(null);
   const reduce = useReducedMotion();
 
-  function recargar() {
-    setComidas(getComidas());
-    setSintomas(getSintomas());
+  async function recargar() {
+    const [cs, ss] = await Promise.all([getComidas(), getSintomas()]);
+    setComidas(cs);
+    setSintomas(ss);
   }
 
   useEffect(() => {
-    asegurarSemilla();
     recargar();
   }, []);
 

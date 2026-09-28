@@ -14,7 +14,6 @@ import { SheetNuevaComida } from '@/components/app/sheet-nueva-comida';
 import { SheetSintoma } from '@/components/app/sheet-sintoma';
 import { SheetDetalleComida } from '@/components/app/sheet-detalle-comida';
 import {
-  asegurarSemilla,
   getComidas,
   getSintomas,
   getPerfil,
@@ -74,15 +73,13 @@ export default function HoyPage() {
   const rachaAnimada = useContadorAnimado(perfil?.rachaActual ?? 0);
 
   useEffect(() => {
-    asegurarSemilla();
     recargar();
   }, []);
 
-  function recargar() {
-    const cs = getComidas();
-    const ss = getSintomas();
+  async function recargar() {
+    const [cs, ss, pf] = await Promise.all([getComidas(), getSintomas(), getPerfil()]);
     setComidas(cs);
-    setPerfil(getPerfil());
+    setPerfil(pf);
     setCorrelacion(calcularCorrelacion(cs, ss));
   }
 
@@ -133,6 +130,9 @@ export default function HoyPage() {
             {ultima.ingredientesRiesgo[0] ? ` · ${ultima.ingredientesRiesgo[0]}` : ''}
           </h2>
           <p className="text-[15px] text-[var(--text-secondary)]">{ultima.descripcion}</p>
+          <a href="/aviso-ia" className="mt-1 inline-block text-[12px] text-[var(--text-tertiary)] underline underline-offset-2">
+            Orientación de IA, no un diagnóstico
+          </a>
         </motion.div>
 
         {correlacion && (
@@ -169,9 +169,9 @@ export default function HoyPage() {
           </motion.button>
           <button
             type="button"
-            onClick={() => {
-              agregarComida(ultima);
-              recargar();
+            onClick={async () => {
+              await agregarComida(ultima);
+              await recargar();
               setAviso(`Agregado: ${ultima.descripcion}`);
               setTimeout(() => setAviso(null), 2200);
             }}
@@ -213,19 +213,20 @@ export default function HoyPage() {
       <SheetNuevaComida
         abierto={sheetComida}
         onCerrar={() => setSheetComida(false)}
-        onElegir={(preset) => {
-          agregarComida(preset);
+        onElegir={async (preset) => {
+          await agregarComida(preset);
           setSheetComida(false);
-          recargar();
+          await recargar();
         }}
+        onGuardado={recargar}
       />
       <SheetSintoma
         abierto={sheetSintoma}
         onCerrar={() => setSheetSintoma(false)}
-        onGuardar={(input) => {
-          agregarSintoma(input);
+        onGuardar={async (input) => {
+          await agregarSintoma(input);
           setSheetSintoma(false);
-          recargar();
+          await recargar();
         }}
       />
       <SheetDetalleComida comida={detalle} onCerrar={() => setDetalle(null)} onEliminar={recargar} />

@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, useReducedMotion } from 'motion/react';
 import { Flame, Bell, LogOut, ChevronRight, Snowflake } from 'lucide-react';
-import { asegurarSemilla, getPerfil, type Perfil } from '@/lib/foodscan-data';
+import { getPerfil, type Perfil } from '@/lib/foodscan-data';
+import { crearClienteSupabase } from '@/lib/supabase/client';
 
 const ENLACES_LEGALES = [
   { label: 'Privacidad', href: '/privacidad' },
@@ -17,13 +19,19 @@ export default function CuentaPage() {
   const [notificaciones, setNotificaciones] = useState(true);
   const [plan, setPlan] = useState<'anual' | 'mensual'>('anual');
   const reduce = useReducedMotion();
+  const router = useRouter();
 
   useEffect(() => {
-    asegurarSemilla();
-    setPerfil(getPerfil());
+    getPerfil().then(setPerfil);
     const planGuardado = sessionStorage.getItem('foodscan_plan');
     if (planGuardado === 'anual' || planGuardado === 'mensual') setPlan(planGuardado);
   }, []);
+
+  async function cerrarSesion() {
+    const supabase = crearClienteSupabase();
+    await supabase.auth.signOut();
+    router.push('/entrar');
+  }
 
   if (!perfil) {
     return (
@@ -99,13 +107,14 @@ export default function CuentaPage() {
             </a>
           ))}
 
-          <a
-            href="/"
-            className="flex items-center gap-3 rounded-[var(--radius-card)] bg-[var(--surface)] p-4 text-[var(--error)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+          <button
+            type="button"
+            onClick={cerrarSesion}
+            className="flex items-center gap-3 rounded-[var(--radius-card)] bg-[var(--surface)] p-4 text-left text-[var(--error)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
           >
             <LogOut size={20} aria-hidden="true" />
             <span className="text-[15px] font-medium">Cerrar sesión</span>
-          </a>
+          </button>
         </div>
       </div>
 

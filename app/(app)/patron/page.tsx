@@ -10,7 +10,6 @@ import { motion, useReducedMotion, AnimatePresence } from 'motion/react';
 import { Info, Sparkles } from 'lucide-react';
 import { MordiscoAncho } from '@/components/app/mordisco-ancho';
 import {
-  asegurarSemilla,
   getComidas,
   getSintomas,
   calcularCorrelacion,
@@ -44,15 +43,13 @@ export default function PatronPage() {
   const reduce = useReducedMotion();
   const router = useRouter();
 
-  function recargar() {
-    const cs = getComidas();
-    const ss = getSintomas();
+  async function recargar() {
+    const [cs, ss] = await Promise.all([getComidas(), getSintomas()]);
     setComidas(cs);
     setCorrelacion(calcularCorrelacion(cs, ss));
   }
 
   useEffect(() => {
-    asegurarSemilla();
     recargar();
   }, []);
 
@@ -131,6 +128,9 @@ export default function PatronPage() {
             <p className="max-w-[32ch] text-[15px] leading-relaxed text-[var(--text-secondary)]">
               {correlacion.vecesConSintoma} de {correlacion.vecesComido} veces que comiste algo con {correlacion.ingrediente}, tuviste síntomas dentro de las siguientes 48 horas.
             </p>
+            <a href="/aviso-ia" className="text-[12px] text-[var(--text-tertiary)] underline underline-offset-2">
+              Orientación de IA, no un diagnóstico
+            </a>
             <p role="status" aria-live="polite" className="sr-only">
               {correlacion.ingrediente}, {confianzaPct}% de confianza como tu detonante principal.
             </p>
