@@ -2,7 +2,11 @@
 
 ## Fase actual
 Sesión 6 (servicios externos) en curso. Paso 1/7 (GitHub) LISTO. Paso 2/7 (Supabase)
-LISTO: base de datos + auth real + gate de sesión.
+LISTO: base de datos + auth real + gate de sesión. Paso 7/7 (Hotmart, el webhook)
+adelantado fuera de orden a pedido del usuario — ver bloque dedicado más abajo.
+Paso 5 (Resend) y paso 6 (dominio propio) siguen pendientes; el usuario eligió
+conectar Hotmart ya mismo y dejar Resend/dominio para después (el correo de acceso
+funciona igual, solo con la plantilla genérica de Supabase hasta que Resend exista).
 
 Paso 3/7 (IA real) LISTO en código y en producción (claves ya configuradas por el
 usuario, tanto en `.env.local` como en Vercel): migración 0003 (ai_calls + bucket
@@ -116,6 +120,58 @@ que yo no puedo disparar redeploys ni leer logs de build por mi cuenta para este
 proyecto — hay que pedirle capturas/texto al usuario o, si se quiere una solución de
 fondo, reautorizar el conector de Vercel desde los ajustes de conectores de la app (fuera
 de mi alcance, lo hace el usuario).
+
+## Checkpoint (paso 7/7 — Hotmart/webhook, en curso, adelantado fuera de orden)
+Construido y aplicado a Supabase (migraciones 0004 y 0005): columnas nuevas en
+`perfiles` (hotmart_subscriber_code, estado_suscripcion, primer_pago_en,
+prueba_termina_en, acceso_hasta, periodo_gracia_hasta — reutiliza la columna `plan`
+existente); tablas `eventos_procesados` (idempotencia), `webhook_log`
+(observabilidad), `transacciones_pago` (ledger económico) — las 3 con RLS activo y
+SIN políticas a propósito (solo el service_role las toca); funciones
+`buscar_usuario_id_por_email` y `aplicar_evento_hotmart` (ambas revocadas de
+anon/authenticated y de PUBLIC — el linter de seguridad detectó que revocar solo de
+anon/authenticated NO bastaba, Postgres también concede a PUBLIC por defecto; quedó
+corregido y verificado limpio con `get_advisors`).
+
+Código: `lib/hotmart-verify.ts` (hottok en tiempo constante, fail-secure — crashea si
+falta `HOTMART_HOTTOK`), `lib/membership-fsm.ts` (estados en español: prueba/activo/
+atrasado/cancelado/expirado/reembolsado/contracargo — el evento de inicio de prueba
+`SUBSCRIPTION_TRIAL_START` es PLACEHOLDER sin verificar, ver nota en el propio
+archivo), `app/api/webhooks/hotmart/route.ts` (pipeline completo: autenticidad →
+frescura → catálogo permitido por `HOTMART_PRODUCT_ID` → resuelve/crea el usuario de
+auth ANTES de marcar el evento procesado, patrón A de 18 para que "pagó y no entra"
+no pueda pasar → idempotencia+transición atómica vía RPC). `middleware.ts` excluye
+`/api/webhooks` del refresco de sesión (no aplica, son peticiones de servidor a
+servidor). **Gate de plan real activado en `app/(app)/layout.tsx`**: ya no basta con
+iniciar sesión — si `perfiles.estado_suscripcion` no da acceso completo, redirige a
+`/paywall`. Esto cierra el hallazgo crítico de seguridad que quedó pendiente desde la
+auditoría (cualquier correo entraba gratis).
+
+⚠️ **Efecto colateral esperado:** la cuenta de prueba del usuario
+(juliolopez366@gmail.com) NUNCA pasó por una compra real de Hotmart, así que
+`estado_suscripcion` está en null — con el gate activo, esa cuenta ahora rebota a
+`/paywall` en vez de entrar a `/hoy`. Hay que decidir con el usuario si se le activa
+el acceso a mano por SQL (para seguir probando IA/fotos) o si prueba el flujo
+comprando de verdad en Hotmart.
+
+**Bloqueante actual:** el build (local Y en Vercel) FALLA a propósito sin
+`HOTMART_HOTTOK` en el entorno (fail-secure, línea 8 de hotmart-verify.ts revienta en
+tiempo de build porque Next.js evalúa el módulo al recolectar datos de la ruta). Se
+le pidió al usuario entrar a Hotmart → Herramientas → Webhook → crear una
+configuración apuntando a `https://foodscan-murex.vercel.app/api/webhooks/hotmart` →
+copiar el HOTTOK de la pestaña de Autenticación → pegarlo como `HOTMART_HOTTOK` en
+Vercel (Production, Secret) y en `.env.local` — TODAVÍA sin seleccionar eventos ni
+enviar el test (eso es el siguiente paso, después de que el build vuelva a compilar
+y se despliegue). También falta, cuando se tenga: `HOTMART_PRODUCT_ID` (el ID
+numérico del producto, para el chequeo de catálogo permitido) — opcional pero
+recomendado, el endpoint funciona sin él si no está seteado.
+
+**Próximo paso inmediato:** cuando el usuario confirme el HOTTOK puesto en ambos
+lugares, hacer commit+push de todo este trabajo (los commits de IA real/paywall ya
+se subieron; esto de Hotmart todavía NO), verificar que el build en Vercel compila,
+y entonces sí guiar los pasos finales en el panel de Hotmart: seleccionar los
+eventos (aprobada, completa, reembolso, chargeback, cancelación, SWITCH_PLAN, pago
+atrasado) y darle "Enviar test" para confirmar 200.
 
 ## Responsable legal — dato del usuario (no inventar, no cambiar sin que él lo pida)
 Julio López (persona natural) · opera desde Estados Unidos · contacto legal:
@@ -450,6 +506,18 @@ técnicas abajo).
   research de mercado del usuario + reseñas públicas de competidores. Es evidencia
   real y citable, pero si en el futuro hay usuarias reales, conviene reforzarla con
   sus entrevistas.
+- **veredicto:paywall — esta vez el archivo SÍ se tocó de verdad (30 sep/1 oct), no es
+  el falso positivo genérico de arriba.** Se conectó el CTA a los checkouts reales de
+  Hotmart (app/paywall/page.tsx), quitando la máquina de estados simulada
+  (procesando/confirmado/error) que el veredicto original (9ª pasada) había evaluado y
+  aprobado. No amerita una pasada nueva del revisor-visual porque CERO píxeles
+  cambiaron en lo que se ve ANTES del clic (cards, copy, jerarquía — todo igual); lo
+  único distinto es que, al tocar el botón, ahora la persona sale de verdad hacia
+  Hotmart en lugar de ver una animación local — que es el comportamiento correcto para
+  un redirect de pago real (el navegador ya muestra su propio indicador de carga al
+  navegar). Si en el futuro se agrega feedback visual propio durante ese clic (p.ej.
+  un `loading` de medio segundo antes del redirect), ahí sí conviene una pasada de
+  craft, aunque no de usabilidad.
 
 ## Decisiones técnicas (criterio del agente)
 - Framework: Next.js 16 App Router (landing con SEO — regla del stack de 51).
