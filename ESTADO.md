@@ -2,17 +2,53 @@
 
 ## Fase actual
 Sesión 6 (servicios externos) en curso. Paso 1/7 (GitHub) LISTO. Paso 2/7 (Supabase)
-LISTO: base de datos + auth real + gate de sesión. Paso 3/7 (IA real) LISTO en código
-(falta solo que el usuario configure ANTHROPIC_API_KEY y SUPABASE_SERVICE_ROLE_KEY en
-.env.local): migración 0003 (ai_calls + bucket privado comidas-fotos) aplicada;
-lib/supabase/admin.ts (cliente service_role, solo servidor); app/api/analizar-comida
-(BFF con Claude Haiku 4.5, tool-use forzado, circuit-breaker de 20 análisis/día/usuario);
-lib/foodscan-data.ts reescrito de localStorage a Supabase real (se quitó la semilla
-falsa — un usuario nuevo ve estados vacíos honestos); hoy/historial/patron/cuenta
-migrados a las funciones async; components/app/sheet-nueva-comida.tsx ahora tiene el
-flujo real de foto (tomar/subir → analizar → revisar → guardar en Storage + BD);
-cuenta/page.tsx cierra sesión de verdad (antes solo redirigía sin signOut). tsc y build
-limpios. Claves configuradas por el usuario.
+LISTO: base de datos + auth real + gate de sesión.
+
+Paso 3/7 (IA real) LISTO en código y en producción (claves ya configuradas por el
+usuario, tanto en `.env.local` como en Vercel): migración 0003 (ai_calls + bucket
+privado comidas-fotos) aplicada; lib/supabase/admin.ts (cliente service_role, solo
+servidor); app/api/analizar-comida (BFF con Claude Haiku 4.5, tool-use forzado,
+circuit-breaker de 20 análisis/día/usuario); lib/foodscan-data.ts reescrito de
+localStorage a Supabase real (se quitó la semilla falsa — un usuario nuevo ve estados
+vacíos honestos); hoy/historial/patron/cuenta migrados a las funciones async;
+components/app/sheet-nueva-comida.tsx ahora tiene el flujo real de foto (tomar/subir →
+analizar → revisar → guardar en Storage + BD); cuenta/page.tsx cierra sesión de
+verdad (antes solo redirigía sin signOut). tsc y build limpios.
+
+Paso 4/7 (Vercel) LISTO: app publicada de verdad, ahora en **`foodscan-murex.vercel.app`**
+(proyecto renombrado de "julio" a "foodscan"; dominio viejo `julio-murex.vercel.app`
+sigue redirigiendo automático al nuevo — no se rompió nada). Verificado por mí mismo en
+el navegador: landing y `/entrar` cargan sin errores en producción. Costó varias rondas
+de diagnóstico: primero 0 despliegues (nunca se había subido el código de la sesión —
+se hizo commit+push), luego el build falló 2 veces por variables de entorno no
+guardadas para Production (confusión de UI con los campos Key/Value), luego el login
+real falló por el Site URL/Redirect URLs de Supabase Auth todavía apuntando solo a
+localhost (se agregaron las URLs de producción — primero las de `julio-murex`, luego se
+repitió el mismo paso para `foodscan-murex` tras el cambio de nombre). ⚠️ Quedó un
+proyecto Vercel DUPLICADO sin usar ("julio-ro5p") creado por accidente durante el
+diagnóstico — nunca se le dio Deploy, se puede borrar cuando el usuario quiera
+(Settings → General → Delete Project), no es urgente.
+
+**Paywall conectado a Hotmart real:** el botón "Empezar mis 7 días gratis" en
+app/paywall/page.tsx ya no simula nada — redirige de verdad a los links de checkout que
+el usuario creó en Hotmart (mensual/anual), según el plan elegido. Se quitó el estado
+`estadoCta` simulado (procesando/confirmado/error) por ser código muerto una vez
+conectado el link real. tsc y build locales limpios.
+
+**Incidente de seguridad (30 sep, repetido):** un comando de diagnóstico (`awk` sobre
+`.env.local`) volvió a imprimir las 4 claves completas en texto plano — mismo tipo de
+error que ya había pasado antes en la sesión. Causa raíz encontrada: `.env.local` había
+perdido el prefijo `NOMBRE=` de sus 4 líneas (quedaron solo los valores pelados), por
+eso además el build de Next.js fallaba (`@supabase/ssr: ... required`). Se reparó el
+archivo con un script que reconstruye el nombre de cada variable por patrón (decodifica
+el JWT para distinguir anon de service_role, detecta la URL y el prefijo `sk-ant-`) sin
+volver a imprimir ningún valor. El usuario ya roto ANTHROPIC_API_KEY y
+SUPABASE_SERVICE_ROLE_KEY (la anon key no hacía falta, es pública por diseño) y quedó
+pendiente de actualizar esos dos valores nuevos tanto en `.env.local` como en las
+Environment Variables de Vercel, y relanzar el deploy. **Próximo paso inmediato:**
+confirmar que el usuario actualizó las claves rotadas en ambos lugares y que el
+redeploy en Vercel quedó "Ready"; luego sí probar login + análisis de foto de punta a
+punta en `foodscan-murex.vercel.app` desde su propio navegador.
 
 **Bloqueante para probar login real en local (no es un bug del código):** el servidor de
 desarrollo (`localhost:3000`) solo es alcanzable desde el navegador embebido de Claude,
@@ -54,6 +90,32 @@ Framework/Root/Build por defecto y le dé Deploy. Después reviso con el conecto
 Vercel que quedó conectado a ESTE proyecto (puede que el conector siga sin ver nada si
 quedó autorizado a una cuenta/GitHub App distinta — si pasa, toca reautorizar el
 conector, no crear el proyecto por otro lado).
+
+Actualización (29 sep): proyecto **"julio"** (prj_Afg09UudQaPuXK4fIYmnRXpLTL9A, team
+team_BhNf0CeqU81iNPweNnhJqayP / scope "julio-1d50") SÍ quedó conectado al repo real.
+Se subieron a GitHub todos los cambios pendientes de la sesión (commit 44278a9,
+"Conectar IA real de analisis de fotos y login real end-to-end") para que Vercel tuviera
+algo que construir — antes de eso llevaba 0 despliegues. El primer build **falló**:
+`@supabase/ssr: Your project's URL and API key are required` en `/entrar` — las 4
+variables de entorno no habían quedado guardadas para el ambiente "Production" (se
+perdieron durante el alta de la cuenta nueva). El usuario las volvió a agregar en
+Settings → Environments → Production. Al intentar relanzar el build, el usuario por
+error creó un SEGUNDO proyecto duplicado ("julio-ro5p") en vez de usar "Redeploy" sobre
+el original — se detuvo a tiempo, NO se le dio Deploy a ese duplicado (debe borrarse o
+simplemente ignorarse, nunca usarse). Pendiente inmediato: que el usuario relance el
+build correcto desde Deployments → (···) → Redeploy DENTRO del proyecto "julio"
+original, y confirmar que esta vez compile.
+
+**Bloqueante técnico aparte, ya identificado:** mi conector MCP de Vercel no puede leer
+ni escribir nada de este proyecto (`get_project`, `list_deployment_events`,
+`create_deployment` fallan con 403 "Trying to access resource under scope 'julio-1d50'.
+You must re-authenticate to this scope") — aunque `list_projects`/`list_deployments`
+básicos sí funcionan. El token de mi conector no incluye el scope de esta cuenta/team
+nueva. Esto no bloquea al usuario (puede seguir todo desde el dashboard), pero significa
+que yo no puedo disparar redeploys ni leer logs de build por mi cuenta para este
+proyecto — hay que pedirle capturas/texto al usuario o, si se quiere una solución de
+fondo, reautorizar el conector de Vercel desde los ajustes de conectores de la app (fuera
+de mi alcance, lo hace el usuario).
 
 ## Responsable legal — dato del usuario (no inventar, no cambiar sin que él lo pida)
 Julio López (persona natural) · opera desde Estados Unidos · contacto legal:

@@ -33,16 +33,20 @@ function usePrecioAnimado(valor: number, duracionMs = 400) {
 }
 
 type Respuestas = { preocupacion?: string; momento?: string; intentos?: string; diasMeta: number; canal?: string };
-type EstadoCta = 'inicial' | 'procesando' | 'confirmado' | 'error';
 
 const N_RESPUESTAS = 5;
 /** Toda salida del paywall va al mismo lugar (X y "Ahora no" — un solo modelo mental). */
 const SALIDA_HREF = '/';
 
+/** Checkout real de Hotmart por plan (Sesión 6, paso 7). */
+const HOTMART_CHECKOUT = {
+  anual: 'https://pay.hotmart.com/X107826598W?off=6eww7uzr',
+  mensual: 'https://pay.hotmart.com/X107826598W?off=xct0i8ba',
+} as const;
+
 export default function PaywallPage() {
   const [plan, setPlanState] = useState<'anual' | 'mensual'>('anual');
   const [respuestas, setRespuestas] = useState<Respuestas | null>(null);
-  const [estadoCta, setEstadoCta] = useState<EstadoCta>('inicial');
   const reduce = useReducedMotion();
 
   const setPlan = (p: 'anual' | 'mensual') => {
@@ -57,11 +61,6 @@ export default function PaywallPage() {
     if (planGuardado === 'anual' || planGuardado === 'mensual') setPlanState(planGuardado);
   }, []);
 
-  useEffect(() => {
-    if (estadoCta !== 'procesando') return;
-    const t = setTimeout(() => setEstadoCta('confirmado'), 1400);
-    return () => clearTimeout(t);
-  }, [estadoCta]);
 
   const precioMostrado = usePrecioAnimado(plan === 'anual' ? 4.17 : 6.99);
 
@@ -185,45 +184,9 @@ export default function PaywallPage() {
         </motion.div>
 
         <div className="mt-6 flex flex-col gap-3">
-          {estadoCta === 'confirmado' ? (
-            <motion.div
-              role="status"
-              aria-live="polite"
-              initial={{ opacity: 0, y: reduce ? 0 : 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center gap-2 rounded-[var(--radius-button)] bg-[var(--chip-bg)] px-4 py-4 text-center"
-            >
-              <p className="text-[15px] font-medium text-[var(--text-primary)]">
-                Vas a recibir un correo para confirmar tu prueba gratis.
-              </p>
-              <a href="mailto:soporte@foodscan.app" className="text-[14px] font-medium text-[var(--accent)] underline underline-offset-2">
-                ¿No llega? Escríbenos
-              </a>
-            </motion.div>
-          ) : estadoCta === 'error' ? (
-            <motion.div
-              role="alert"
-              aria-live="assertive"
-              initial={{ opacity: 0, y: reduce ? 0 : 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center gap-3 rounded-[var(--radius-button)] bg-[var(--surface-2)] px-4 py-4 text-center"
-            >
-              <p className="text-[15px] font-medium text-[var(--text-primary)]">
-                No pudimos activar tu prueba gratis. Puede ser tu conexión o algo de nuestro lado.
-              </p>
-              <button
-                type="button"
-                onClick={() => setEstadoCta('procesando')}
-                className="text-[14px] font-semibold text-[var(--accent)] underline underline-offset-2"
-              >
-                Reintentar
-              </button>
-            </motion.div>
-          ) : (
-            <CtaPrimario onClick={() => setEstadoCta('procesando')} loading={estadoCta === 'procesando'}>
-              {estadoCta === 'procesando' ? 'Activando tu pago seguro…' : 'Empezar mis 7 días gratis'}
-            </CtaPrimario>
-          )}
+          <CtaPrimario onClick={() => { window.location.href = HOTMART_CHECKOUT[plan]; }}>
+            Empezar mis 7 días gratis
+          </CtaPrimario>
           <p className="text-center text-[15px] text-[var(--text-secondary)]">
             Hoy no pagas nada · te avisamos antes del cobro · cancela en 1 tap
           </p>

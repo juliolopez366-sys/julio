@@ -70,7 +70,11 @@
       "mcp__2f5e9bb7-3b40-46c5-9ddc-e6dd50ebffc9__list_projects",
       "mcp__2f5e9bb7-3b40-46c5-9ddc-e6dd50ebffc9__create_git_project",
       "mcp__2f5e9bb7-3b40-46c5-9ddc-e6dd50ebffc9__get_project",
-      "mcp__2f5e9bb7-3b40-46c5-9ddc-e6dd50ebffc9__list_deployments"
+      "mcp__2f5e9bb7-3b40-46c5-9ddc-e6dd50ebffc9__list_deployments",
+      "mcp__2f5e9bb7-3b40-46c5-9ddc-e6dd50ebffc9__list_deployment_events",
+      "mcp__2f5e9bb7-3b40-46c5-9ddc-e6dd50ebffc9__create_deployment",
+      "mcp__2f5e9bb7-3b40-46c5-9ddc-e6dd50ebffc9__update_project",
+      "mcp__2f5e9bb7-3b40-46c5-9ddc-e6dd50ebffc9__list_project_domains"
     ]
   }
 }
