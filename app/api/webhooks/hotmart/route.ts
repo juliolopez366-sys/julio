@@ -64,11 +64,15 @@ export async function POST(request: NextRequest) {
     // elegido. Se implementa cuando el producto tenga más de un nivel de plan real;
     // por ahora el mensual/anual de FoodScan comparten el mismo acceso, así que no
     // hay nada que actualizar aún. Se responde 200 para que Hotmart no reintente.
+    await admin.from('webhook_log').insert({ event_id: eventId, tipo: evento, resultado: 'ignored' });
     return NextResponse.json({ received: true, ignored: evento });
   }
 
   const nuevoEstado = estadoParaEvento(evento);
   if (!nuevoEstado) {
+    // Se registra el nombre del evento (no es PII) para poder ver qué manda Hotmart de
+    // verdad — en particular el de inicio de prueba, que sigue siendo un placeholder.
+    await admin.from('webhook_log').insert({ event_id: eventId, tipo: evento, resultado: 'ignored' });
     return NextResponse.json({ received: true, ignored: evento }); // evento que no mapeamos, 200
   }
 

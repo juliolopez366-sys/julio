@@ -2,11 +2,17 @@
 
 ## Fase actual
 Sesión 6 (servicios externos) en curso. Paso 1/7 (GitHub) LISTO. Paso 2/7 (Supabase)
-LISTO: base de datos + auth real + gate de sesión. Paso 7/7 (Hotmart, el webhook)
-adelantado fuera de orden a pedido del usuario — ver bloque dedicado más abajo.
-Paso 5 (Resend) y paso 6 (dominio propio) siguen pendientes; el usuario eligió
-conectar Hotmart ya mismo y dejar Resend/dominio para después (el correo de acceso
-funciona igual, solo con la plantilla genérica de Supabase hasta que Resend exista).
+LISTO: base de datos + auth real + gate de sesión. Pasos 6/7 (dominio) y 7/7 (Hotmart,
+el webhook) adelantados fuera de orden a pedido del usuario — ver bloques dedicados
+más abajo. Solo paso 5 (Resend) sigue pendiente; el correo de acceso funciona igual,
+con la plantilla genérica de Supabase hasta que Resend exista.
+
+**Dominio propio LISTO:** el usuario compró `clubfoodscan.com` en Namecheap y quedó
+conectado a Vercel (A record `@` → `216.198.79.1`, CNAME `www` → el host que dio
+Vercel). `clubfoodscan.com` redirige automático a `https://www.clubfoodscan.com`
+(dominio de Production). Supabase Auth (Site URL + Redirect URLs) actualizado a este
+dominio — verificado por mí mismo: `/entrar` carga bien ahí. La dirección anterior
+(`foodscan-murex.vercel.app`) sigue funcionando como respaldo, no se tocó.
 
 Paso 3/7 (IA real) LISTO en código y en producción (claves ya configuradas por el
 usuario, tanto en `.env.local` como en Vercel): migración 0003 (ai_calls + bucket
