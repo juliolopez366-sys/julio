@@ -536,6 +536,10 @@ técnicas abajo).
   puede iniciar sesión en local. Probar en producción tras el deploy: subir una foto y
   verla en Hoy, Historial y el detalle. Pendiente aparte: borrar una comida no borra su
   archivo del bucket.
+- **Publicado (14-oct):** commits 0f85be7…0f8976f subidos a `master`; Vercel publicó en
+  ~40 s. Verificado en www.clubfoodscan.com: landing nueva, foto del hero y carrusel 200,
+  sin "MÁS POPULAR" ni "Reportes ilimitados". Falta que el usuario pruebe con su cuenta la
+  foto real en Hoy/Historial/detalle y la preselección del plan mensual.
 - **veredicto:onboarding / veredicto:paywall — caducados por fecha (14-oct):** no se
   re-revisaron. Cambios reales que los tocan: color de texto secundario #6B6B54 → #636349
   (tokens.css, global) y el onboarding guarda `?plan=` en sessionStorage para preseleccionar
