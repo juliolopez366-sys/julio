@@ -55,7 +55,24 @@
       "Bash(ffmpeg -v error -i docs/revisiones/landing-375.png -vf crop=375:2622:0:5400,scale=250:-1 -y __TRACKED_VAR__/p3.jpg)",
       "Bash(node __TRACKED_VAR__/shot375.mjs http://localhost:3100/ docs/revisiones/landing-375.png)",
       "Bash(ffmpeg -v error -i docs/revisiones/landing-375.png -vf crop=375:1400:0:2500,scale=250:-1 -y __TRACKED_VAR__/q.jpg)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(awk '$1==\"-\"')",
+      "Bash(git commit *)",
+      "Bash(git commit -q -m 'Actualizar el veredicto del revisor visual de la landing \\(33/40 · 16/20 · 18/20\\) *)",
+      "Bash(ffmpeg -v error -i frame-2.png -i frame-3.png -filter_complex \"[0]scale=260:-1[a];[1]scale=260:-1[b];[a][b]hstack\" -y fr23.jpg)",
+      "Bash(ffprobe -v error -show_entries stream=width,height -of csv=p=0 frame-2.png)",
+      "Bash(cp C:/Users/julio/AppData/Local/Temp/claude/C--Users-julio-Downloads-Claude-App1/d950b2da-02a1-4485-b957-b952a188f024/scratchpad/frame-1.png public/carrusel-1-onboarding.png)",
+      "Bash(cp C:/Users/julio/AppData/Local/Temp/claude/C--Users-julio-Downloads-Claude-App1/d950b2da-02a1-4485-b957-b952a188f024/scratchpad/frame-2.png public/carrusel-2-mecanismo.png)",
+      "Bash(cp C:/Users/julio/AppData/Local/Temp/claude/C--Users-julio-Downloads-Claude-App1/d950b2da-02a1-4485-b957-b952a188f024/scratchpad/frame-3.png public/carrusel-3-hoy.png)",
+      "Bash(sed -i \"s|nombrePantalla: 'Hoy', src: '/hero-mockup.png' }|nombrePantalla: 'Hoy', src: '/carrusel-3-hoy.png' }|\" app/page.tsx)",
+      "Bash(pkill -f \"http.server 4180\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3100/)",
+      "Bash(ffmpeg -v error -i docs/revisiones/landing-375.png -vf crop=375:2000:0:1000,scale=250:-1 -y __TRACKED_VAR__/r1.jpg)",
+      "Bash(ffmpeg -v error -i docs/revisiones/landing-375.png -vf crop=375:1300:0:3300,scale=250:-1 -y __TRACKED_VAR__/r2.jpg)",
+      "Bash(ffmpeg -v error -i docs/revisiones/landing-375.png -vf crop=375:330:0:60 -y __TRACKED_VAR__/h.jpg)",
+      "Bash(sed -i '42s/leading-tight \\\\[font-family/leading-tight text-[var\\(--text-primary\\)] [font-family/' components/landing/Garantia.tsx)",
+      "Bash(ffmpeg -v error -i docs/revisiones/landing-375.png -vf crop=375:420:0:5230 -y __TRACKED_VAR__/g.jpg)",
+      "Bash(ffmpeg -v error -i docs/revisiones/landing-375.png -vf crop=375:380:0:5620 -y C:/Users/julio/AppData/Local/Temp/claude/C--Users-julio-Downloads-Claude-App1/d950b2da-02a1-4485-b957-b952a188f024/scratchpad/g2.jpg)"
     ]
   },
   "hooks": {

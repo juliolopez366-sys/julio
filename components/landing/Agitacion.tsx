@@ -6,10 +6,12 @@
 // líneas; warn a las 18 palabras). El NÚMERO del costo va en [b]/[acento] desde
 // el copy marcado (es el dato héroe de la sección). MISMO fondo elevado que §2
 // (un solo movimiento visual, sin separador). Cero decoración de miedo.
+// Texto corrido sin tarjetas ni íconos: el peso lo pone el copy, la última frase
+// (la salida) va más fuerte.
 
 import { motion } from 'motion/react';
 import type { LucideIcon } from 'lucide-react';
-import { IconChip, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
+import { SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
 import { MarkedCopy, warnCopy, warnRango } from './MarkedCopy';
 
 export interface FraseAgitacion {
@@ -46,39 +48,27 @@ export function Agitacion({ frases, contraste, id }: AgitacionProps) {
         viewport={VIEWPORT_ONCE}
         className="mx-auto max-w-[620px]"
       >
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3 pt-4">
           {frases.map((f, i) => (
-            <motion.div
+            <motion.p
               key={i}
               variants={item}
-              className="flex items-start gap-4 rounded-[var(--radius-card)] bg-[var(--bg)] p-4 shadow-[var(--shadow-1)]"
+              className={`text-pretty leading-relaxed ${
+                i === frases.length - 1
+                  ? 'text-lg font-medium text-[var(--text-primary)]'
+                  : 'text-base text-[var(--text-secondary)]'
+              }`}
             >
-              <IconChip icon={f.icon} tone="muted" />
-              <p className="pt-2 text-[16px] leading-snug text-[var(--text-secondary)]">
-                <MarkedCopy text={f.textoMarked} />
-              </p>
-            </motion.div>
+              <MarkedCopy text={f.textoMarked} />
+            </motion.p>
           ))}
         </div>
 
         {contraste && (
-          <>
-            <motion.div variants={item} className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className="rounded-[var(--radius-card)] bg-[var(--bg)] p-5">
-              <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text-tertiary)]">
-                {contraste.labelHoy}
-              </p>
-              <p className="mt-2 text-[15px] leading-snug text-[var(--text-primary)]">{contraste.hoy}</p>
-            </div>
-            {/* "si nada cambia": más apagado/frío — el peso lo pone el copy, no el rojo */}
-            <div className="rounded-[var(--radius-card)] bg-[var(--surface-2)] p-5">
-              <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text-tertiary)]">
-                {contraste.labelFuturo}
-              </p>
-              <p className="mt-2 text-[15px] leading-snug text-[var(--text-secondary)]">{contraste.futuro}</p>
-            </div>
-            </motion.div>
-          </>
+          <motion.p variants={item} className="mt-6 text-base leading-relaxed text-[var(--text-secondary)]">
+            <b className="font-semibold text-[var(--text-primary)]">{contraste.labelHoy}:</b> {contraste.hoy}{' '}
+            <b className="font-semibold text-[var(--text-primary)]">{contraste.labelFuturo}:</b> {contraste.futuro}
+          </motion.p>
         )}
       </motion.div>
     </SectionShell>

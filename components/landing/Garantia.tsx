@@ -9,11 +9,11 @@
 
 import { motion } from 'motion/react';
 import { Lock } from 'lucide-react';
-import { Accent, Hairline, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
+import { Hairline, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
 import { MarkedCopy, warnCopy } from './MarkedCopy';
 
 export interface GarantiaProps {
-  /** Nombre PROPIO ("la Garantía del Primer Día Claro") — se pinta en acento. */
+  /** Nombre PROPIO, copy MARCADO ("Garantía del [acento]Primer Patrón[/acento]"). */
   nombre: string;
   /** Copy MARCADO de la condición — máx 3 líneas (~30 palabras, warn). */
   condicionMarked: string;
@@ -37,10 +37,10 @@ export function Garantia({ nombre, condicionMarked, pisoLegal, id }: GarantiaPro
       >
         <motion.div variants={item}>
           {/* La card de garantía: uno de los 1-3 usos de hairline permitidos por vista */}
-          <Hairline surface="surface" className="shadow-[var(--shadow-1)]">
+          <Hairline surface="bg" className="shadow-[var(--shadow-1)]">
             <div className="flex flex-col items-center gap-4 px-6 py-10 text-center">
-              <h2 className="text-balance text-[26px] font-bold leading-tight [font-family:var(--font-display)] md:text-[32px]">
-                <Accent>{nombre}</Accent>
+              <h2 className="text-balance text-[26px] font-bold leading-tight text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[32px]">
+                <MarkedCopy text={nombre} />
               </h2>
               <p className="max-w-[44ch] text-[15px] leading-[1.6] text-[var(--text-secondary)]">
                 <MarkedCopy text={condicionMarked} />

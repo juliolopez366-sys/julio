@@ -7,7 +7,7 @@
 
 ## 1. Hero
 - h1Marked: `Encuentra tu [acento]detonante real[/acento] en días, no en años`
-- subtitleMarked: `Solo tomas la foto. Cruzamos cada síntoma con tus [b]últimas 48 horas[/b] de comidas.` (48 h es la ventana que revisa el Motor, no el tiempo hasta ver un patrón)
+- subtitleMarked: `Solo fotos: el [b]Motor de Detonante Real[/b] cruza cada síntoma con 48 horas previas.` (14 palabras, tope del kit) (48 h es la ventana que revisa el Motor, no el tiempo hasta ver un patrón)
 - ctaLabel: `Encontrar mi detonante gratis`
 - socialProof: `7 días gratis · cancela cuando quieras`
 - visual: `<DemoAnalisis />` — foto de tacos con salsa cremosa (`public/hero-tacos*.webp`, generada con IA) + el análisis tal como lo devuelve `/api/analizar-comida`: «Así se ve un análisis» · `Tacos de pollo con salsa cremosa` · ingredientes · `Riesgo alto` por `ajo y cebolla` · `La salsa no dice «ajo». La IA lo marca igual: prefiere avisarte de más que dejarte a ciegas.` · `Orientación de IA, no un diagnóstico` (→ /aviso-ia)
@@ -16,22 +16,22 @@
 - titulo: `¿Te suena?`
 - preguntas (icon Lucide · textoMarked):
   1. AlertCircle · `¿Te hinchas de la nada sin saber qué lo causó?`
-  2. Clock · `¿Cancelas planes por miedo a no llegar a un baño?`
+  2. Clock · `¿Cancelas planes por la [b]ansiedad del baño[/b]?`
   3. XCircle · `¿Ya probaste apps de registro y las abandonaste enseguida?`
-  4. UtensilsCrossed · `¿Sientes que comer se volvió un experimento agotador?`
+  4. UtensilsCrossed · `¿Sientes que cada comida es [b]hacer tarea[/b]?`
+- Render: lista tipográfica con línea fina entre filas, sin tarjetas (antes eran 9 tarjetas iguales con Agitación).
 
 ## 3. Agitación
 - frases:
   1. `Cada mes sigues sin saber qué alimento te ataca, aunque comas "con cuidado".`
   2. `En un año, seguirás en el mismo punto: [acento]meses de datos que nadie sabe usar[/acento].`
-  3. `Otra app de registro manual no lo arregla: [b]más tecleo no es más respuesta[/b].`
-- contraste: labelHoy `Hoy` · hoy `Comidas "seguras" que ya no lo son, y ningún patrón claro.`
-  · labelFuturo `En 6 meses, si nada cambia` · futuro `Seguirás adivinando y cancelando planes por miedo.`
+  3. `Otra app de registro manual no lo arregla: más tecleo no es más respuesta. Necesitas [b]datos reales, no adivinanzas[/b].`
+- Render: texto corrido sin tarjetas; la última frase más fuerte. Contraste "Hoy / En 6 meses" eliminado.
 
 ## 4. Solución
 - tituloMarked: `Tu patrón, [acento]resuelto en días[/acento]`
 - mecanismo: `el Motor de Detonante Real`
-- bigIdeaMarked: `No te faltan datos: te falta quien los cruce. El Motor de Detonante Real conecta cada síntoma con lo que comiste en las [b]últimas 48 horas[/b].`
+- bigIdeaMarked: `No te faltan datos: te falta quien los cruce. Cada síntoma, contra tus [b]últimas 48 horas[/b] de comidas.`
 - pasos (exactamente 3):
   1. Toma la foto · `Fotografías tu plato — la IA identifica los ingredientes de riesgo al instante.`
   2. Registra el síntoma · `Un toque cuando algo te ataca: tipo y hora, sin formularios largos.`
@@ -44,9 +44,10 @@
 ## 5. La app por dentro
 - tituloMarked: `Tu próxima comida, [acento]sin miedo[/acento]`
 - frames (con captura real, recortada de vista-previa-app.html — FICHA-ARTE.md):
-  1. `Así empiezas` · Bienvenida (/carrusel-1-onboarding.png)
-  2. `Fotografías tu plato` · La IA analiza (/carrusel-2-mecanismo.png)
-  3. `Tu día de un vistazo` · Hoy (/hero-mockup.png)
+  1. `Así empiezas` · Bienvenida (/carrusel-1-onboarding.webp)
+  2. `Fotografías tu plato` · La IA analiza (/carrusel-2-mecanismo.webp — con la foto de tacos)
+  3. `El riesgo de tu comida, antes de comer` · Hoy (/carrusel-3-hoy.webp — con la foto de tacos)
+  (capturas 2x de vista-previa-app.html; la app real hoy aún muestra un degradado en vez de la foto, ver ESTADO.md)
   (se quitó el frame de Planes: la captura mostraba $4.99, un precio que no existe)
 - ctaLabel: `Encontrar mi detonante gratis`
 
@@ -64,7 +65,7 @@
 - notaPago: `Pago seguro con Hotmart · no se cobra nada durante los 7 días de prueba`
 
 ## 7. Garantía
-- nombre: `Garantía del Primer Patrón`
+- nombre: `Garantía del [acento]Primer Patrón[/acento]`
 - condicionMarked: `Si en 7 días no ves un patrón más claro sobre tu detonante, escribes un correo y te devolvemos todo. Sin preguntas.`
 - pisoLegal: `Además, Hotmart te respalda con 15 días de garantía desde tu compra` (15 días = lo configurado en Hotmart, FICHA-MERCADO)
 
@@ -80,7 +81,7 @@
 - futurePacingMarked: `Imagina aceptar una cena sin pánico, tomar la foto, y saber en segundos si es segura para ti.`
 - ctaLabel: `Encontrar mi detonante gratis`
 - recap: `Garantía del Primer Patrón · 7 días gratis`
-- psMarked: `PS: cruzamos cada síntoma con lo que comiste en las últimas 48 horas para encontrar tu detonante real — no otra lista de alimentos "seguros" que dejan de serlo. Hoy entras con 7 días gratis y la Garantía del Primer Patrón.`
+- psMarked: `PS: no es otra lista de alimentos «seguros». Es tu detonante real, con datos tuyos. Entras con 7 días gratis.`
 
 ## 10. Footer legal
 - appName: `FoodScan`

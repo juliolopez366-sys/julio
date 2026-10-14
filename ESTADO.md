@@ -519,6 +519,23 @@ técnicas abajo).
     quedaron igual — era P2, fuera del alcance elegido.
 
 ## Problemas conocidos
+- **veredicto:landing — LISTA (14-oct, 3ª pasada): 36/40 · 17/20 · 18/20**, justo en el
+  mínimo de usabilidad. Rondas: 31→33→36. Se corrigieron Problema+Agitación (lista
+  tipográfica + texto corrido, sin las 9 tarjetas), Big Idea y PS recortados, frames del
+  carrusel recapturados a 2x en WebP con la foto de tacos, mecanismo nombrado en el hero y
+  acento en itálica dentro de títulos. Después del veredicto se aplicaron 2 ajustes
+  cosméticos que el propio revisor pidió (acento solo en "Primer Patrón" y tarjeta de
+  garantía sobre --bg) sin nueva pasada.
+  ⚠️ **CONDICIÓN PARA PUBLICAR (defecto 1 del revisor):** el frame 3 del carrusel
+  (`carrusel-3-hoy.webp`) muestra Hoy con la foto de la comida, pero la app real todavía
+  pinta un degradado (`components/app/foto-comida.tsx` no usa la foto guardada en Storage).
+  Antes del push: o la app muestra la foto real (URL firmada del bucket privado), o el
+  frame vuelve a la captura del estado real. Commits sin push.
+- **veredicto:onboarding / veredicto:paywall — caducados por fecha (14-oct):** no se
+  re-revisaron. Cambios reales que los tocan: color de texto secundario #6B6B54 → #636349
+  (tokens.css, global) y el onboarding guarda `?plan=` en sessionStorage para preseleccionar
+  el plan del paywall (sin cambio visual). La restauración de archivos del 14-oct también
+  refrescó todas las fechas. Re-lanzar el revisor-visual en ambas antes del próximo deploy.
 - **veredicto:landing / veredicto:onboarding / veredicto:paywall** — el hook de
   cierre marca estos 3 veredictos como "caducados" cuando detecta archivos .tsx MÁS
   NUEVOS en el repo que pertenecen a OTRAS pantallas (ej. las de la app interna,

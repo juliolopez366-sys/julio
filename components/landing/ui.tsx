@@ -11,9 +11,11 @@ import { AnimatePresence, motion, useReducedMotion, type Variants } from 'motion
 import { Check } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
-/* ── <Accent> — la palabra que vende, en el acento del kit ─────────────────── */
+/* ── <Accent> — la palabra que vende, en el acento del kit. Dentro de títulos va
+   además en itálica de Fraunces: el verde solo apenas se distingue del texto casi
+   negro (≈1.9:1 entre ambos), la itálica marca la diferencia sin otro color. ── */
 export function Accent({ children }: { children: ReactNode }) {
-  return <span className="text-[var(--accent)]">{children}</span>;
+  return <span className="text-[var(--accent)] [h1_&]:italic [h2_&]:italic">{children}</span>;
 }
 
 /* ── <Kicker> — caps 12px/600 tracking +0.08em en acento (máx 1 por sección) ── */

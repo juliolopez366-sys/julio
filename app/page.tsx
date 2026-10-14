@@ -32,7 +32,7 @@ export default function LandingFoodScan() {
         logo={LOGO}
         loginHref="/entrar"
         h1Marked="Encuentra tu [acento]detonante real[/acento] en días, no en años"
-        subtitleMarked="Solo tomas la foto. Cruzamos cada síntoma con tus [b]últimas 48 horas[/b] de comidas."
+        subtitleMarked="Solo fotos: el [b]Motor de Detonante Real[/b] cruza cada síntoma con 48 horas previas."
         ctaLabel={CTA_LABEL}
         ctaHref={CTA_HREF}
         socialProof={<span>7 días gratis · cancela cuando quieras</span>}
@@ -57,19 +57,13 @@ export default function LandingFoodScan() {
           { icon: TrendingDown, textoMarked: 'En un año, seguirás en el mismo punto: [acento]meses de datos que nadie sabe usar[/acento].' },
           { icon: Repeat, textoMarked: 'Otra app de registro manual no lo arregla: más tecleo no es más respuesta. Necesitas [b]datos reales, no adivinanzas[/b].' },
         ]}
-        contraste={{
-          labelHoy: 'Hoy',
-          hoy: 'Comidas "seguras" que ya no lo son, y ningún patrón claro.',
-          labelFuturo: 'En 6 meses, si nada cambia',
-          futuro: 'Seguirás adivinando y cancelando planes por miedo.',
-        }}
       />
 
       {/* 4. SOLUCIÓN */}
       <Solucion
         tituloMarked="Tu patrón, [acento]resuelto en días[/acento]"
         mecanismo="el Motor de Detonante Real"
-        bigIdeaMarked="No te faltan datos: te falta quien los cruce. El Motor de Detonante Real conecta cada síntoma con lo que comiste en las [b]últimas 48 horas[/b]."
+        bigIdeaMarked="No te faltan datos: te falta quien los cruce. Cada síntoma, contra tus [b]últimas 48 horas[/b] de comidas."
         pasos={[
           { titulo: 'Toma la foto', detalle: 'Fotografías tu plato — la IA identifica los ingredientes de riesgo al instante.' },
           { titulo: 'Registra el síntoma', detalle: 'Un toque cuando algo te ataca: tipo y hora, sin formularios largos.' },
@@ -82,9 +76,9 @@ export default function LandingFoodScan() {
       <AppPorDentro
         tituloMarked="Tu próxima comida, [acento]sin miedo[/acento]"
         frames={[
-          { label: 'Así empiezas', nombrePantalla: 'Bienvenida', src: '/carrusel-1-onboarding.png' },
-          { label: 'Fotografías tu plato', nombrePantalla: 'La IA analiza', src: '/carrusel-2-mecanismo.png' },
-          { label: 'El riesgo de tu comida, antes de comer', nombrePantalla: 'Hoy', src: '/hero-mockup.png' },
+          { label: 'Así empiezas', nombrePantalla: 'Bienvenida', src: '/carrusel-1-onboarding.webp' },
+          { label: 'Fotografías tu plato', nombrePantalla: 'La IA analiza', src: '/carrusel-2-mecanismo.webp' },
+          { label: 'El riesgo de tu comida, antes de comer', nombrePantalla: 'Hoy', src: '/carrusel-3-hoy.webp' },
         ]}
         ctaLabel={CTA_LABEL}
         ctaHref={CTA_HREF}
@@ -128,7 +122,7 @@ export default function LandingFoodScan() {
 
       {/* 7. GARANTÍA */}
       <Garantia
-        nombre="Garantía del Primer Patrón"
+        nombre="Garantía del [acento]Primer Patrón[/acento]"
         condicionMarked="Si en 7 días no ves un patrón más claro sobre tu detonante, escribes un correo y te devolvemos todo. Sin preguntas."
         pisoLegal="Además, Hotmart te respalda con 15 días de garantía desde tu compra"
       />
@@ -171,7 +165,7 @@ export default function LandingFoodScan() {
         ctaLabel={CTA_LABEL}
         ctaHref={CTA_HREF}
         recap="Garantía del Primer Patrón · 7 días gratis"
-        psMarked="PS: cruzamos cada síntoma con lo que comiste en las últimas 48 horas para encontrar tu detonante real — no otra lista de alimentos «seguros» que dejan de serlo. Hoy entras con 7 días gratis y la Garantía del Primer Patrón."
+        psMarked="PS: no es otra lista de alimentos «seguros». Es tu detonante real, con datos tuyos. Entras con 7 días gratis."
       />
 
       {/* 10. FOOTER LEGAL */}

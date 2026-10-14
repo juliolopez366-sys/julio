@@ -1,14 +1,15 @@
 'use client';
 
 // KIT DE LANDING — §2 PROBLEMA (blueprint: 55 §2)
-// 3-5 PREGUNTAS que hacen asentir, apiladas — NUNCA párrafo corrido. Cada una con
-// su ícono de dolor SVG en IconChip tone="muted" (neutro apagado: los checks son
-// de la solución, no del problema). Máx 12 palabras por card (warn). Fondo
-// ELEVADO: abre el bloque problema+agitación (un solo movimiento visual, T1).
+// 3-5 PREGUNTAS que hacen asentir, apiladas — NUNCA párrafo corrido. Lista
+// tipográfica (filas separadas por una línea fina), NO tarjetas: con agitación
+// debajo, 9 tarjetas iguales eran una pared. Ícono de dolor pequeño y apagado.
+// Máx 12 palabras por pregunta (warn). Fondo ELEVADO: abre el bloque
+// problema+agitación (un solo movimiento visual, T1).
 
 import { motion } from 'motion/react';
 import type { LucideIcon } from 'lucide-react';
-import { IconChip, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
+import { SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
 import { MarkedCopy, warnCopy, warnRango } from './MarkedCopy';
 
 export interface PreguntaProblema {
@@ -48,19 +49,18 @@ export function Problema({ titulo, preguntas, id }: ProblemaProps) {
             {titulo}
           </motion.h2>
         )}
-        <ul className="flex flex-col gap-4">
-          {preguntas.map((p, i) => (
-            <motion.li
-              key={i}
-              variants={item}
-              className="flex items-start gap-4 rounded-[var(--radius-card)] bg-[var(--bg)] p-4 shadow-[var(--shadow-1)]"
-            >
-              <IconChip icon={p.icon} tone="muted" />
-              <p className="pt-2 text-[17px] font-medium leading-snug text-[var(--text-primary)]">
-                <MarkedCopy text={p.textoMarked} />
-              </p>
-            </motion.li>
-          ))}
+        <ul className="flex flex-col divide-y divide-[color-mix(in_oklab,var(--text-tertiary)_22%,transparent)]">
+          {preguntas.map((p, i) => {
+            const Icono = p.icon;
+            return (
+              <motion.li key={i} variants={item} className="flex items-start gap-4 py-4">
+                <Icono size={20} strokeWidth={2} aria-hidden="true" className="mt-0.5 shrink-0 text-[var(--text-secondary)]" />
+                <p className="text-lg font-medium leading-snug text-[var(--text-primary)]">
+                  <MarkedCopy text={p.textoMarked} />
+                </p>
+              </motion.li>
+            );
+          })}
         </ul>
       </motion.div>
     </SectionShell>
