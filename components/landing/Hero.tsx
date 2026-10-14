@@ -3,11 +3,11 @@
 // KIT DE LANDING — §1 HERO (blueprint: 55 §1)
 // Reglas embebidas: H1 bold completo con acento vía copy marcado · subtítulo con
 // tope duro de 14 palabras (warn + truncado) · CTA vivo ≥52px con sombra tintada ·
-// franja de prueba social como slot (SOLO datos reales — 19 §1) · mesh sutil de
-// fondo YA incluido · carga inmediata (fade simple, nada que compita con el LCP).
+// franja de prueba social como slot (SOLO datos reales — 19 §1) · fondo plano
+// (FICHA-ARTE: sin degradados) · 2 columnas en desktop (copy | visual) · carga
+// inmediata: visible desde el primer pixel (nada que retrase el LCP).
 
 import type { ReactNode } from 'react';
-import { motion } from 'motion/react';
 import { Camera } from 'lucide-react';
 import { CtaButton } from './ui';
 import { MarkedCopy, truncarMarcado, warnCopy } from './MarkedCopy';
@@ -55,17 +55,6 @@ export function Hero({
 
   return (
     <section id={id} className="relative overflow-hidden">
-      {/* Fondo con profundidad: mesh/radial sutil del acento — nunca fill plano */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            'radial-gradient(900px 480px at 50% -10%, color-mix(in oklab, var(--accent) 8%, transparent) 0%, transparent 60%), ' +
-            'radial-gradient(640px 420px at 100% 0%, color-mix(in oklab, var(--accent-2) 6%, transparent) 0%, transparent 55%)',
-        }}
-      />
-
       <div className="mx-auto w-full max-w-[1140px] px-5">
         {/* Header 64px: marca a la izquierda, SOLO "Entrar" terciario a la derecha (19) */}
         <header className="flex h-16 items-center justify-between">
@@ -80,55 +69,38 @@ export function Hero({
           )}
         </header>
 
-        {/* Carga inmediata: fade simple 300ms — el LCP manda (55 T4) */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          className="mx-auto flex max-w-[820px] flex-col items-center pt-10 text-center md:pt-16"
+        {/* Mobile: copy centrado y el visual debajo. Desktop: copy a la izquierda,
+            visual a la derecha, todo en el primer viewport. Sin fade: el LCP manda. */}
+        <div
+          className="grid grid-cols-1 items-center gap-10 pb-16 pt-8 md:grid-cols-[minmax(0,1fr)_minmax(0,25rem)] md:gap-16 md:pb-24 md:pt-12"
         >
-          {/* H1: bold completo por defecto; el acento lo pone el [acento] del copy */}
-          <h1 className="text-balance text-[40px] font-bold leading-[1.08] tracking-[-0.01em] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[60px]">
-            <MarkedCopy text={h1Marked} />
-          </h1>
+          <div className="flex flex-col items-center text-center md:items-start md:text-left">
+            {/* H1: bold completo por defecto; el acento lo pone el [acento] del copy */}
+            <h1 className="text-balance text-[40px] font-bold leading-[1.08] tracking-[-0.01em] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[56px]">
+              <MarkedCopy text={h1Marked} />
+            </h1>
 
-          <p className="mt-4 max-w-[560px] text-[17px] leading-relaxed text-[var(--text-secondary)] md:text-[18px]">
-            <MarkedCopy text={subtitulo} />
-          </p>
+            <p className="mt-4 max-w-[34ch] text-[17px] leading-relaxed text-[var(--text-secondary)] md:text-[19px]">
+              <MarkedCopy text={subtitulo} />
+            </p>
 
-          <div className="mt-6 w-full sm:w-auto">
-            <CtaButton href={ctaHref}>{ctaLabel}</CtaButton>
+            <div className="mt-8 w-full sm:w-auto">
+              <CtaButton href={ctaHref}>{ctaLabel}</CtaButton>
+            </div>
+
+            {/* Franja de prueba social: 8-12px bajo el CTA — SOLO números reales */}
+            {socialProof && (
+              <div className="mt-3 text-[13px] text-[var(--text-secondary)]">{socialProof}</div>
+            )}
           </div>
 
-          {/* Franja de prueba social: 8-12px bajo el CTA — SOLO números reales */}
-          {socialProof && (
-            <div className="mt-3 text-[13px] text-[var(--text-secondary)]">{socialProof}</div>
-          )}
-
-          {/* Visual del producto: asoma en el primer viewport e invita al scroll */}
-          <div className="mt-10 w-full max-w-[720px]">
-            {visual ? (
-              <div className="overflow-hidden rounded-[var(--radius-card)] border border-[color-mix(in_oklab,var(--accent)_18%,transparent)] shadow-[var(--shadow-2)]">
-                {visual}
-              </div>
-            ) : (
+          {/* Visual del producto: el propio componente trae su tarjeta (sin marco doble) */}
+          <div className="w-full">
+            {visual ?? (
               /* Placeholder HONESTO (55 §1.3): dashed + ratio fijo (CLS 0) + sugerencia.
-                 Lleva el dispositivo ownable de FICHA-ARTE.md (la curva "mordisco") para
-                 que la identidad no dependa solo de la paleta papel+tinta verde.
                  Queda anotado como pendiente en ESTADO.md hasta montar el visual real. */
-              <div className="relative flex aspect-[4/3] w-full flex-col items-center justify-end overflow-hidden rounded-[var(--radius-card)] border-2 border-dashed border-[color-mix(in_oklab,var(--text-tertiary)_45%,transparent)] bg-[linear-gradient(160deg,color-mix(in_oklab,var(--accent)_85%,transparent),var(--accent)_70%)]">
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 400 34"
-                  preserveAspectRatio="none"
-                  className="absolute inset-x-0 bottom-[22%] h-[24px] w-full"
-                >
-                  <path
-                    d="M0,0 L150,0 C172,0 178,34 200,34 C222,34 228,0 250,0 L400,0 L400,34 L0,34 Z"
-                    fill="var(--surface)"
-                  />
-                </svg>
-                <div className="relative z-10 flex w-full flex-col items-center gap-3 bg-[var(--surface)] px-8 pb-6 pt-4 [border-radius:0_0_var(--radius-card)_var(--radius-card)]">
+              <div className="relative flex aspect-[4/3] w-full flex-col items-center justify-end overflow-hidden rounded-[var(--radius-card)] border-2 border-dashed border-[color-mix(in_oklab,var(--text-tertiary)_45%,transparent)] bg-[var(--surface)]">
+                <div className="relative z-10 flex w-full flex-col items-center gap-3 px-8 pb-6 pt-4">
                   <Camera size={20} color="var(--text-secondary)" aria-hidden="true" />
                   <p className="max-w-[36ch] text-center text-[14px] font-medium leading-snug text-[var(--text-secondary)]">
                     Sugerencia: {visualPlaceholderSugerencia}
@@ -137,7 +109,7 @@ export function Hero({
               </div>
             )}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

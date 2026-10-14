@@ -12,3 +12,6 @@ build/
 
 # Vercel
 .vercel
+
+# Binario de Impeccable (se descarga solo en el primer uso)
+.claude/skills/impeccable/scripts/bin/

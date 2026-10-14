@@ -1,11 +1,11 @@
 'use client';
 
 // KIT DE LANDING — §9 CTA FINAL EMOCIONAL + PS (blueprint: 55 §9)
-// El bloque de MÁXIMO contraste de la página: fondo INVERTIDO (usa
-// --text-primary como fondo y --bg como texto), sin nav ni distracciones.
+// El bloque de MÁXIMO contraste de la página: bloque verde bosque (--accent)
+// con texto crema (--bg) — el mismo dúo de FICHA-ARTE, sin degradados.
 // H2 emocional ≤8 palabras (warn) · future pacing 1-2 líneas en presente y 2ª
 // persona · CTA ≥56px con el MISMO verbo del hero (42) · recap riesgo/urgencia
-// SOLO con datos reales · PS estilo carta (borde izquierdo en acento) — el
+// SOLO con datos reales · PS estilo carta (itálica, sin borde de color) — el
 // segundo texto más leído de la página (19 §9). Nada se interpone entre el PS
 // y el footer.
 
@@ -48,18 +48,8 @@ export function CtaFinal({
       id={id}
       aria-label="Empieza hoy"
       className="relative overflow-hidden py-20 md:py-24"
-      style={{ background: 'var(--text-primary)' }}
+      style={{ background: 'var(--accent)' }}
     >
-      {/* Profundidad también en el bloque invertido: radial sutil del acento */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(720px 420px at 50% 0%, color-mix(in oklab, var(--accent) 16%, transparent) 0%, transparent 60%)',
-        }}
-      />
-
       <motion.div
         variants={contenedor}
         initial="hidden"
@@ -67,7 +57,7 @@ export function CtaFinal({
         viewport={VIEWPORT_ONCE}
         className="relative mx-auto flex max-w-[680px] flex-col items-center px-5 text-center"
       >
-        {/* Dispositivo ownable "mordisco" (FICHA-ARTE.md), en --bg sobre el fondo invertido */}
+        {/* Dispositivo ownable "mordisco" (FICHA-ARTE.md): su único eco fuera del Hero, en crema sobre el verde */}
         <motion.svg variants={item} aria-hidden="true" viewBox="0 0 56 14" className="mb-4 h-[12px] w-[44px]">
           <path
             d="M0,0 L18,0 C21,0 22,14 28,14 C34,14 35,0 38,0 L56,0"
@@ -79,8 +69,9 @@ export function CtaFinal({
         </motion.svg>
         <motion.h2
           variants={item}
-          className="text-balance text-[32px] font-bold leading-[1.15] [font-family:var(--font-display)] md:text-[44px]"
-          style={{ color: 'var(--bg)' }}
+          className="text-balance text-[32px] font-bold leading-[1.15] [font-family:var(--font-display)] md:text-[44px] [&_span]:italic"
+          // La palabra [acento] va en itálica y crema hundido sobre el verde (nunca verde sobre verde)
+          style={{ color: 'var(--bg)', ['--accent' as string]: 'var(--surface-2)' }}
         >
           <MarkedCopy text={h2Marked} />
         </motion.h2>
@@ -88,14 +79,14 @@ export function CtaFinal({
         <motion.p
           variants={item}
           className="mt-4 max-w-[520px] text-[17px] leading-relaxed"
-          style={{ color: 'color-mix(in oklab, var(--bg) 78%, transparent)' }}
+          style={{ color: 'color-mix(in oklab, var(--bg) 88%, transparent)' }}
         >
           <MarkedCopy text={futurePacingMarked} />
         </motion.p>
 
         <motion.div variants={item} className="mt-8 w-full sm:w-auto">
-          {/* Acento pleno sobre fondo invertido = el máximo contraste de la página */}
-          <CtaButton href={ctaHref} alto={56}>
+          {/* Crema sobre verde = el máximo contraste de la página */}
+          <CtaButton href={ctaHref} alto={56} tono="invertido">
             {ctaLabel}
           </CtaButton>
         </motion.div>
@@ -104,7 +95,7 @@ export function CtaFinal({
           <motion.p
             variants={item}
             className="mt-3 text-[13px]"
-            style={{ color: 'color-mix(in oklab, var(--bg) 65%, transparent)' }}
+            style={{ color: 'color-mix(in oklab, var(--bg) 82%, transparent)' }}
           >
             {recap}
           </motion.p>
@@ -113,11 +104,8 @@ export function CtaFinal({
         {psMarked !== undefined && (
           <motion.p
             variants={item}
-            className="mt-10 max-w-[520px] border-l-2 pl-4 text-left text-[15px] italic leading-[1.6]"
-            style={{
-              borderColor: 'var(--accent)',
-              color: 'color-mix(in oklab, var(--bg) 80%, transparent)',
-            }}
+            className="mt-10 max-w-[520px] text-left text-[15px] italic leading-[1.6]"
+            style={{ color: 'color-mix(in oklab, var(--bg) 88%, transparent)' }}
           >
             <MarkedCopy text={psMarked} />
           </motion.p>

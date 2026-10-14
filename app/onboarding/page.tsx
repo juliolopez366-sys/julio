@@ -39,6 +39,13 @@ export default function OnboardingPage() {
   // Progreso con ENDOWED PROGRESS: arranca en 8%, nunca en 0 (A2 del 50).
   const progreso = Math.round(8 + (paso / PASOS_TOTALES) * 92);
 
+  // El plan elegido en la landing (?plan=anual|mensual) llega preseleccionado al paywall,
+  // que lee 'foodscan_plan' de sessionStorage.
+  useEffect(() => {
+    const plan = new URLSearchParams(window.location.search).get('plan');
+    if (plan === 'anual' || plan === 'mensual') sessionStorage.setItem('foodscan_plan', plan);
+  }, []);
+
   useEffect(() => {
     if (paso === PASOS_TOTALES) {
       sessionStorage.setItem('foodscan_onboarding', JSON.stringify(respuestas));

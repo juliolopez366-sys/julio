@@ -1,14 +1,15 @@
 'use client';
 
 // KIT DE LANDING — §4 SOLUCIÓN (blueprint: 55 §4)
-// Vuelve al fondo BASE (el alivio también es visual). Kicker + título + el
-// MECANISMO BAUTIZADO en su chip con <Accent> y hairline (uno de los 1-3 usos
-// permitidos por vista) + Big Idea + EXACTAMENTE 3 pasos con number chip 44px
-// (tupla en el tipo: ni 2 ni 4) + antes/después opcional. Pasos entran
+// Vuelve al fondo BASE (el alivio también es visual). Título + el MECANISMO
+// BAUTIZADO en su chip con <Accent> y hairline + Big Idea + el mecanismo
+// MOSTRADO (slot `visual`) + EXACTAMENTE 3 pasos con number chip 44px (tupla en
+// el tipo: ni 2 ni 4). Sin kicker: el título carga su propio peso. Pasos entran
 // escalonados (whileInView + stagger, reduced-motion respetado).
 
+import type { ReactNode } from 'react';
 import { motion } from 'motion/react';
-import { Accent, Hairline, Kicker, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
+import { Accent, Hairline, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
 import { MarkedCopy, warnCopy } from './MarkedCopy';
 
 export interface PasoMecanismo {
@@ -19,8 +20,6 @@ export interface PasoMecanismo {
 }
 
 export interface SolucionProps {
-  /** Kicker en acento — default "EL MECANISMO". */
-  kicker?: string;
   /** Copy MARCADO del título de sección (máx 8 palabras). */
   tituloMarked: string;
   /** Nombre PROPIO del mecanismo bautizado (19) — se pinta en el chip con <Accent>. */
@@ -29,23 +28,17 @@ export interface SolucionProps {
   bigIdeaMarked: string;
   /** Los 3 pasos del mecanismo — la tupla obliga a que sean exactamente 3. */
   pasos: [PasoMecanismo, PasoMecanismo, PasoMecanismo];
-  /** Antes/después opcional: split 2 columnas, el "después" con acento sutil. */
-  antesDespues?: {
-    labelAntes: string;
-    antes: string;
-    labelDespues: string;
-    despues: string;
-  };
+  /** El mecanismo MOSTRADO (ej. <Cruce48h />) — va entre la Big Idea y los pasos. */
+  visual?: ReactNode;
   id?: string;
 }
 
 export function Solucion({
-  kicker = 'EL MECANISMO',
   tituloMarked,
   mecanismo,
   bigIdeaMarked,
   pasos,
-  antesDespues,
+  visual,
   id,
 }: SolucionProps) {
   warnCopy('Solución → título', tituloMarked, 8);
@@ -63,7 +56,6 @@ export function Solucion({
         className="mx-auto max-w-[780px]"
       >
         <motion.div variants={item}>
-          <Kicker>{kicker}</Kicker>
           <h2 className="text-balance text-[26px] font-bold leading-[1.15] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[32px]">
             <MarkedCopy text={tituloMarked} />
           </h2>
@@ -73,16 +65,6 @@ export function Solucion({
         <motion.div variants={item} className="mt-4">
           <Hairline surface="bg" className="w-fit">
             <span className="flex items-center gap-2 px-4 py-2 text-[15px] font-semibold">
-              {/* Dispositivo ownable "mordisco" (FICHA-ARTE.md), versión compacta */}
-              <svg aria-hidden="true" viewBox="0 0 56 14" className="h-[12px] w-[44px] shrink-0">
-                <path
-                  d="M0,0 L18,0 C21,0 22,14 28,14 C34,14 35,0 38,0 L56,0"
-                  fill="none"
-                  stroke="var(--accent)"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
               <Accent>{mecanismo}</Accent>
             </span>
           </Hairline>
@@ -92,13 +74,19 @@ export function Solucion({
           <MarkedCopy text={bigIdeaMarked} />
         </motion.p>
 
+        {visual && (
+          <motion.div variants={item} className="mt-10">
+            {visual}
+          </motion.div>
+        )}
+
         {/* 3 pasos: filas apiladas en mobile, 3 columnas en desktop */}
         <ol className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
           {pasos.map((p, i) => (
             <motion.li key={i} variants={item} className="flex items-start gap-4 md:flex-col">
               <span
                 aria-hidden="true"
-                className="flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-button)] border border-[color-mix(in_oklab,var(--accent)_22%,transparent)] bg-[var(--chip-bg)] text-[17px] font-bold tabular-nums text-[var(--accent)]"
+                className="flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-button)] bg-[var(--chip-bg)] text-[17px] font-bold tabular-nums text-[var(--accent)]"
               >
                 {String(i + 1).padStart(2, '0')}
               </span>
@@ -109,26 +97,6 @@ export function Solucion({
             </motion.li>
           ))}
         </ol>
-
-        {antesDespues && (
-          <motion.div variants={item} className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className="rounded-[var(--radius-card)] bg-[var(--surface-2)] p-5">
-              <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text-tertiary)]">
-                {antesDespues.labelAntes}
-              </p>
-              <p className="mt-2 text-[15px] leading-snug text-[var(--text-secondary)]">{antesDespues.antes}</p>
-            </div>
-            {/* El "después" con acento sutil de fondo (4-6%) */}
-            <div className="rounded-[var(--radius-card)] bg-[color-mix(in_oklab,var(--accent)_6%,transparent)] p-5">
-              <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--accent)]">
-                {antesDespues.labelDespues}
-              </p>
-              <p className="mt-2 text-[15px] font-medium leading-snug text-[var(--text-primary)]">
-                {antesDespues.despues}
-              </p>
-            </div>
-          </motion.div>
-        )}
       </motion.div>
     </SectionShell>
   );

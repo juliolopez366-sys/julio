@@ -488,6 +488,36 @@ técnicas abajo).
   que proponía el análisis externo se descartó a propósito — reabriría la decisión
   de monetización ya aprobada (cosa juzgada).
 
+- **Landing — crítica Impeccable + corrección (2026-10-14, pedido explícito del usuario).**
+  `/impeccable critique` dio 21/36 (crítica guardada en `.impeccable/critique/`). Se hicieron
+  los 4 arreglos prioritarios + polish:
+  - **Honestidad (P0):** fuera el stack de valor ($84/$29/$19 inventados; "Reportes para tu
+    médico" y la "Guía FODMAP" NO existen), "MÁS POPULAR" → "RECOMENDADO" (0 usuarios), fuera
+    el frame del carrusel con $4.99 (precio inexistente; también corregido en
+    `vista-previa-app.html`). FAQ 1 y 2 prometían "confirmar/corregir en un toque" — esa
+    función NO existe en la app; reescritas con lo que sí hace (`/api/analizar-comida` marca
+    ocultos de forma conservadora; revisar → Guardar / Repetir foto).
+  - **Cifras (P1):** ahorro "Casi 5 meses gratis (ahorras 40%)" = paywall; piso Hotmart 15
+    días (antes decía 7); "48 horas" ya no se presenta como tiempo hasta el resultado; FAQ 4
+    explica la regla real del Motor (≥2 veces, ≥50 %). La Garantía del Primer Patrón se dejó
+    en 7 días por decisión del usuario (sigue coincidiendo con la prueba gratis — anotado).
+  - **Mecanismo visible (P1):** hero nuevo `components/landing/DemoAnalisis.tsx` (foto real
+    de tacos generada con IA vía Magnific/Freepik → `public/hero-tacos*.webp`, + el análisis
+    tal como lo devuelve la API, + disclaimer de IA) y `components/landing/Cruce48h.tsx` en
+    Solución (ejemplo rotulado del cruce de 48 h con la misma regla del código).
+  - **Hero (P1):** 2 columnas en desktop, sin marco doble, sin degradado, sin fade (LCP); la
+    curva "mordisco" ahora vive UNA vez en su lugar canónico (foto → hoja crema) y un eco en
+    el CTA final; se quitaron los 6 glifos repetidos.
+  - **Polish:** sin kickers, sin bordes en chips/cards/barra fija, CTA final verde bosque con
+    texto y botón crema (antes "cuerpo" quedaba a 1.9:1), `--text-secondary/-tertiary`
+    #6B6B54 → #636349 (mismo oliva, ahora ≥4.5:1 sobre todas las superficies — afecta
+    también a la app interna), footer sin "·" huérfanos, CTA del plan anual sin partirse.
+  - Verificado: `tsc --noEmit` ✓ · `impeccable detect` 0 hallazgos · revisión visual a 375px
+    y 1280px en local. NO verificado: `npm run build` (falla sin `.env.local`/`HOTMART_HOTTOK`,
+    que se borraron del disco el 14-oct junto con node_modules — hay que recrear `.env.local`).
+    Sin revisor-visual del SO ni commit todavía. Problema y Agitación (7 tarjetas de dolor)
+    quedaron igual — era P2, fuera del alcance elegido.
+
 ## Problemas conocidos
 - **veredicto:landing / veredicto:onboarding / veredicto:paywall** — el hook de
   cierre marca estos 3 veredictos como "caducados" cuando detecta archivos .tsx MÁS

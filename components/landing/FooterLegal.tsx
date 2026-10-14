@@ -37,18 +37,14 @@ export function FooterLegal({ appName, logo, enlaces, soporteEmail, anio }: Foot
             {appName}
           </p>
           <nav aria-label="Enlaces legales">
-            <ul className="flex flex-wrap items-center gap-x-1 gap-y-0">
-              {enlaces.map((e, i) => (
+            {/* Sin separadores "·": al envolver en mobile quedaban huérfanos al inicio de línea */}
+            <ul className="-mx-2 flex flex-wrap items-center gap-x-2 gap-y-0">
+              {enlaces.map((e) => (
                 <li key={e.href} className="flex items-center">
-                  {i > 0 && (
-                    <span aria-hidden="true" className="px-1 text-[var(--text-tertiary)]">
-                      ·
-                    </span>
-                  )}
                   {/* py-3 = área táctil ≥44px sin líneas pegadas */}
                   <a
                     href={e.href}
-                    className="px-1 py-3 text-[13px] text-[var(--text-tertiary)] underline-offset-4 hover:text-[var(--text-secondary)] hover:underline"
+                    className="px-2 py-3 text-[13px] text-[var(--text-tertiary)] underline-offset-4 hover:text-[var(--text-secondary)] hover:underline"
                   >
                     {e.label}
                   </a>

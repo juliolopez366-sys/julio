@@ -34,10 +34,8 @@ export function IconChip({ icon: Icono, tone = 'accent' }: { icon: LucideIcon; t
   return (
     <span
       aria-hidden="true"
-      className={`inline-flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-button)] border ${
-        acento
-          ? 'border-[color-mix(in_oklab,var(--accent)_22%,transparent)] bg-[var(--chip-bg)]'
-          : 'border-[color-mix(in_oklab,var(--text-tertiary)_35%,transparent)] bg-[color-mix(in_oklab,var(--text-tertiary)_12%,transparent)]'
+      className={`inline-flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-button)] ${
+        acento ? 'bg-[var(--chip-bg)]' : 'bg-[color-mix(in_oklab,var(--text-tertiary)_12%,transparent)]'
       }`}
     >
       <Icono size={22} strokeWidth={2} color={acento ? 'var(--accent)' : 'var(--text-secondary)'} aria-hidden="true" />
@@ -141,23 +139,30 @@ export const VIEWPORT_ONCE = { once: true, amount: 0.2 } as const;
 
 /* ── <CtaButton> — el CTA vivo del kit: ≥52px, whileTap 0.97, sombra tintada.
    El texto sobre acento usa --bg: si tu FICHA-ARTE rompe el contraste AA ahí,
-   ajusta los tokens, no el componente. ── */
+   ajusta los tokens, no el componente. tono 'invertido' = crema sobre un bloque
+   verde (CTA final), dentro del mismo dúo de color. ── */
 export function CtaButton({
   href,
   children,
   alto = 52,
   fullMobile = true,
+  tono = 'acento',
 }: {
   href: string;
   children: ReactNode;
   alto?: 52 | 56;
   fullMobile?: boolean;
+  tono?: 'acento' | 'invertido';
 }) {
+  const colores =
+    tono === 'invertido'
+      ? 'bg-[var(--bg)] text-[var(--accent)] shadow-[0_8px_24px_rgb(0_0_0_/_0.18)] hover:bg-[var(--surface)] focus-visible:ring-[var(--bg)] focus-visible:ring-offset-[var(--accent)]'
+      : 'bg-[var(--accent)] text-[var(--bg)] shadow-[0_8px_30px_color-mix(in_oklab,var(--accent)_25%,transparent)] hover:bg-[color-mix(in_oklab,var(--accent)_88%,var(--text-primary))] focus-visible:ring-[var(--accent)] focus-visible:ring-offset-[var(--bg)]';
   return (
     <motion.a
       whileTap={{ scale: 0.97 }}
       href={href}
-      className={`inline-flex items-center justify-center rounded-[var(--radius-button)] bg-[var(--accent)] px-8 text-[17px] font-semibold text-[var(--bg)] shadow-[0_8px_30px_color-mix(in_oklab,var(--accent)_25%,transparent)] transition-colors duration-150 hover:bg-[color-mix(in_oklab,var(--accent)_88%,var(--text-primary))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] [touch-action:manipulation] ${
+      className={`inline-flex items-center justify-center rounded-[var(--radius-button)] px-8 text-center text-[17px] font-semibold leading-tight transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 [touch-action:manipulation] ${colores} ${
         alto === 56 ? 'h-14' : 'h-[52px]'
       } ${fullMobile ? 'w-full sm:w-auto' : ''}`}
     >
@@ -229,7 +234,7 @@ export function StickyCtaMobile({
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: reduce ? 0 : 88, opacity: 0 }}
           transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-x-0 bottom-0 z-40 border-t border-[color-mix(in_oklab,var(--text-tertiary)_25%,transparent)] bg-[var(--surface)] px-4 pt-2 pb-[max(12px,env(safe-area-inset-bottom))] md:hidden"
+          className="fixed inset-x-0 bottom-0 z-40 bg-[var(--surface)] shadow-[0_-8px_24px_-12px_rgb(71_89_58_/_0.25)] px-4 pt-2 pb-[max(12px,env(safe-area-inset-bottom))] md:hidden"
         >
           <motion.a
             whileTap={{ scale: 0.97 }}

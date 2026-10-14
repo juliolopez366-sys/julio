@@ -7,10 +7,10 @@
 
 ## 1. Hero
 - h1Marked: `Encuentra tu [acento]detonante real[/acento] en días, no en años`
-- subtitleMarked: `Toma una foto de tu comida y descubre [b]tu patrón real[/b] en 48 horas.`
+- subtitleMarked: `Solo tomas la foto. Cruzamos cada síntoma con tus [b]últimas 48 horas[/b] de comidas.` (48 h es la ventana que revisa el Motor, no el tiempo hasta ver un patrón)
 - ctaLabel: `Encontrar mi detonante gratis`
 - socialProof: `7 días gratis · cancela cuando quieras`
-- visualPlaceholderSugerencia: `captura de la pantalla principal mostrando el riesgo de una comida`
+- visual: `<DemoAnalisis />` — foto de tacos con salsa cremosa (`public/hero-tacos*.webp`, generada con IA) + el análisis tal como lo devuelve `/api/analizar-comida`: «Así se ve un análisis» · `Tacos de pollo con salsa cremosa` · ingredientes · `Riesgo alto` por `ajo y cebolla` · `La salsa no dice «ajo». La IA lo marca igual: prefiere avisarte de más que dejarte a ciegas.` · `Orientación de IA, no un diagnóstico` (→ /aviso-ia)
 
 ## 2. Problema
 - titulo: `¿Te suena?`
@@ -36,43 +36,43 @@
   1. Toma la foto · `Fotografías tu plato — la IA identifica los ingredientes de riesgo al instante.`
   2. Registra el síntoma · `Un toque cuando algo te ataca: tipo y hora, sin formularios largos.`
   3. Descubre tu patrón · `El Motor cruza tus últimas 48 horas y te muestra tu detonante real.`
-- antesDespues: labelAntes `Antes` · antes `Un diario de papel con meses de datos sin ninguna conclusión.`
-  · labelDespues `Después` · despues `Un patrón claro, con el ingrediente exacto y el nivel de confianza.`
+- visual: `<Cruce48h />` (reemplaza el antes/después) — EJEMPLO rotulado de un síntoma y sus 48 h previas:
+  Lun 13:10 Tacos con salsa cremosa · ajo, cebolla / Lun 20:30 Arroz con pollo / Mar 08:00 Avena con fresas /
+  Mar 13:30 Pasta al pomodoro · ajo, trigo / Mar 19:00 Hinchazón fuerte → `4 de 5` comidas con ajo terminaron en
+  síntoma dentro de las 48 horas siguientes · confianza 80 % (misma regla que `calcularCorrelacion`: ≥2 veces, ≥50 %).
 
 ## 5. La app por dentro
 - tituloMarked: `Tu próxima comida, [acento]sin miedo[/acento]`
 - frames (con captura real, recortada de vista-previa-app.html — FICHA-ARTE.md):
   1. `Así empiezas` · Bienvenida (/carrusel-1-onboarding.png)
   2. `Fotografías tu plato` · La IA analiza (/carrusel-2-mecanismo.png)
-  3. `Tu detonante más probable` · Panel de patrones (/hero-mockup.png)
-  4. `Prueba gratis antes de pagar` · Planes (/carrusel-4-planes.png)
+  3. `Tu día de un vistazo` · Hoy (/hero-mockup.png)
+  (se quitó el frame de Planes: la captura mostraba $4.99, un precio que no existe)
 - ctaLabel: `Encontrar mi detonante gratis`
 
 ## 6. Oferta
 - tituloMarked: `Empieza gratis. Sigue por [acento]$0.14 al día[/acento]`
 - trialDias: `7`
-- stack:
-  - Acceso completo al Motor de Detonante Real (12 meses) · `$84`
-  - Reportes ilimitados para tu médico · `$29`
-  - Guía "Entiende tus resultados FODMAP" · `$19`
-  - totalTachado: `$132` · nota: `Hoy: $4.17/mes (se cobra $49.99/año)`
-- anual: badge `MÁS POPULAR` · precioMes `$4.17` · totalAnual `Se cobra $49.99/año`
-  · ahorro `2 meses gratis` · descomposicionDia `menos de $0.14 al día`
-  · ctaLabel `Encontrar mi detonante gratis` (mismo verbo del hero, regla del kit)
+- stack: ELIMINADO (2026-10-14) — vendía reportes y una guía que no existen, con valores inventados.
+- anual: badge `RECOMENDADO` (no "MÁS POPULAR": no hay usuarios todavía) · precioMes `$4.17`
+  · totalAnual `Se cobra $49.99/año` · ahorro `Casi 5 meses gratis (ahorras 40%)` (coincide con el paywall)
+  · descomposicionDia `menos de $0.14 al día`
+  · ctaLabel `Empezar mis 7 días gratis` (más corto: el del hero se partía en 2 líneas dentro de la card)
   · features: `Foto → riesgo instantáneo con IA` · `Registro de síntomas en un toque`
-    · `Motor de correlación de 48 horas` · `Reportes para tu médico`
+    · `Motor de correlación de 48 horas` · `Tu historial de comidas y síntomas, siempre guardado`
 - mensual: precioMes `$6.99` · ctaLabel `Elegir mensual` · mismas features + `Cancelas cuando quieras`
+- notaPago: `Pago seguro con Hotmart · no se cobra nada durante los 7 días de prueba`
 
 ## 7. Garantía
-- nombre: `la Garantía del Primer Patrón`
+- nombre: `Garantía del Primer Patrón`
 - condicionMarked: `Si en 7 días no ves un patrón más claro sobre tu detonante, escribes un correo y te devolvemos todo. Sin preguntas.`
-- pisoLegal: `Respaldada por la garantía Hotmart de 7 días`
+- pisoLegal: `Además, Hotmart te respalda con 15 días de garantía desde tu compra` (15 días = lo configurado en Hotmart, FICHA-MERCADO)
 
 ## 8. FAQ
-1. `¿La IA realmente va a acertar con comidas de restaurante?` → `Con platos compuestos (como una salsa con ajo oculto), el Motor marca el riesgo probable y tú confirmas en un toque — [b]nunca te deja a ciegas[/b].`
-2. `¿Voy a perder más tiempo corrigiendo a la IA que registrando yo misma?` → `Corregir un ingrediente toma un toque. No vuelves a escribir la comida completa como en un diario tradicional.`
+1. `¿La IA realmente va a acertar con comidas de restaurante?` → `Con platos compuestos, la IA marca como riesgo probable lo que suele esconderse en salsas, como ajo o cebolla en polvo: [b]prefiere avisarte de más que dejarte a ciegas[/b].` (la app NO tiene "confirmar/corregir en un toque")
+2. `¿Voy a perder más tiempo con la app que con un diario?` → `No escribes nada: tomas la foto, revisas el resultado y lo guardas con un toque. Si la foto no salió bien, la repites.`
 3. `¿En qué se diferencia de Cara Care o mySymptoms?` → `Ellas registran; nosotros [b]cruzamos tus síntomas con tus comidas de las últimas 48 horas[/b] para mostrarte el patrón, no solo una lista plana.`
-4. `¿Cuánto tardo en ver mi primer patrón?` → `Desde el primer día ves el riesgo de cada comida. El patrón con confianza estadística aparece cuando acumulas unos días de registro.`
+4. `¿Cuánto tardo en ver mi primer patrón?` → `El riesgo de cada comida lo ves desde la primera foto. El patrón aparece cuando un ingrediente se repite: lo comiste al menos 2 veces y en la mitad o más hubo síntomas en las [b]48 horas siguientes[/b].`
 5. `¿Qué pasa si no me sirve?` → `Tienes 7 días de prueba gratis y la Garantía del Primer Patrón: [b]un correo y te devolvemos todo[/b].`
 
 ## 9. CTA final

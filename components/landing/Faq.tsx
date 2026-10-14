@@ -10,7 +10,7 @@
 import { useId, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
-import { Kicker, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
+import { SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
 import { MarkedCopy, warnCopy, warnRango } from './MarkedCopy';
 
 export interface ItemFaq {
@@ -21,7 +21,6 @@ export interface ItemFaq {
 }
 
 export interface FaqProps {
-  kicker?: string;
   titulo?: string;
   /** 4-6 ítems = las objeciones de la ficha en su orden de fuerza. */
   items: ItemFaq[];
@@ -30,7 +29,7 @@ export interface FaqProps {
   id?: string;
 }
 
-export function Faq({ kicker = 'PREGUNTAS', titulo = 'Lo que quizá te estás preguntando', items, abiertoInicial = 0, id }: FaqProps) {
+export function Faq({ titulo = 'Lo que quizá te estás preguntando', items, abiertoInicial = 0, id }: FaqProps) {
   warnRango('FAQ → ítems', items.length, 4, 6);
   items.forEach((it, i) => warnCopy(`FAQ → respuesta ${i + 1}`, it.respuestaMarked, 40));
   const [abierto, setAbierto] = useState<number | null>(abiertoInicial);
@@ -48,18 +47,7 @@ export function Faq({ kicker = 'PREGUNTAS', titulo = 'Lo que quizá te estás pr
         className="mx-auto max-w-[680px]"
       >
         <motion.div variants={item} className="mb-8">
-          <Kicker>{kicker}</Kicker>
           <h2 className="flex items-center gap-3 text-balance text-[26px] font-bold leading-[1.15] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[32px]">
-            {/* Dispositivo ownable "mordisco" (FICHA-ARTE.md), repetido en toda la página */}
-            <svg aria-hidden="true" viewBox="0 0 56 14" className="h-[12px] w-[44px] shrink-0">
-              <path
-                d="M0,0 L18,0 C21,0 22,14 28,14 C34,14 35,0 38,0 L56,0"
-                fill="none"
-                stroke="var(--accent)"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
             {titulo}
           </h2>
         </motion.div>

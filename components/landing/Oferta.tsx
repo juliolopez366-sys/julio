@@ -4,14 +4,14 @@
 // Reglas embebidas: el ANUAL va PRIMERO en el DOM (recomendado, mobile arriba) ·
 // badge de trial en AMBAS cards SOLO si trialDias existe (02C decide N; sin
 // esquema de trial NO se pinta — prohibido inventarlo) · total anual SIEMPRE
-// visible ("Se cobra $X/año") · ahorro en MESES, no en % · hairline degradada en
+// visible ("Se cobra $X/año") · ahorro en MESES (y el % si el paywall lo usa) · hairline en
 // la card recomendada (el uso canónico de la técnica) · checkmarks custom.
 // El destino de los CTAs sigue al MODELO de 02C (checkout vs /onboarding).
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'motion/react';
 import { Star } from 'lucide-react';
-import { CheckCustom, CtaButton, Hairline, Kicker, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
+import { CheckCustom, CtaButton, Hairline, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
 import { MarkedCopy, warnCopy, warnRango } from './MarkedCopy';
 
 export interface PlanOferta {
@@ -28,7 +28,6 @@ export interface PlanOferta {
 }
 
 export interface OfertaProps {
-  kicker?: string;
   /** Copy MARCADO del título (máx 8 palabras). */
   tituloMarked: string;
   /** N días de trial según 02C/ESTADO.md. undefined = esquema SIN trial → sin badge. */
@@ -48,6 +47,8 @@ export interface OfertaProps {
     totalTachado: string;
     nota?: string;
   };
+  /** Línea de confianza bajo los planes (cómo se paga) — SOLO hechos verificables. */
+  notaPago?: string;
   /** default 'oferta' — lo observa StickyCtaMobile. */
   id?: string;
 }
@@ -134,12 +135,12 @@ function Features({ items, origen }: { items: string[]; origen: string }) {
 }
 
 export function Oferta({
-  kicker = 'LA OFERTA',
   tituloMarked,
   trialDias,
   anual,
   mensual,
   stack,
+  notaPago,
   id = 'oferta',
 }: OfertaProps) {
   warnCopy('Oferta → título', tituloMarked, 8);
@@ -149,7 +150,6 @@ export function Oferta({
     <SectionShell id={id} elevacion="base" ariaLabel="Planes y precios">
       <motion.div variants={contenedor} initial="hidden" whileInView="visible" viewport={VIEWPORT_ONCE}>
         <motion.div variants={item} className="mx-auto max-w-[620px] text-center">
-          <Kicker>{kicker}</Kicker>
           <h2 className="text-balance text-[32px] font-bold leading-[1.1] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[44px]">
             <MarkedCopy text={tituloMarked} />
           </h2>
@@ -160,7 +160,7 @@ export function Oferta({
         {stack && (
           <motion.div
             variants={item}
-            className="mx-auto mt-8 max-w-[560px] rounded-[var(--radius-card)] border border-[color-mix(in_oklab,var(--text-tertiary)_25%,transparent)] bg-[var(--surface)] p-6"
+            className="mx-auto mt-8 max-w-[560px] rounded-[var(--radius-card)] bg-[var(--surface)] p-6"
           >
             <ul className="flex flex-col gap-3">
               {stack.lineas.map((l, i) => (
@@ -189,24 +189,14 @@ export function Oferta({
           {/* ── ANUAL (recomendado): hairline 2px + fondo acento sutil + sombra tintada ── */}
           <motion.div variants={item} className="relative md:-translate-y-2">
             {anual.badge && (
-              <span className="absolute -top-[10px] left-1/2 z-10 -translate-x-1/2 rounded-full border border-[color-mix(in_oklab,var(--accent)_25%,transparent)] bg-[var(--accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.06em] text-[var(--bg)]">
+              <span className="absolute -top-[10px] left-1/2 z-10 -translate-x-1/2 rounded-full bg-[var(--accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.06em] text-[var(--bg)]">
                 {anual.badge}
               </span>
             )}
             <Hairline emphasis surface="surface" className="shadow-[0_12px_36px_color-mix(in_oklab,var(--accent)_16%,transparent)]">
               <div className="rounded-[var(--radius-card)] bg-[color-mix(in_oklab,var(--accent)_5%,transparent)] p-6 md:p-7">
                 <div className="flex items-center justify-between gap-3">
-                  <h3 className="flex items-center gap-2 text-[18px] font-semibold text-[var(--text-primary)]">
-                    {/* Dispositivo ownable "mordisco" (FICHA-ARTE.md), versión compacta */}
-                    <svg aria-hidden="true" viewBox="0 0 56 14" className="h-[12px] w-[44px] shrink-0">
-                      <path
-                        d="M0,0 L18,0 C21,0 22,14 28,14 C34,14 35,0 38,0 L56,0"
-                        fill="none"
-                        stroke="var(--accent)"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      />
-                    </svg>
+                  <h3 className="text-[18px] font-semibold text-[var(--text-primary)]">
                     {anual.nombre}
                   </h3>
                   {trialDias !== undefined && <TrialBadge dias={trialDias} />}
@@ -230,7 +220,7 @@ export function Oferta({
           {/* ── MENSUAL: card base, CTA outline — menos peso visual ── */}
           <motion.div
             variants={item}
-            className="rounded-[var(--radius-card)] border border-[color-mix(in_oklab,var(--text-tertiary)_28%,transparent)] bg-[var(--surface)] p-6 shadow-[var(--shadow-1)] md:p-7"
+            className="rounded-[var(--radius-card)] bg-[var(--surface)] p-6 shadow-[var(--shadow-1)] md:p-7"
           >
             <div className="flex items-center justify-between gap-3">
               <h3 className="text-[18px] font-semibold text-[var(--text-primary)]">{mensual.nombre}</h3>
@@ -243,12 +233,18 @@ export function Oferta({
             <motion.a
               whileTap={{ scale: 0.97 }}
               href={mensual.ctaHref}
-              className="mt-6 flex h-12 w-full items-center justify-center rounded-[var(--radius-button)] border border-[color-mix(in_oklab,var(--accent)_45%,transparent)] text-[16px] font-semibold text-[var(--accent)] transition-colors duration-150 hover:bg-[var(--chip-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)] [touch-action:manipulation]"
+              className="mt-6 flex h-12 w-full items-center justify-center rounded-[var(--radius-button)] bg-[var(--surface-2)] text-[16px] font-semibold text-[var(--text-primary)] transition-colors duration-150 hover:bg-[color-mix(in_oklab,var(--surface-2)_80%,var(--accent))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)] [touch-action:manipulation]"
             >
               {mensual.ctaLabel}
             </motion.a>
           </motion.div>
         </div>
+
+        {notaPago && (
+          <motion.p variants={item} className="mx-auto mt-6 max-w-[560px] text-center text-[13px] text-[var(--text-secondary)]">
+            {notaPago}
+          </motion.p>
+        )}
       </motion.div>
     </SectionShell>
   );

@@ -82,12 +82,6 @@ export default function EjemploLandingDespeja() {
           { titulo: 'El Filtro decide', detalle: 'Cruza urgencia real con impacto y descarta el ruido.' },
           { titulo: 'Empiezas', detalle: 'Recibes 3 prioridades con su bloque de tiempo.' },
         ]}
-        antesDespues={{
-          labelAntes: 'Antes',
-          antes: 'Una lista de 47 tareas sin orden ni dueño.',
-          labelDespues: 'Después',
-          despues: '3 prioridades con su bloque de tiempo, listas a las 8:03.',
-        }}
       />
 
       {/* 5. LA APP POR DENTRO — placeholders honestos hasta tener screenshots

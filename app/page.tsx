@@ -12,6 +12,8 @@ import { Faq } from '@/components/landing/Faq';
 import { CtaFinal } from '@/components/landing/CtaFinal';
 import { FooterLegal } from '@/components/landing/FooterLegal';
 import { StickyCtaMobile } from '@/components/landing/ui';
+import { DemoAnalisis } from '@/components/landing/DemoAnalisis';
+import { Cruce48h } from '@/components/landing/Cruce48h';
 
 // Modelo onboarding-first registrado (decisión técnica, ver ESTADO.md): el CTA
 // lleva a /onboarding, nunca directo al checkout.
@@ -30,18 +32,11 @@ export default function LandingFoodScan() {
         logo={LOGO}
         loginHref="/entrar"
         h1Marked="Encuentra tu [acento]detonante real[/acento] en días, no en años"
-        subtitleMarked="Toma una foto de tu comida y descubre [b]tu patrón real[/b] en 48 horas."
+        subtitleMarked="Solo tomas la foto. Cruzamos cada síntoma con tus [b]últimas 48 horas[/b] de comidas."
         ctaLabel={CTA_LABEL}
         ctaHref={CTA_HREF}
         socialProof={<span>7 días gratis · cancela cuando quieras</span>}
-        visual={
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src="/hero-mockup.png"
-            alt="Pantalla principal de FoodScan mostrando el riesgo de una comida"
-            className="h-full w-full object-cover"
-          />
-        }
+        visual={<DemoAnalisis />}
       />
 
       {/* 2. PROBLEMA */}
@@ -49,9 +44,9 @@ export default function LandingFoodScan() {
         titulo="¿Te suena?"
         preguntas={[
           { icon: AlertCircle, textoMarked: '¿Te hinchas de la nada sin saber qué lo causó?' },
-          { icon: Clock, textoMarked: '¿Cancelas planes por miedo a no llegar a un baño?' },
+          { icon: Clock, textoMarked: '¿Cancelas planes por la [b]ansiedad del baño[/b]?' },
           { icon: XCircle, textoMarked: '¿Ya probaste apps de registro y las abandonaste enseguida?' },
-          { icon: UtensilsCrossed, textoMarked: '¿Sientes que comer se volvió un experimento agotador?' },
+          { icon: UtensilsCrossed, textoMarked: '¿Sientes que cada comida es [b]hacer tarea[/b]?' },
         ]}
       />
 
@@ -60,7 +55,7 @@ export default function LandingFoodScan() {
         frases={[
           { icon: CalendarClock, textoMarked: 'Cada mes sigues sin saber qué alimento te ataca, aunque comas "con cuidado".' },
           { icon: TrendingDown, textoMarked: 'En un año, seguirás en el mismo punto: [acento]meses de datos que nadie sabe usar[/acento].' },
-          { icon: Repeat, textoMarked: 'Otra app de registro manual no lo arregla: [b]más tecleo no es más respuesta[/b].' },
+          { icon: Repeat, textoMarked: 'Otra app de registro manual no lo arregla: más tecleo no es más respuesta. Necesitas [b]datos reales, no adivinanzas[/b].' },
         ]}
         contraste={{
           labelHoy: 'Hoy',
@@ -80,12 +75,7 @@ export default function LandingFoodScan() {
           { titulo: 'Registra el síntoma', detalle: 'Un toque cuando algo te ataca: tipo y hora, sin formularios largos.' },
           { titulo: 'Descubre tu patrón', detalle: 'El Motor cruza tus últimas 48 horas y te muestra tu detonante real.' },
         ]}
-        antesDespues={{
-          labelAntes: 'Antes',
-          antes: 'Un diario de papel con meses de datos sin ninguna conclusión.',
-          labelDespues: 'Después',
-          despues: 'Un patrón claro, con el ingrediente exacto y el nivel de confianza.',
-        }}
+        visual={<Cruce48h />}
       />
 
       {/* 5. LA APP POR DENTRO */}
@@ -94,8 +84,7 @@ export default function LandingFoodScan() {
         frames={[
           { label: 'Así empiezas', nombrePantalla: 'Bienvenida', src: '/carrusel-1-onboarding.png' },
           { label: 'Fotografías tu plato', nombrePantalla: 'La IA analiza', src: '/carrusel-2-mecanismo.png' },
-          { label: 'Tu detonante más probable', nombrePantalla: 'Panel de patrones', src: '/hero-mockup.png' },
-          { label: 'Prueba gratis antes de pagar', nombrePantalla: 'Planes', src: '/carrusel-4-planes.png' },
+          { label: 'El riesgo de tu comida, antes de comer', nombrePantalla: 'Hoy', src: '/hero-mockup.png' },
         ]}
         ctaLabel={CTA_LABEL}
         ctaHref={CTA_HREF}
@@ -105,50 +94,43 @@ export default function LandingFoodScan() {
       <Oferta
         tituloMarked="Empieza gratis. Sigue por [acento]$0.14 al día[/acento]"
         trialDias={7}
-        stack={{
-          lineas: [
-            { resultado: 'Acceso completo al Motor de Detonante Real (12 meses)', valor: '$84' },
-            { resultado: 'Reportes ilimitados para tu médico', valor: '$29' },
-            { resultado: 'Guía «Entiende tus resultados FODMAP»', valor: '$19' },
-          ],
-          totalTachado: '$132',
-          nota: 'Hoy: $4.17/mes (se cobra $49.99/año)',
-        }}
         anual={{
           nombre: 'Anual',
-          badge: 'MÁS POPULAR',
+          badge: 'RECOMENDADO',
           precioMes: '$4.17',
           totalAnual: 'Se cobra $49.99/año',
-          ahorro: '2 meses gratis',
+          ahorro: 'Casi 5 meses gratis (ahorras 40%)',
           descomposicionDia: 'menos de $0.14 al día',
-          ctaLabel: CTA_LABEL,
-          ctaHref: CTA_HREF,
+          // Más corto que el CTA del hero para que no se parta en dos líneas dentro de la card
+          ctaLabel: 'Empezar mis 7 días gratis',
+          ctaHref: `${CTA_HREF}?plan=anual`,
           features: [
             'Foto → riesgo instantáneo con IA',
             'Registro de síntomas en un toque',
-            'Motor de correlación de 48 horas',
-            'Reportes para tu médico',
+            'Motor de Detonante Real (cruce de 48 horas)',
+            'Tu historial de comidas y síntomas, siempre guardado',
           ],
         }}
         mensual={{
           nombre: 'Mensual',
           precioMes: '$6.99',
           ctaLabel: 'Elegir mensual',
-          ctaHref: CTA_HREF,
+          ctaHref: `${CTA_HREF}?plan=mensual`,
           features: [
             'Foto → riesgo instantáneo con IA',
             'Registro de síntomas en un toque',
-            'Motor de correlación de 48 horas',
+            'Motor de Detonante Real (cruce de 48 horas)',
             'Cancelas cuando quieras',
           ],
         }}
+        notaPago="Pago seguro con Hotmart · no se cobra nada durante los 7 días de prueba"
       />
 
       {/* 7. GARANTÍA */}
       <Garantia
-        nombre="la Garantía del Primer Patrón"
+        nombre="Garantía del Primer Patrón"
         condicionMarked="Si en 7 días no ves un patrón más claro sobre tu detonante, escribes un correo y te devolvemos todo. Sin preguntas."
-        pisoLegal="Respaldada por la garantía Hotmart de 7 días"
+        pisoLegal="Además, Hotmart te respalda con 15 días de garantía desde tu compra"
       />
 
       {/* 8. FAQ */}
@@ -157,12 +139,12 @@ export default function LandingFoodScan() {
           {
             pregunta: '¿La IA realmente va a acertar con comidas de restaurante?',
             respuestaMarked:
-              'Con platos compuestos (como una salsa con ajo oculto), el Motor marca el riesgo probable y tú confirmas en un toque — [b]nunca te deja a ciegas[/b].',
+              'Con platos compuestos, la IA marca como riesgo probable lo que suele esconderse en salsas, como ajo o cebolla en polvo: [b]prefiere avisarte de más que dejarte a ciegas[/b].',
           },
           {
-            pregunta: '¿Voy a perder más tiempo corrigiendo a la IA que registrando yo misma?',
+            pregunta: '¿Voy a perder más tiempo con la app que con un diario?',
             respuestaMarked:
-              'Corregir un ingrediente toma un toque. No vuelves a escribir la comida completa como en un diario tradicional.',
+              'No escribes nada: tomas la foto, revisas el resultado y lo guardas con un toque. Si la foto no salió bien, la repites.',
           },
           {
             pregunta: '¿En qué se diferencia de Cara Care o mySymptoms?',
@@ -172,7 +154,7 @@ export default function LandingFoodScan() {
           {
             pregunta: '¿Cuánto tardo en ver mi primer patrón?',
             respuestaMarked:
-              'Desde el primer día ves el riesgo de cada comida. El patrón con confianza estadística aparece cuando acumulas unos días de registro.',
+              'El riesgo de cada comida lo ves desde la primera foto. El patrón aparece cuando un ingrediente se repite: lo comiste al menos 2 veces y en la mitad o más hubo síntomas en las [b]48 horas siguientes[/b].',
           },
           {
             pregunta: '¿Qué pasa si no me sirve?',

@@ -9,7 +9,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
-import { CtaButton, Kicker, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
+import { CtaButton, SectionShell, useReveal, VIEWPORT_ONCE } from './ui';
 import { MarkedCopy, warnCopy, warnRango } from './MarkedCopy';
 
 export interface FrameCarrusel {
@@ -23,7 +23,6 @@ export interface FrameCarrusel {
 }
 
 export interface AppPorDentroProps {
-  kicker?: string;
   /** Copy MARCADO del título (máx 8 palabras). */
   tituloMarked: string;
   /** 3-5 frames. */
@@ -35,7 +34,6 @@ export interface AppPorDentroProps {
 }
 
 export function AppPorDentro({
-  kicker = 'ASÍ SE VE POR DENTRO',
   tituloMarked,
   frames,
   ctaLabel,
@@ -83,7 +81,6 @@ export function AppPorDentro({
     <SectionShell id={id} elevacion="elevada" ariaLabel="La app por dentro">
       <motion.div variants={contenedor} initial="hidden" whileInView="visible" viewport={VIEWPORT_ONCE}>
         <motion.div variants={item} className="mx-auto max-w-[620px] text-center">
-          <Kicker>{kicker}</Kicker>
           <h2 className="text-balance text-[26px] font-bold leading-[1.15] text-[var(--text-primary)] [font-family:var(--font-display)] md:text-[32px]">
             <MarkedCopy text={tituloMarked} />
           </h2>
@@ -101,8 +98,8 @@ export function AppPorDentro({
                   ref={(el) => {
                     frameRefs.current[i] = el;
                   }}
-                  className="relative aspect-[9/19.5] w-[250px] overflow-hidden rounded-[var(--radius-card)] border-[5px] shadow-[var(--shadow-2)]"
-                  style={{ borderColor: 'color-mix(in oklab, var(--text-primary) 90%, var(--accent))' }}
+                  // Las capturas ya traen su propio marco de teléfono: sin borde extra (evita el doble marco)
+                  className="relative aspect-[9/19.5] w-[250px] overflow-hidden rounded-[var(--radius-card)] shadow-[var(--shadow-2)]"
                 >
                   {f.src ? (
                     /* Si el proyecto usa next/image, cambiar por <Image> — <img> mantiene el kit portable */

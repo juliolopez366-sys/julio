@@ -24,12 +24,14 @@
 
   /* ── TEXTO ── */
   --text-primary: #2c2a1e;
-  --text-secondary: #6b6b54;
-  --text-tertiary: #6b6b54;
+  /* Oliva grisáceo de FICHA-ARTE (#6B6B54) oscurecido un paso para pasar AA
+     (≥4.5:1) también sobre --surface y --surface-2; mismo tono. */
+  --text-secondary: #636349;
+  --text-tertiary: #636349;
 
   /* ── MARCA ── */
   --accent: #47593a;
-  --accent-2: #b5652e;   /* 2ª nota: alerta terracota — usada como decoración sutil en la landing (Hero.tsx) */
+  --accent-2: #b5652e;   /* 2ª nota: alerta terracota — SOLO para riesgo, nunca decoración */
 
   /* ── SEMÁNTICOS (FICHA-ARTE.md — sistema duotono, estos son funcionales no decorativos) ── */
   --exito: #5c7a4a;
