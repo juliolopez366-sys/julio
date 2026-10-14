@@ -72,7 +72,8 @@
       "Bash(ffmpeg -v error -i docs/revisiones/landing-375.png -vf crop=375:330:0:60 -y __TRACKED_VAR__/h.jpg)",
       "Bash(sed -i '42s/leading-tight \\\\[font-family/leading-tight text-[var\\(--text-primary\\)] [font-family/' components/landing/Garantia.tsx)",
       "Bash(ffmpeg -v error -i docs/revisiones/landing-375.png -vf crop=375:420:0:5230 -y __TRACKED_VAR__/g.jpg)",
-      "Bash(ffmpeg -v error -i docs/revisiones/landing-375.png -vf crop=375:380:0:5620 -y C:/Users/julio/AppData/Local/Temp/claude/C--Users-julio-Downloads-Claude-App1/d950b2da-02a1-4485-b957-b952a188f024/scratchpad/g2.jpg)"
+      "Bash(ffmpeg -v error -i docs/revisiones/landing-375.png -vf crop=375:380:0:5620 -y C:/Users/julio/AppData/Local/Temp/claude/C--Users-julio-Downloads-Claude-App1/d950b2da-02a1-4485-b957-b952a188f024/scratchpad/g2.jpg)",
+      "Bash(git stash *)"
     ]
   },
   "hooks": {

@@ -106,7 +106,7 @@ export default function HoyPage() {
             <Flame size={14} aria-hidden="true" /> {rachaAnimada} días
           </span>
         </div>
-        <FotoComida colores={ultima.colorFoto} className="absolute inset-x-5 top-14 bottom-0 rounded-t-[var(--radius-card)]" />
+        <FotoComida colores={ultima.colorFoto} src={ultima.fotoFirmada} className="absolute inset-x-5 top-14 bottom-0 rounded-t-[var(--radius-card)]" />
       </div>
       <MordiscoAncho />
 

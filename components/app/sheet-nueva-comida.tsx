@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useReducedMotion, AnimatePresence } from 'motion/react';
 import { Camera, Loader2, RotateCcw } from 'lucide-react';
 import { BottomSheet } from './bottom-sheet';
@@ -41,6 +41,11 @@ export function SheetNuevaComida({
   const inputRef = useRef<HTMLInputElement>(null);
   const [archivo, setArchivo] = useState<File | null>(null);
   const [analisis, setAnalisis] = useState<Analisis | null>(null);
+  // Vista previa local de la foto elegida (antes de subirla), liberada al cambiar o cerrar
+  const vistaPrevia = useMemo(() => (archivo ? URL.createObjectURL(archivo) : null), [archivo]);
+  useEffect(() => () => {
+    if (vistaPrevia) URL.revokeObjectURL(vistaPrevia);
+  }, [vistaPrevia]);
   const [estado, setEstado] = useState<'elegir' | 'analizando' | 'revisar' | 'guardando' | 'error'>('elegir');
   const [error, setError] = useState<string | null>(null);
 
@@ -175,7 +180,7 @@ export function SheetNuevaComida({
         {estado === 'revisar' && analisis && (
           <motion.div key="revisar" initial={{ opacity: 0, y: reduce ? 0 : 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex flex-col gap-4">
             <div className="flex items-center gap-3 rounded-[var(--radius-card)] bg-[var(--surface)] p-3 shadow-[0_2px_10px_color-mix(in_oklab,var(--accent)_8%,transparent)]">
-              <FotoComida colores={COLOR_FOTO_IA} className="size-12 shrink-0 rounded-[var(--radius-button)]" />
+              <FotoComida colores={COLOR_FOTO_IA} src={vistaPrevia} className="size-12 shrink-0 rounded-[var(--radius-button)]" />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-[15px] font-semibold text-[var(--text-primary)]">{analisis.descripcion}</p>
                 <p className="truncate text-[12px] text-[var(--text-secondary)]">{analisis.ingredientes.join(', ')}</p>

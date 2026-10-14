@@ -16,7 +16,10 @@ export interface Comida {
   ingredientesRiesgo: string[];
   nivelRiesgo: NivelRiesgo;
   colorFoto: [string, string];
+  /** Ruta del archivo en el bucket privado 'comidas-fotos' (null en comidas sin foto). */
   fotoUrl: string | null;
+  /** URL firmada de corta duración para MOSTRAR la foto (null si no hay foto o falló la firma). */
+  fotoFirmada: string | null;
   registradoEn: string;
 }
 
@@ -105,8 +108,24 @@ function mapearComida(fila: FilaComida): Comida {
     nivelRiesgo: fila.nivel_riesgo,
     colorFoto: fila.color_foto ?? ['#dcd0a8', '#a9925f'],
     fotoUrl: fila.foto_url,
+    fotoFirmada: null,
     registradoEn: fila.registrado_en,
   };
+}
+
+// El bucket es privado: para mostrar cada foto se firma una URL temporal. La
+// política de Storage solo deja firmar archivos de la carpeta del propio usuario.
+const DURACION_URL_FOTO_S = 60 * 60;
+
+async function firmarFotos(comidas: Comida[]): Promise<Comida[]> {
+  const rutas = comidas.map((c) => c.fotoUrl).filter((r): r is string => !!r);
+  if (rutas.length === 0) return comidas;
+  const supabase = crearClienteSupabase();
+  const { data, error } = await supabase.storage.from('comidas-fotos').createSignedUrls(rutas, DURACION_URL_FOTO_S);
+  // Si la firma falla, la app sigue funcionando con el degradado de respaldo.
+  if (error || !data) return comidas;
+  const porRuta = new Map(data.filter((d) => d.signedUrl && !d.error).map((d) => [d.path, d.signedUrl]));
+  return comidas.map((c) => (c.fotoUrl ? { ...c, fotoFirmada: porRuta.get(c.fotoUrl) ?? null } : c));
 }
 
 type FilaSintoma = { id: string; tipo: TipoSintoma; intensidad: 1 | 2 | 3; registrado_en: string };
@@ -119,7 +138,7 @@ export async function getComidas(): Promise<Comida[]> {
   const supabase = crearClienteSupabase();
   const { data, error } = await supabase.from('comidas').select('*').order('registrado_en', { ascending: false });
   if (error) throw error;
-  return (data as FilaComida[]).map(mapearComida);
+  return firmarFotos((data as FilaComida[]).map(mapearComida));
 }
 
 export async function getSintomas(): Promise<Sintoma[]> {
@@ -177,7 +196,8 @@ export async function agregarComida(input: {
     .select('*')
     .single();
   if (error) throw error;
-  return mapearComida(data as FilaComida);
+  const [comida] = await firmarFotos([mapearComida(data as FilaComida)]);
+  return comida;
 }
 
 export async function agregarSintoma(input: { tipo: TipoSintoma; intensidad: 1 | 2 | 3 }): Promise<Sintoma> {

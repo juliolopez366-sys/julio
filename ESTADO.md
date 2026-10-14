@@ -526,11 +526,16 @@ técnicas abajo).
   acento en itálica dentro de títulos. Después del veredicto se aplicaron 2 ajustes
   cosméticos que el propio revisor pidió (acento solo en "Primer Patrón" y tarjeta de
   garantía sobre --bg) sin nueva pasada.
-  ⚠️ **CONDICIÓN PARA PUBLICAR (defecto 1 del revisor):** el frame 3 del carrusel
-  (`carrusel-3-hoy.webp`) muestra Hoy con la foto de la comida, pero la app real todavía
-  pinta un degradado (`components/app/foto-comida.tsx` no usa la foto guardada en Storage).
-  Antes del push: o la app muestra la foto real (URL firmada del bucket privado), o el
-  frame vuelve a la captura del estado real. Commits sin push.
+  **Defecto 1 del revisor (Hoy con foto en el carrusel vs degradado en la app) — resuelto
+  en código el 14-oct:** la app ahora muestra la foto real. `lib/foodscan-data.ts` firma
+  las rutas del bucket privado `comidas-fotos` con `createSignedUrls` (1 h, solo la carpeta
+  del propio usuario por la política de Storage) y expone `fotoFirmada`; `FotoComida` la
+  muestra con el degradado de fondo mientras carga y como respaldo si no hay foto (presets)
+  o si falla. Conectado en Hoy, Historial (filas), el detalle y la vista previa local al
+  revisar una foto recién tomada. ⚠️ NO verificado en navegador: sin `.env.local` no se
+  puede iniciar sesión en local. Probar en producción tras el deploy: subir una foto y
+  verla en Hoy, Historial y el detalle. Pendiente aparte: borrar una comida no borra su
+  archivo del bucket.
 - **veredicto:onboarding / veredicto:paywall — caducados por fecha (14-oct):** no se
   re-revisaron. Cambios reales que los tocan: color de texto secundario #6B6B54 → #636349
   (tokens.css, global) y el onboarding guarda `?plan=` en sessionStorage para preseleccionar

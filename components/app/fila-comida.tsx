@@ -13,7 +13,7 @@ export function FilaComida({ comida, onClick }: { comida: Comida; onClick?: (com
   const reduce = useReducedMotion();
   const contenido = (
     <>
-      <FotoComida colores={comida.colorFoto} className="size-14 shrink-0 rounded-[var(--radius-button)]" />
+      <FotoComida colores={comida.colorFoto} src={comida.fotoFirmada} className="size-14 shrink-0 rounded-[var(--radius-button)]" />
       <div className="min-w-0 flex-1">
         <p className="line-clamp-2 text-[15px] font-semibold leading-tight text-[var(--text-primary)]">{comida.descripcion}</p>
         <p className="text-[12px] text-[var(--text-secondary)]">

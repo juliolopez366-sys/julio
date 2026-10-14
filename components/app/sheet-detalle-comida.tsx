@@ -81,7 +81,7 @@ export function SheetDetalleComida({
       )}
       {comida && !eliminado && (
         <div className="flex flex-col gap-4">
-          <FotoComida colores={comida.colorFoto} className="h-32 w-full rounded-[var(--radius-card)]" />
+          <FotoComida colores={comida.colorFoto} src={comida.fotoFirmada} className="h-40 w-full rounded-[var(--radius-card)]" />
           <div className="flex items-center gap-2">
             <BadgeRiesgo nivel={comida.nivelRiesgo} />
             <span className="text-[12px] text-[var(--text-secondary)]">{comida.nombreComida}</span>
